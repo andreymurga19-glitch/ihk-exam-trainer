@@ -444,14 +444,35 @@ function renderCard(q){
     </div>
     <div class="btns" style="margin-top:8px">
       <button class="btn btn-check" onclick="check('${q.id}','${id}',${q.pts})">🤖 AI перевіряє</button>
+      <button class="btn" style="background:#1a0d2e;color:#a78bfa;border:1px solid #2d1a4a" onclick="showAnswer('${id}','${q.id}')">📖 Правильна відповідь</button>
       <button class="btn btn-clr" onclick="clearQ('${id}')">✕ Очистити</button>
     </div>
+    <div class="ai-res" id="correct_${id}" style="display:none;background:#0f0f2e;border:1px solid #3730a3;color:#c4b5fd"></div>
     <div class="ai-loading" id="ld_${id}">⏳ AI аналізує...</div>
     <div class="ai-res" id="ar_${id}"></div>
   </div>`;
 }
 
 function tog(id){document.getElementById(id).classList.toggle('on')}
+
+function showAnswer(id, qid){
+  const el = document.getElementById('correct_'+id);
+  if(el.style.display === 'block'){
+    el.style.display = 'none';
+    return;
+  }
+  // знаходимо питання
+  let q = null;
+  for(const key of Object.keys(DATA)){
+    if(DATA[key].qs){
+      const found = DATA[key].qs.find(x=>x.id===qid);
+      if(found){ q=found; break; }
+    }
+  }
+  if(!q) return;
+  el.innerHTML = '<div class="ai-lbl">📖 Правильна відповідь</div>' + q.ans.replace(/\n/g,'<br>');
+  el.style.display = 'block';
+}
 function scrollQ(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
 function clearQ(id){
   document.getElementById('ta_'+id).value='';
@@ -504,13 +525,18 @@ function updateProgress(){
 }
 
 // ===== VOCAB =====
-document.addEventListener('mouseup',()=>{
-  const sel=window.getSelection();
-  if(!sel) return;
-  const word=sel.toString().trim().replace(/[«»"".,!?;:()\[\]]/g,'');
-  if(word.length>1 && word.length<80 && !vocab.includes(word)){
-    vocab.push(word);saveVoc();renderVocabPanel();showToast('📚 "'+word+'" → словник');
-  }
+document.addEventListener('mouseup',function(e){
+  setTimeout(function(){
+    const sel = window.getSelection();
+    if(!sel || sel.rangeCount === 0) return;
+    const word = sel.toString().trim().replace(/[«»"".,!?;:()\[\]{}']/g,'').trim();
+    if(word.length > 1 && word.length < 80 && !vocab.includes(word)){
+      vocab.push(word);
+      saveVoc();
+      renderVocabPanel();
+      showToast('📚 "'+word+'" → словник');
+    }
+  }, 50);
 });
 
 function removeVoc(w){
