@@ -210,10 +210,73 @@ a1:{
      exp:'🇺🇦 Чому товар іде на Sperrfläche (заблоковану зону), а не одразу в основний склад? Що означає "gesperrt" в логістиці?',
      hint:'💡 Sperrfläche = заблокована зона. Товар ще не перевірений — не можна продавати чи відвантажувати.',
      ans:'Die Ware wurde noch nicht qualitätsgeprüft. Auf der Sperrfläche werden Artikel gelagert, die für den Verkauf oder die Auslieferung noch nicht freigegeben sind. So wird verhindert, dass nicht geprüfte Ware versehentlich eingelagert oder ausgeliefert wird.'},
-    {id:'1.7',pts:4,text:'Für den innerbetrieblichen Transport des Artikels 240150 zur QS-Abteilung und zurück zur Sperrfläche S20 muss ein <strong>Interner Transportbeleg</strong> ausgefüllt werden.<br>Felder: Lagerzone | Artikelnummer | an Abteilung | Menge in Stück | Anzahl Europaletten | Lieferschein-Nr. | Rücksendung Lagerzone | Rücksendung Sperrfläche',
+    {id:'1.7',pts:4,text:`Für den innerbetrieblichen Transport des Artikels 240150 zur QS-Abteilung und zurück zur Sperrfläche S20 muss ein <strong>Interner Transportbeleg</strong> ausgefüllt werden. Nehmen Sie alle Eintragungen vor!
+<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:16px">
+  <div style="text-align:center;font-weight:700;font-size:15px;color:#fff;margin-bottom:14px;letter-spacing:1px">Interner Transportbeleg</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">an Lagerzone:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;width:20%"></td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">Artikelnummer:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;width:20%"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">an Abteilung:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Menge in Stück:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Anzahl Europaletten:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lieferschein-Nr.:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+    </tr>
+    <tr>
+      <td colspan="4" style="border:1px solid #2d3a5a;padding:8px 12px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lagerzone:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Sperrfläche:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+    </tr>
+  </table>
+</div>`,
      exp:'🇺🇦 Заповни внутрішній транспортний документ. Всі дані вже відомі з попередніх питань та накладної.',
      hint:'💡 Menge=225 Stück (з 1.5). Lieferschein-Nr.=55016-20. Рух: Lagerzone C → QS → назад Lagerzone C, Sperrfläche S20.',
-     ans:'<table class="ans-table"><tr><td>an Lagerzone:</td><td>C</td><td>Artikelnummer:</td><td>240150</td></tr><tr><td>an Abteilung:</td><td>Qualitätssicherung</td><td>Menge in Stück:</td><td>225</td></tr><tr><td>Anzahl Europaletten:</td><td>laut Anlage</td><td>Lieferschein-Nr.:</td><td>55016-20</td></tr><tr><th colspan="4" style="padding-top:8px">Rücksendung an...</th></tr><tr><td>Lagerzone:</td><td>C</td><td>Sperrfläche:</td><td>S 20</td></tr></table>'},
+     ans:`<div style="background:#0a1020;border:2px solid #22c55e;border-radius:10px;padding:16px">
+  <div style="text-align:center;font-weight:700;font-size:15px;color:#22c55e;margin-bottom:14px;letter-spacing:1px">Interner Transportbeleg ✓</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">an Lagerzone:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600;width:20%">C</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">Artikelnummer:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600;width:20%">240150</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">an Abteilung:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">Qualitätssicherung</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Menge in Stück:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">225</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Anzahl Europaletten:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">laut Anlage</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lieferschein-Nr.:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">55016-20</td>
+    </tr>
+    <tr>
+      <td colspan="4" style="border:1px solid #2d3a5a;padding:8px 12px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lagerzone:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">C</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Sperrfläche:</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">S 20</td>
+    </tr>
+  </table>
+</div>`},
     {id:'1.8',pts:1,text:'Die QS stellt fest: Nähte der Sporthosen sind <strong>mangelhaft vernäht</strong>. Die Ware ist nicht verkaufsfähig.<br>Nennen Sie <strong>eine</strong> Möglichkeit der Nacherfüllung, die Eltron GmbH vorrangig geltend machen kann!',
      exp:'🇺🇦 Товар бракований. За законом (BGB) є право на Nacherfüllung. Яке право "vorrangig" (першочергово) — ремонт чи заміна?',
      hint:'💡 Nacherfüllung = або Nachbesserung (усунення дефекту) або Ersatzlieferung (нова партія). Яке логічніше при поганих швах?',
@@ -226,7 +289,37 @@ a1:{
      exp:'🇺🇦 Можна зекономити 7.800€ на ціні, але треба заплатити 1.440€ за зберігання. Яка реальна економія?',
      hint:'💡 7.800 € − 1.440 € = ?',
      ans:'7.800,00 € − 1.440,00 € = 6.360,00 €'},
-    {id:'1.10.1',pts:3,text:'Wurfbälle werden zu Sets verpackt. Ein Set = <strong>120 Bälle</strong>. Anteile: Rot=5, Gelb=4, Blau=3, Grün=3.<br>Berechnen Sie die Anteile je Farbe in Stück! Geben Sie den Rechenweg an!',
+    {id:'1.10.1',pts:3,text:`Farbige Wurfbälle werden zu Sets verpackt. Ein Set besteht aus <strong>120 Bällen</strong>. Diese sollen farblich nach Anteilen gemischt werden. Berechnen Sie die Anteile je Farbe in Stück und geben Sie den Rechenweg an!
+<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:16px">
+  <div style="text-align:center;font-weight:700;font-size:14px;color:#fff;margin-bottom:12px">Set Wurfbälle</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Anteile</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Farbe</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Stück</th>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">5</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Rot</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">4</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Gelb</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">3</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Blau</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">3</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Grün</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+    </tr>
+  </table>
+</div>`,
      exp:'🇺🇦 120 м\'ячів ділимо пропорційно 5:4:3:3. Спочатку знаходимо суму всіх часток, потім ділимо 120 на цю суму і множимо на кожну частку.',
      hint:'💡 Сума: 5+4+3+3=15. Rot: 120÷15×5=? Gelb: 120÷15×4=? Blau=Grün=?',
      ans:'Summe der Anteile: 5 + 4 + 3 + 3 = 15\nRot:  120 : 15 × 5 = 40 Stück\nGelb: 120 : 15 × 4 = 32 Stück\nBlau: 120 : 15 × 3 = 24 Stück\nGrün: 120 : 15 × 3 = 24 Stück\nProbe: 40 + 32 + 24 + 24 = 120 Stück ✓'},
@@ -257,7 +350,22 @@ a2:{
      exp:'🇺🇦 Зараз 4 полки + ще 4 = 8 полок. Перша полка починається на 10 см від підлоги. Кожна полка займає 40 см висоти. Знайди висоту верхнього краю 8-ї полки.',
      hint:'💡 Формула: 10 cm (до першої) + 8 × 40 cm (8 полок по 40 см) = ? см → перевести в метри.',
      ans:'10 cm + 8 × 40 cm = 10 cm + 320 cm = 330 cm = 3,30 m'},
-    {id:'2.2.3',pts:3,text:'Neue Kommissioniergeräte nötig: <strong>Hubhöhe mind. 3,00 m</strong> und <strong>2 Personen im Fahrerstand</strong>.<br><table class="qt"><tr><th>Gerät</th><th>Personen</th><th>Tragfähigkeit kg</th><th>Hubhöhe cm</th></tr><tr><td>KG 200/R</td><td>2</td><td>1.200</td><td>250</td></tr><tr><td>KommFlex CR</td><td>1</td><td>2.000</td><td>290</td></tr><tr><td>Bulder 1308</td><td>2</td><td>1.800</td><td>300</td></tr><tr><td>HubKo 500</td><td>1</td><td>1.500</td><td>300</td></tr></table>Wählen Sie das geeignete Gerät und begründen Sie!',
+    {id:'2.2.3',pts:3,text:`Aufgrund der neuen Kommissionierhöhe müssen neue Kommissioniergeräte angeschafft werden. Anforderungen: <strong>Hubhöhe mindestens 3,00 m</strong> und <strong>2 Personen im Fahrerstand</strong>.
+<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:16px">
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff">Kommissioniergerät</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Max. Personen im Fahrerstand</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Tragfähigkeit in kg</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Hubhöhe in cm</th>
+    </tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">KG 200/R</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">2</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1.200</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">250</td></tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">KommFlex CR</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">2.000</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">290</td></tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">Bulder 1308</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">2</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1.800</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">300</td></tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">HubKo 500</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1.500</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">300</td></tr>
+  </table>
+</div>
+Wählen Sie das geeignete Gerät aus der Tabelle aus und begründen Sie Ihre Entscheidung!`,
      exp:'🇺🇦 Два обов\'язкові критерії: 2 особи у кабіні І висота підйому ≥ 300 см. Знайди в таблиці те що відповідає ОБОМ умовам.',
      hint:'💡 KG200/R: 2 особи ✓ але 250 см ✗. KommFlex: 290 см ✗. Bulder: 2 особи ✓ і 300 см ✓. HubKo: 1 особа ✗.',
      ans:'Bulder 1308\nBegründung: Das Gerät erfüllt beide Anforderungen:\n– 2 Personen im Fahrerstand ✓\n– Hubhöhe 300 cm (≥ 3,00 m) ✓'},
