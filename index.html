@@ -104,6 +104,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .qt th{background:var(--s2);color:var(--acc);padding:7px 10px;text-align:left;font-size:11px;border-bottom:1px solid var(--border)}
 .qt td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--dim)}
 .qt tr:last-child td{border:none}
+.qtext table, .sit-box table{max-width:100%;overflow-x:auto;display:block}
+.ai-res table{max-width:100%;overflow-x:auto;display:block}
 .ans-table{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0}
 .ans-table td,.ans-table th{padding:6px 10px;border:1px solid #2d3a5a;color:#e2e8f0}
 .ans-table th{background:#162035;color:var(--acc);font-size:11px}
@@ -211,69 +213,85 @@ a1:{
      hint:'💡 Sperrfläche = заблокована зона. Товар ще не перевірений — не можна продавати чи відвантажувати.',
      ans:'Die Ware wurde noch nicht qualitätsgeprüft. Auf der Sperrfläche werden Artikel gelagert, die für den Verkauf oder die Auslieferung noch nicht freigegeben sind. So wird verhindert, dass nicht geprüfte Ware versehentlich eingelagert oder ausgeliefert wird.'},
     {id:'1.7',pts:4,text:`Für den innerbetrieblichen Transport des Artikels 240150 zur QS-Abteilung und zurück zur Sperrfläche S20 muss ein <strong>Interner Transportbeleg</strong> ausgefüllt werden. Nehmen Sie alle Eintragungen vor!
-<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:16px">
-  <div style="text-align:center;font-weight:700;font-size:15px;color:#fff;margin-bottom:14px;letter-spacing:1px">Interner Transportbeleg</div>
+<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:14px">
+  <div style="text-align:center;font-weight:700;font-size:14px;color:#fff;margin-bottom:12px;letter-spacing:1px">Interner Transportbeleg</div>
   <table style="width:100%;border-collapse:collapse;font-size:13px">
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">an Lagerzone:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;width:20%"></td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">Artikelnummer:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;width:20%"></td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8;width:50%">an Lagerzone:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;width:50%"></td>
     </tr>
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">an Abteilung:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Menge in Stück:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Artikelnummer:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
     </tr>
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Anzahl Europaletten:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lieferschein-Nr.:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">an Abteilung:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
     </tr>
     <tr>
-      <td colspan="4" style="border:1px solid #2d3a5a;padding:8px 12px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Menge in Stück:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
     </tr>
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lagerzone:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Sperrfläche:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px"></td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Anzahl Europaletten:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lieferschein-Nr.:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border:1px solid #2d3a5a;padding:8px 10px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lagerzone:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Sperrfläche:</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
     </tr>
   </table>
 </div>`,
      exp:'🇺🇦 Заповни внутрішній транспортний документ. Всі дані вже відомі з попередніх питань та накладної.',
      hint:'💡 Menge=225 Stück (з 1.5). Lieferschein-Nr.=55016-20. Рух: Lagerzone C → QS → назад Lagerzone C, Sperrfläche S20.',
-     ans:`<div style="background:#0a1020;border:2px solid #22c55e;border-radius:10px;padding:16px">
-  <div style="text-align:center;font-weight:700;font-size:15px;color:#22c55e;margin-bottom:14px;letter-spacing:1px">Interner Transportbeleg ✓</div>
+     ans:`<div style="background:#0a1020;border:2px solid #22c55e;border-radius:10px;padding:14px">
+  <div style="text-align:center;font-weight:700;font-size:14px;color:#22c55e;margin-bottom:12px;letter-spacing:1px">Interner Transportbeleg ✓</div>
   <table style="width:100%;border-collapse:collapse;font-size:13px">
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">an Lagerzone:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600;width:20%">C</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b;width:30%">Artikelnummer:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600;width:20%">240150</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8;width:50%">an Lagerzone:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700;width:50%">C</td>
     </tr>
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">an Abteilung:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">Qualitätssicherung</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Menge in Stück:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">225</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Artikelnummer:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">240150</td>
     </tr>
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Anzahl Europaletten:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">laut Anlage</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lieferschein-Nr.:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">55016-20</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">an Abteilung:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">Qualitätssicherung</td>
     </tr>
     <tr>
-      <td colspan="4" style="border:1px solid #2d3a5a;padding:8px 12px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Menge in Stück:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">225</td>
     </tr>
     <tr>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Lagerzone:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">C</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#64748b">Sperrfläche:</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;color:#fff;font-weight:600">S 20</td>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Anzahl Europaletten:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">laut Anlage</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lieferschein-Nr.:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">55016-20</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border:1px solid #2d3a5a;padding:8px 10px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lagerzone:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">C</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Sperrfläche:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">S 20</td>
     </tr>
   </table>
 </div>`},
