@@ -202,7 +202,7 @@ a1:{
      exp:'🇺🇦 Простий розрахунок: від 1.500 штук знайди 15%. ВАЖЛИВО: завжди пиши хід обчислення — без нього можеш втратити бали!',
      hint:'💡 1.500 × 15 ÷ 100 = ?',
      ans:'1.500 Stück × 15 / 100 = 225 Stück müssen zur Qualitätssicherungsabteilung gebracht werden.'},
-    {id:'1.6',pts:2,text:'Der restliche Teil des Artikels 240150 wird auf die <strong>Sperrfläche (S 20)</strong> in Lagerzone C gebracht — bis zum Abschluss der Qualitätssicherung.<br>Erläutern Sie, warum!',
+    {id:'1.6',pts:2,text:'Der Teil der angelieferten Menge des Artikels 240150, der nicht zur Qualitätssicherung geschickt wird, wird von Ihnen nicht zur Einlagerung transportiert, sondern zur Sperrfläche (S 20) in der Lagerzone C. Bis zum Abschluss der Qualitätssicherung wird der Artikel auf der Sperrfläche gelagert.<br><strong>Erläutern Sie, warum Sie diese Menge auf die Sperrfläche bringen!</strong>',
      exp:'🇺🇦 Чому товар іде на Sperrfläche (заблоковану зону), а не одразу в основний склад? Що означає "gesperrt" в логістиці?',
      hint:'💡 Sperrfläche = заблокована зона. Товар ще не перевірений — не можна продавати чи відвантажувати.',
      ans:'Die restliche Ware wurde noch nicht vollständig qualitätsgeprüft. Die Sperrfläche kennzeichnet Waren, die für Verkauf oder Auslieferung noch nicht freigegeben sind — sie dürfen erst nach Abschluss der Qualitätssicherung in den normalen Lagerbestand übernommen werden.'},
@@ -526,38 +526,90 @@ function updateProgress(){
 }
 
 // ===== VOCAB =====
-// Словник через click на слово - як в LagerLogistik Pro
+// ===== СЛОВНИК: попап як в LagerLogistik Pro =====
 function makeWordsClickable(container){
   if(!container) return;
-  // Обробляємо всі текстові елементи
-  container.querySelectorAll('.qtext, .exp-box, .hint-box, .sit-box p, .sit-box td').forEach(function(el){
-    if(el.dataset.processed) return;
-    el.dataset.processed = '1';
+  container.querySelectorAll('.qtext, .exp-box, .hint-box, .sit-box p, .sit-box td, .ai-res').forEach(function(el){
+    if(el.dataset.wc) return;
+    el.dataset.wc = '1';
     el.addEventListener('click', function(e){
-      // Беремо слово під курсором
-      const sel = window.getSelection();
+      // Слово під курсором
       let word = '';
-      if(sel && sel.toString().trim().length > 0){
-        word = sel.toString().trim();
-      } else {
-        // Fallback: слово з позиції кліку
-        const range = document.caretRangeFromPoint ? document.caretRangeFromPoint(e.clientX, e.clientY) : null;
-        if(range){
-          range.expand('word');
-          word = range.toString().trim();
-        }
+      const range = document.caretRangeFromPoint
+        ? document.caretRangeFromPoint(e.clientX, e.clientY)
+        : (document.caretPositionFromPoint
+            ? (function(){ const p=document.caretPositionFromPoint(e.clientX,e.clientY); if(!p) return null; const r=document.createRange(); r.setStart(p.offsetNode,p.offset); return r; })()
+            : null);
+      if(range){
+        range.expand('word');
+        word = range.toString().trim().replace(/[.,!?;:()\[\]{}'"«»\n\r]/g,'').trim();
       }
-      word = word.replace(/[«»"".,!?;:()\[\]{}'\n\r]/g,'').trim();
-      if(word.length > 1 && word.length < 80){
-        if(!vocab.includes(word)){
-          vocab.push(word);
-          saveVoc();
-          renderVocabPanel();
-        }
-        showToast('📚 "'+word+'" → словник');
+      if(word.length > 1 && word.length < 60){
+        showWordPopup(word, e.clientX, e.clientY);
       }
     });
   });
+}
+
+function showWordPopup(word, x, y){
+  // Видаляємо старий попап
+  const old = document.getElementById('word-popup');
+  if(old) old.remove();
+
+  const popup = document.createElement('div');
+  popup.id = 'word-popup';
+  popup.style.cssText = `
+    position:fixed;z-index:9999;
+    background:#1a1d2e;border:2px solid var(--gold);border-radius:12px;
+    padding:14px 16px;min-width:200px;max-width:280px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.6);
+    left:${Math.min(x, window.innerWidth-300)}px;
+    top:${Math.min(y+10, window.innerHeight-150)}px;
+  `;
+
+  popup.innerHTML = `
+    <div style="color:var(--gold);font-weight:700;font-size:15px;margin-bottom:4px">${word}</div>
+    <div style="color:var(--muted);font-size:12px;margin-bottom:12px" id="popup-trans">🔄 Перекладаємо...</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="addWordFromPopup('${word.replace(/'/g,"\'")}')" style="flex:1;background:var(--green);color:#000;border:none;border-radius:7px;padding:7px;font-weight:700;cursor:pointer;font-size:13px">+ Словник</button>
+      <button onclick="document.getElementById('word-popup').remove()" style="background:var(--s3);color:var(--muted);border:none;border-radius:7px;padding:7px 12px;cursor:pointer;font-size:16px">✕</button>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  // Закриваємо при кліку поза попапом
+  setTimeout(()=>{
+    document.addEventListener('click', function handler(e){
+      if(!popup.contains(e.target)){ popup.remove(); document.removeEventListener('click',handler); }
+    });
+  }, 100);
+
+  // Переклад через Gemini API
+  fetch('/api/gemini', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({prompt:`Перекладай одне слово або фразу з німецької на українську. Відповідай ТІЛЬКИ перекладом, без пояснень, без лапок. Слово: "${word}"`})
+  }).then(r=>r.json()).then(d=>{
+    const el = document.getElementById('popup-trans');
+    if(el) el.textContent = d.text || '—';
+  }).catch(()=>{
+    const el = document.getElementById('popup-trans');
+    if(el) el.textContent = '(переклад недоступний)';
+  });
+}
+
+function addWordFromPopup(word){
+  if(!vocab.includes(word)){
+    vocab.push(word);
+    saveVoc();
+    renderVocabPanel();
+    showToast('📚 "'+word+'" → словник!');
+  } else {
+    showToast('✅ "'+word+'" вже в словнику');
+  }
+  const p = document.getElementById('word-popup');
+  if(p) p.remove();
 }
 
 function removeVoc(w){
