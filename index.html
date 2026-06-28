@@ -407,6 +407,7 @@ function renderAufgabe(auf){
   el.innerHTML=`<div class="sit-box"><div class="sit-lbl">📋 Situation — ${auf.label}</div>${auf.sit}</div>`
     +auf.qs.map(q=>renderCard(q)).join('');
   el.scrollTop=0;
+  setTimeout(function(){ makeWordsClickable(el); }, 100);
 }
 
 function renderSidebar(auf){
@@ -525,19 +526,39 @@ function updateProgress(){
 }
 
 // ===== VOCAB =====
-document.addEventListener('mouseup',function(e){
-  setTimeout(function(){
-    const sel = window.getSelection();
-    if(!sel || sel.rangeCount === 0) return;
-    const word = sel.toString().trim().replace(/[«»"".,!?;:()\[\]{}']/g,'').trim();
-    if(word.length > 1 && word.length < 80 && !vocab.includes(word)){
-      vocab.push(word);
-      saveVoc();
-      renderVocabPanel();
-      showToast('📚 "'+word+'" → словник');
-    }
-  }, 50);
-});
+// Словник через click на слово - як в LagerLogistik Pro
+function makeWordsClickable(container){
+  if(!container) return;
+  // Обробляємо всі текстові елементи
+  container.querySelectorAll('.qtext, .exp-box, .hint-box, .sit-box p, .sit-box td').forEach(function(el){
+    if(el.dataset.processed) return;
+    el.dataset.processed = '1';
+    el.addEventListener('click', function(e){
+      // Беремо слово під курсором
+      const sel = window.getSelection();
+      let word = '';
+      if(sel && sel.toString().trim().length > 0){
+        word = sel.toString().trim();
+      } else {
+        // Fallback: слово з позиції кліку
+        const range = document.caretRangeFromPoint ? document.caretRangeFromPoint(e.clientX, e.clientY) : null;
+        if(range){
+          range.expand('word');
+          word = range.toString().trim();
+        }
+      }
+      word = word.replace(/[«»"".,!?;:()\[\]{}'\n\r]/g,'').trim();
+      if(word.length > 1 && word.length < 80){
+        if(!vocab.includes(word)){
+          vocab.push(word);
+          saveVoc();
+          renderVocabPanel();
+        }
+        showToast('📚 "'+word+'" → словник');
+      }
+    });
+  });
+}
 
 function removeVoc(w){
   vocab=vocab.filter(x=>x!==w);saveVoc();renderVocabPanel();
