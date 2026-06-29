@@ -110,6 +110,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .ans-table td,.ans-table th{padding:6px 10px;border:1px solid #2d3a5a;color:#e2e8f0}
 .ans-table th{background:#162035;color:var(--acc);font-size:11px}
 .ai-res pre,.correct-pre{white-space:pre-wrap;font-family:'Inter',sans-serif;font-size:13px;line-height:1.7}
+[contenteditable]:focus{border-color:#22c55e !important;background:#071510 !important}
+[contenteditable]:empty:before{content:attr(placeholder);color:#374151;font-style:italic}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gold);color:#111;font-weight:700;font-size:13px;padding:8px 22px;border-radius:20px;z-index:999;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
@@ -218,38 +220,38 @@ a1:{
   <table style="width:100%;border-collapse:collapse;font-size:13px">
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8;width:50%">an Lagerzone:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px;width:50%"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;width:50%;color:#fff;outline:none;background:#0d1a30;min-height:20px" placeholder="..."></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Artikelnummer:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">an Abteilung:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Menge in Stück:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Anzahl Europaletten:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lieferschein-Nr.:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
     </tr>
     <tr>
       <td colspan="2" style="border:1px solid #2d3a5a;padding:8px 10px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lagerzone:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Sperrfläche:</td>
-      <td style="border:1px solid #2d3a5a;padding:9px 10px"></td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
     </tr>
   </table>
 </div>`,
@@ -319,22 +321,22 @@ a1:{
     <tr>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">5</td>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Rot</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30;min-width:60px"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">4</td>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Gelb</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">3</td>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Blau</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30"></td>
     </tr>
     <tr>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">3</td>
       <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Grün</td>
-      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;color:#64748b">___</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30"></td>
     </tr>
   </table>
 </div>`,
@@ -614,8 +616,25 @@ function clearQ(id){
 async function check(qid,id,pts){
   const aufgabe=DATA[curTab];
   const q=aufgabe.qs.find(x=>x.id===qid);
-  const userAns=document.getElementById('ta_'+id).value.trim();
-  if(!userAns){alert('Напиши спочатку свою відповідь!');return;}
+  // Збираємо відповідь: або з textarea або з contenteditable таблиці
+  let userAns = document.getElementById('ta_'+id).value.trim();
+  // Якщо є contenteditable поля в картці — збираємо їх теж
+  const qcard = document.getElementById('qc_'+id);
+  if(qcard){
+    const editCells = qcard.querySelectorAll('[contenteditable]');
+    if(editCells.length > 0){
+      const tableAns = [];
+      qcard.querySelectorAll('tr').forEach(row => {
+        const label = row.querySelector('td:not([contenteditable])');
+        const val = row.querySelector('[contenteditable]');
+        if(label && val && val.textContent.trim()){
+          tableAns.push(label.textContent.trim() + ' ' + val.textContent.trim());
+        }
+      });
+      if(tableAns.length > 0) userAns = tableAns.join('\n') + (userAns ? '\n' + userAns : '');
+    }
+  }
+  if(!userAns){alert('Заповни поля таблиці або напиши відповідь!');return;}
   const ld=document.getElementById('ld_'+id);
   const ar=document.getElementById('ar_'+id);
   ld.classList.add('on'); ar.className='ai-res';
