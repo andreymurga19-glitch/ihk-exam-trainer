@@ -27,6 +27,54 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .stat-chip .sc-main{font-size:15px;font-weight:700;color:#fff}
 .stat-chip .sc-sub{font-size:10px;color:var(--dim);margin-top:2px;line-height:1.5}
 .stat-chip.active{border-color:var(--acc);background:#11192e}
+
+/* EXAM LAUNCH BOX */
+.exam-launch-box{display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(135deg,#2a0a0a,#1a0505);border:1px solid #7f1d1d;border-radius:12px;padding:14px 18px;margin-bottom:18px;flex-wrap:wrap}
+.exam-launch-box .elb-title{font-size:14px;font-weight:700;color:#fca5a5}
+.exam-launch-box .elb-sub{font-size:11px;color:#9ca3af;margin-top:2px}
+
+/* EXAM MODE OVERLAY */
+#examOverlay{position:fixed;inset:0;background:var(--bg);z-index:5000;display:none;flex-direction:column}
+#examOverlay.show{display:flex}
+.exam-hdr{background:linear-gradient(135deg,#1a0505,#2a0a0a);border-bottom:2px solid #dc2626;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.exam-hdr-title{font-size:14px;font-weight:700;color:#fff}
+.exam-timer{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#fca5a5;background:#1a0505;border:1px solid #7f1d1d;border-radius:8px;padding:6px 14px}
+.exam-timer.warn{color:var(--gold);border-color:var(--gold);animation:examPulse 1s infinite}
+.exam-timer.danger{color:#fca5a5;border-color:#dc2626;animation:examPulse .5s infinite}
+@keyframes examPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.exam-progress{font-size:12px;color:var(--muted)}
+.exam-body{flex:1;overflow-y:auto;padding:20px 16px 100px;max-width:760px;margin:0 auto;width:100%}
+.exam-q-num{font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:.5px}
+.exam-q-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:0}
+.exam-q-text{font-size:15px;color:#fff;line-height:1.7;margin-bottom:18px}
+.exam-opt{display:block;width:100%;text-align:left;background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:13px 16px;margin-bottom:9px;color:var(--text);font-size:14px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.exam-opt:hover{border-color:var(--acc)}
+.exam-opt.selected{border-color:var(--acc);background:#1a2d4f;color:#93c5fd;font-weight:600}
+.exam-nav{position:fixed;bottom:0;left:0;right:0;background:#0d0f17;border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;justify-content:center;align-items:center}
+.exam-nav button{padding:11px 22px;border-radius:9px;font-weight:600;font-size:14px;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+.exam-btn-prev{background:var(--s2);color:var(--text)}
+.exam-btn-next{background:var(--acc);color:#fff}
+.exam-btn-finish{background:#dc2626;color:#fff}
+.exam-dots{display:flex;flex-wrap:wrap;gap:5px;padding:14px 16px;max-width:760px;margin:0 auto}
+.exam-dot{width:26px;height:26px;border-radius:6px;background:var(--s2);border:1px solid var(--border);font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.exam-dot.answered{background:#1a3a2a;border-color:var(--green);color:var(--green)}
+.exam-dot.current{border-color:var(--acc);border-width:2px;color:#fff}
+
+/* EXAM RESULT SCREEN */
+.exam-result{max-width:480px;margin:40px auto;text-align:center;padding:0 16px}
+.exam-result-badge{font-size:64px;margin-bottom:10px}
+.exam-result-title{font-size:24px;font-weight:700;margin-bottom:8px}
+.exam-result-title.pass{color:var(--green)}
+.exam-result-title.fail{color:#fca5a5}
+.exam-result-score{font-size:46px;font-weight:800;color:#fff;margin:18px 0 4px}
+.exam-result-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.exam-result-bar{height:10px;background:var(--s2);border-radius:5px;overflow:hidden;margin-bottom:24px}
+.exam-result-fill{height:100%;border-radius:5px}
+.exam-result-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.exam-result-stat{background:var(--s1);border:1px solid var(--border);border-radius:9px;padding:12px}
+.exam-result-stat .ers-num{font-size:20px;font-weight:700;color:#fff}
+.exam-result-stat .ers-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:11px 18px;font-size:13px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;font-family:'Inter',sans-serif}
 .tab.on{color:var(--acc);border-bottom-color:var(--acc)}
@@ -187,6 +235,19 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div id="examOverlay">
+  <div class="exam-hdr">
+    <div>
+      <div class="exam-hdr-title" id="examHdrTitle">🎯 Режим екзамену</div>
+      <div class="exam-progress" id="examProgress">Frage 1 / 36</div>
+    </div>
+    <div class="exam-timer" id="examTimer">90:00</div>
+  </div>
+  <div class="exam-dots" id="examDots"></div>
+  <div class="exam-body" id="examBody"></div>
+  <div class="exam-nav" id="examNav"></div>
+</div>
 
 <script>
 const KEY_DONE = 'ihk26_done';
@@ -1113,7 +1174,17 @@ function goTab(tab, btn){
 function renderAufgabe(auf){
   renderSidebar(auf);
   const el=document.getElementById('content');
+  const examBtn = (curTab==='a5' || curTab==='a6')
+    ? `<div class="exam-launch-box">
+        <div class="elb-text">
+          <div class="elb-title">🎯 Режим реального екзамену</div>
+          <div class="elb-sub">Таймер · без підказок · без пояснень · результат в кінці</div>
+        </div>
+        <button class="btn" style="background:#dc2626;color:#fff;font-weight:700;white-space:nowrap" onclick="startExamMode('${curTab}')">▶ Почати екзамен</button>
+      </div>`
+    : '';
   el.innerHTML=`<div class="sit-box"><div class="sit-lbl">📋 Situation — ${auf.label}</div>${auf.sit}</div>`
+    + examBtn
     +auf.qs.map(q=>renderCard(q)).join('');
   el.scrollTop=0;
   setTimeout(function(){ makeWordsClickable(el); }, 100);
@@ -1502,7 +1573,241 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('on'),2200);
 }
 
-// INIT
+// ===== EXAM MODE (ізольований модуль, не зачіпає звичайний режим) =====
+let examState = null; // {tab, qs, answers:{}, idx, timeLeft, timerInterval, durationSec}
+
+function startExamMode(tab){
+  const auf = DATA[tab];
+  if(!auf) return;
+  const durationSec = tab === 'a5' ? 90*60 : 60*60; // Güterumschlag 90 Min, WiSo 60 Min
+  examState = {
+    tab,
+    qs: auf.qs,
+    answers: {},
+    idx: 0,
+    timeLeft: durationSec,
+    durationSec,
+    timerInterval: null,
+    finished: false
+  };
+  document.getElementById('examHdrTitle').textContent = tab === 'a5' ? '🎯 Екзамен: Güterumschlag' : '🎯 Екзамен: WiSo';
+  document.getElementById('examOverlay').classList.add('show');
+  renderExamDots();
+  renderExamQuestion();
+  startExamTimer();
+}
+
+function startExamTimer(){
+  updateExamTimerDisplay();
+  examState.timerInterval = setInterval(()=>{
+    examState.timeLeft--;
+    updateExamTimerDisplay();
+    if(examState.timeLeft <= 0){
+      clearInterval(examState.timerInterval);
+      finishExam(true);
+    }
+  }, 1000);
+}
+
+function updateExamTimerDisplay(){
+  const t = document.getElementById('examTimer');
+  const m = Math.floor(examState.timeLeft/60);
+  const s = examState.timeLeft%60;
+  t.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  t.className = 'exam-timer';
+  if(examState.timeLeft <= 300) t.classList.add('danger');
+  else if(examState.timeLeft <= 600) t.classList.add('warn');
+}
+
+function renderExamDots(){
+  const el = document.getElementById('examDots');
+  el.innerHTML = examState.qs.map((q,i)=>{
+    const answered = examState.answers[q.id] !== undefined;
+    const isCurrent = i === examState.idx;
+    return `<div class="exam-dot ${answered?'answered':''} ${isCurrent?'current':''}" onclick="goToExamQuestion(${i})">${i+1}</div>`;
+  }).join('');
+}
+
+function goToExamQuestion(i){
+  examState.idx = i;
+  renderExamQuestion();
+  renderExamDots();
+}
+
+function renderExamQuestion(){
+  const q = examState.qs[examState.idx];
+  const id = q.id;
+  document.getElementById('examProgress').textContent = `Frage ${examState.idx+1} / ${examState.qs.length}`;
+
+  let bodyHtml = `<div class="exam-q-card">
+    <div class="exam-q-num">${q.id} · ${q.pts} Punkt${q.pts>1?'e':''}</div>
+    <div class="exam-q-text">${q.text}</div>`;
+
+  const savedAns = examState.answers[id];
+
+  if(q.correctMulti){
+    // Zuordnung/Reihenfolge - кожен термін окремо
+    const terms = Object.keys(q.correctMulti);
+    bodyHtml += terms.map(term => {
+      const savedForTerm = savedAns && savedAns[term];
+      return `<div style="margin-bottom:14px">
+        <div style="font-weight:600;color:#fff;margin-bottom:8px;font-size:13px">${term}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${q.options.map(opt=>{
+            const val = opt.split('.')[0].trim();
+            const sel = savedForTerm === val ? 'selected' : '';
+            return `<button type="button" class="exam-opt ${sel}" style="width:auto;flex:1;min-width:120px" onclick="examSelectZuord('${term.replace(/'/g,"\\'")}','${val}')">${opt}</button>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  } else if(q.type === 'multiselect'){
+    const savedArr = savedAns || [];
+    bodyHtml += q.options.map(opt=>{
+      const val = opt.split('.')[0].trim();
+      const sel = savedArr.includes(val) ? 'selected' : '';
+      return `<button type="button" class="exam-opt ${sel}" onclick="examToggleMultiselect('${val}')">${opt}</button>`;
+    }).join('');
+  } else if(q.type === 'mc'){
+    bodyHtml += q.options.map(opt=>{
+      const val = opt.split('.')[0].trim();
+      const sel = savedAns === val ? 'selected' : '';
+      return `<button type="button" class="exam-opt ${sel}" onclick="examSelectMC('${val}')">${opt}</button>`;
+    }).join('');
+  } else {
+    // open question
+    bodyHtml += `<textarea id="examOpenAnswer" style="width:100%;min-height:100px;background:var(--s2);border:1px solid var(--border);border-radius:9px;color:var(--text);padding:12px;font-family:'Inter',sans-serif;font-size:14px" placeholder="Schreibe deine Antwort..." oninput="examSaveOpenAnswer(this.value)">${savedAns||''}</textarea>`;
+  }
+
+  bodyHtml += `</div>`;
+  document.getElementById('examBody').innerHTML = bodyHtml;
+
+  const nav = document.getElementById('examNav');
+  const isLast = examState.idx === examState.qs.length - 1;
+  nav.innerHTML = `
+    <button class="exam-btn-prev" onclick="examPrev()" ${examState.idx===0?'disabled style="opacity:.4"':''}>← Zurück</button>
+    ${isLast
+      ? `<button class="exam-btn-finish" onclick="confirmFinishExam()">✓ Prüfung abgeben</button>`
+      : `<button class="exam-btn-next" onclick="examNext()">Weiter →</button>`}
+  `;
+}
+
+function examSelectMC(val){
+  const q = examState.qs[examState.idx];
+  examState.answers[q.id] = val;
+  renderExamQuestion();
+  renderExamDots();
+}
+
+function examToggleMultiselect(val){
+  const q = examState.qs[examState.idx];
+  if(!examState.answers[q.id]) examState.answers[q.id] = [];
+  const arr = examState.answers[q.id];
+  const i = arr.indexOf(val);
+  if(i>=0) arr.splice(i,1); else arr.push(val);
+  renderExamQuestion();
+  renderExamDots();
+}
+
+function examSelectZuord(term, val){
+  const q = examState.qs[examState.idx];
+  if(!examState.answers[q.id]) examState.answers[q.id] = {};
+  examState.answers[q.id][term] = val;
+  renderExamQuestion();
+  renderExamDots();
+}
+
+function examSaveOpenAnswer(val){
+  const q = examState.qs[examState.idx];
+  examState.answers[q.id] = val;
+  // не перерендерюємо щоб не втратити фокус/курсор
+  renderExamDots();
+}
+
+function examPrev(){
+  if(examState.idx > 0){ examState.idx--; renderExamQuestion(); renderExamDots(); }
+}
+function examNext(){
+  if(examState.idx < examState.qs.length-1){ examState.idx++; renderExamQuestion(); renderExamDots(); }
+}
+
+function confirmFinishExam(){
+  const answered = Object.keys(examState.answers).length;
+  const total = examState.qs.length;
+  if(answered < total){
+    const ok = confirm(`Ти відповів на ${answered} з ${total} питань. Точно завершити екзамен?`);
+    if(!ok) return;
+  }
+  finishExam(false);
+}
+
+function finishExam(timeUp){
+  if(examState.timerInterval) clearInterval(examState.timerInterval);
+  examState.finished = true;
+
+  // Підрахунок балів
+  let earnedPts = 0;
+  let totalPts = 0;
+  let correctCount = 0;
+  let answeredCount = 0;
+
+  examState.qs.forEach(q=>{
+    totalPts += q.pts;
+    const ans = examState.answers[q.id];
+    if(ans === undefined || (Array.isArray(ans) && ans.length===0) || (typeof ans==='object' && !Array.isArray(ans) && Object.keys(ans).length===0)) return;
+    answeredCount++;
+
+    if(q.correctMulti){
+      // перевіряємо чи ВСІ терміни правильні
+      const allCorrect = Object.keys(q.correctMulti).every(term => ans[term] === q.correctMulti[term]);
+      if(allCorrect){ earnedPts += q.pts; correctCount++; }
+    } else if(q.type === 'multiselect'){
+      // для multiselect просто рахуємо як "відповів" - бали оцінюються приблизно (бо нема єдиного correct)
+      // ставимо часткові бали якщо щось вибрано
+      earnedPts += q.pts * 0.5; // консервативна оцінка
+    } else if(q.type === 'mc'){
+      if(ans === q.correct){ earnedPts += q.pts; correctCount++; }
+    }
+    // open питання не можна автоматично перевірити - не додаємо бали автоматично
+  });
+
+  const pct = totalPts > 0 ? (earnedPts/totalPts*100) : 0;
+  const passed = pct >= 50;
+
+  const examName = examState.tab === 'a5' ? 'Güterumschlag' : 'WiSo';
+  const timeUsed = examState.durationSec - examState.timeLeft;
+  const minUsed = Math.floor(timeUsed/60);
+
+  document.getElementById('examHdrTitle').textContent = `🏁 Результат: ${examName}`;
+  document.getElementById('examProgress').textContent = '';
+  document.getElementById('examTimer').style.display = 'none';
+  document.getElementById('examDots').innerHTML = '';
+  document.getElementById('examNav').innerHTML = `<button class="exam-btn-next" onclick="closeExamMode()">Закрити</button>`;
+
+  document.getElementById('examBody').innerHTML = `
+    <div class="exam-result">
+      <div class="exam-result-badge">${passed ? '✅' : '❌'}</div>
+      <div class="exam-result-title ${passed?'pass':'fail'}">${passed ? 'ЗДАВ!' : 'НЕ ЗДАВ'}</div>
+      <div class="exam-result-score">${pct.toFixed(1)}%</div>
+      <div class="exam-result-sub">${earnedPts.toFixed(1)} з ${totalPts} балів ${timeUp ? '· ⏰ час вийшов' : ''}</div>
+      <div class="exam-result-bar"><div class="exam-result-fill" style="width:${Math.min(pct,100)}%;background:${passed?'var(--green)':'#dc2626'}"></div></div>
+      <div class="exam-result-stats">
+        <div class="exam-result-stat"><div class="ers-num">${correctCount}</div><div class="ers-lbl">Правильних (MC/Zuordnung)</div></div>
+        <div class="exam-result-stat"><div class="ers-num">${answeredCount}/${examState.qs.length}</div><div class="ers-lbl">Дано відповідей</div></div>
+        <div class="exam-result-stat"><div class="ers-num">${minUsed} хв</div><div class="ers-lbl">Витрачено часу</div></div>
+        <div class="exam-result-stat"><div class="ers-num">${pct>=50?'≥50%':'<50%'}</div><div class="ers-lbl">Прохідний бал</div></div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.6">⚠️ Відкриті питання (Rechenaufgaben/Текст) не перевіряються автоматично — використовуй звичайний режим з AI-перевіркою щоб дізнатись точний бал по них.</p>
+    </div>`;
+}
+
+function closeExamMode(){
+  document.getElementById('examOverlay').classList.remove('show');
+  document.getElementById('examTimer').style.display = '';
+  examState = null;
+}
+
+
 renderVocabPanel();
 renderStatsBar('lagerlogistik');
 goTab('a1', document.querySelector('#subTabs .tab'));
