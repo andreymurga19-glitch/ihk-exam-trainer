@@ -119,6 +119,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .mc-opt{text-align:left;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
 .mc-opt:hover{border-color:var(--acc);background:#162035}
 .mc-opt.selected{border-color:var(--acc);background:#1a2d4f;color:#93c5fd;font-weight:600}
+.zuord-wrap{margin:10px 0}
+.zuord-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.zuord-term{font-weight:600;color:#fff;font-size:13px;min-width:140px;flex-shrink:0}
+.zuord-opts{display:flex;gap:6px;flex-wrap:wrap}
+.zuord-btn{background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--dim);cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.zuord-btn:hover{border-color:var(--acc)}
+.zuord-btn.selected{background:#1a2d4f;border-color:var(--acc);color:#93c5fd;font-weight:600}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gold);color:#111;font-weight:700;font-size:13px;padding:8px 22px;border-radius:20px;z-index:999;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
@@ -886,9 +893,25 @@ function renderSidebar(auf){
 function renderCard(q){
   const id=q.id.replace(/\./g,'_');
   const isMC = q.type === 'mc';
+  const isZuordnung = !!q.correctMulti;
 
   let answerInput;
-  if(isMC){
+  if(isZuordnung){
+    const terms = Object.keys(q.correctMulti);
+    answerInput = `<div class="zuord-wrap" id="zwrap_${id}">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">👉 Обери категорію для кожного терміна:</div>
+      ${terms.map((term,ti)=>`
+        <div class="zuord-row">
+          <div class="zuord-term">${term}</div>
+          <div class="zuord-opts" data-term="${term}">
+            ${q.options.map(opt=>{
+              const val = opt.split('.')[0].trim();
+              return `<button type="button" class="zuord-btn" data-val="${val}" onclick="selectZuord('${id}','${term.replace(/'/g,"\\'")}','${val}',this)">${opt}</button>`;
+            }).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+  } else if(isMC){
     answerInput = `<div class="mc-options" id="mcwrap_${id}">
       ${q.options.map((opt,i)=>`<button type="button" class="mc-opt" data-val="${opt.split('.')[0].trim()}" onclick="selectMC('${id}', this)">${opt}</button>`).join('')}
     </div>`;
@@ -902,7 +925,7 @@ function renderCard(q){
         <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
           <span class="qbadge">${q.id}</span>
           <span class="qpts">⭐ ${q.pts} Punkt${q.pts>1?'e':''}</span>
-          ${isMC ? '<span class="qpts" style="color:#a78bfa">🔘 Multiple Choice</span>' : ''}
+          ${isZuordnung ? '<span class="qpts" style="color:#a78bfa">🔗 Zuordnung</span>' : (isMC ? '<span class="qpts" style="color:#a78bfa">🔘 Multiple Choice</span>' : '')}
         </div>
         <div class="qtext selectable">${q.text}</div>
       </div>
@@ -930,6 +953,13 @@ function selectMC(id, btn){
   wrap.querySelectorAll('.mc-opt').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
   wrap.dataset.selected = btn.dataset.val;
+}
+
+function selectZuord(id, term, val, btn){
+  const row = btn.closest('.zuord-opts');
+  row.querySelectorAll('.zuord-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  row.dataset.selectedVal = val;
 }
 
 function tog(id){document.getElementById(id).classList.toggle('on')}
@@ -961,6 +991,11 @@ function clearQ(id){
     mcWrap.dataset.selected = '';
     mcWrap.querySelectorAll('.mc-opt').forEach(b=>b.classList.remove('selected'));
   }
+  const zWrap = document.getElementById('zwrap_'+id);
+  if(zWrap){
+    zWrap.querySelectorAll('.zuord-opts').forEach(o=>{ o.dataset.selectedVal=''; });
+    zWrap.querySelectorAll('.zuord-btn').forEach(b=>b.classList.remove('selected'));
+  }
   const ar=document.getElementById('ar_'+id);
   ar.className='ai-res';ar.innerHTML='';
   const correctBox = document.getElementById('correct_'+id);
@@ -970,10 +1005,19 @@ function clearQ(id){
 async function check(qid,id,pts){
   const aufgabe=DATA[curTab];
   const q=aufgabe.qs.find(x=>x.id===qid);
-  // Збираємо відповідь: MC вибір, textarea, або contenteditable таблиця
+  // Збираємо відповідь: Zuordnung, MC вибір, textarea, або contenteditable таблиця
   let userAns = '';
+  const zWrap = document.getElementById('zwrap_'+id);
   const mcWrap = document.getElementById('mcwrap_'+id);
-  if(mcWrap){
+  if(zWrap){
+    const pairs = [];
+    zWrap.querySelectorAll('.zuord-opts').forEach(o=>{
+      const term = o.dataset.term;
+      const val = o.dataset.selectedVal || '(не обрано)';
+      pairs.push(`${term} → ${val}`);
+    });
+    userAns = pairs.join('\n');
+  } else if(mcWrap){
     userAns = mcWrap.dataset.selected || '';
   } else {
     const taEl = document.getElementById('ta_'+id);
