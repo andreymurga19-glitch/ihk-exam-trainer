@@ -20,6 +20,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 
 /* TABS */
 .tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.stats-bar{display:flex;gap:0;background:#0d0f17;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:10px 14px;gap:10px}
+.stats-bar::-webkit-scrollbar{display:none}
+.stat-chip{background:var(--s1);border:1px solid var(--border);border-radius:9px;padding:8px 13px;min-width:128px;flex-shrink:0}
+.stat-chip .sc-title{font-size:10px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.stat-chip .sc-main{font-size:15px;font-weight:700;color:#fff}
+.stat-chip .sc-sub{font-size:10px;color:var(--dim);margin-top:2px;line-height:1.5}
+.stat-chip.active{border-color:var(--acc);background:#11192e}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:11px 18px;font-size:13px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;font-family:'Inter',sans-serif}
 .tab.on{color:var(--acc);border-bottom-color:var(--acc)}
@@ -146,13 +153,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 <div class="hdr">
   <div>
     <div class="hdr-title">📦 IHK Exam Trainer — Lagerlogistik Sommer 2026</div>
-    <div class="hdr-sub">Fachkraft für Lagerlogistik · 4 Aufgaben · 100 Punkte</div>
+    <div class="hdr-sub" id="hdrSub">3 Prüfungsteile · 79 Aufgaben · 300 Punkte gesamt</div>
   </div>
   <div class="prog-wrap">
     <div class="prog-txt" id="progTxt">0 / 30</div>
     <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0"></div></div>
   </div>
 </div>
+
+<div class="stats-bar" id="statsBar"></div>
 
 <div class="tabs" id="mainTabs">
   <button class="tab on" onclick="goGroup('lagerlogistik',this)">📦 Lagerlogistik</button>
@@ -1069,6 +1078,7 @@ function goGroup(group, btn){
   if(btn) btn.classList.add('on');
 
   const subTabs = document.getElementById('subTabs');
+  renderStatsBar(group);
 
   if(group === 'lagerlogistik'){
     subTabs.style.display = 'flex';
@@ -1087,6 +1097,7 @@ function goGroup(group, btn){
     goTab('vocab', null);
   }
 }
+
 
 function goTab(tab, btn){
   curTab=tab;
@@ -1328,6 +1339,49 @@ function updateProgress(){
   document.getElementById('progFill').style.width=(d/total*100)+'%';
 }
 
+function examStats(qs){
+  let pts=0, mc=0, open=0, zuord=0;
+  qs.forEach(q=>{
+    pts += q.pts || 0;
+    if(q.correctMulti) zuord++;
+    else if(q.type==='mc' || q.type==='multiselect') mc++;
+    else open++;
+  });
+  return { count: qs.length, pts, mc, open, zuord };
+}
+
+function renderStatsBar(activeGroup){
+  const sl = examStats(DATA.a1.qs.concat(DATA.a2.qs, DATA.a3.qs, DATA.a4.qs));
+  const sg = examStats(DATA.a5.qs);
+  const sw = examStats(DATA.a6.qs);
+
+  const chips = [
+    { key:'lagerlogistik', icon:'📦', title:'Lagerlogistik', main:'100 Punkte', sub:`${sl.count} Aufgaben · 150 Min<br>${sl.mc} Test · ${sl.open} offen` },
+    { key:'guterumschlag', icon:'🚛', title:'Güterumschlag', main: sg.pts+' Punkte', sub:`${sg.count} Aufgaben · 90 Min<br>${sg.mc+sg.zuord} Test/Zuordnung · ${sg.open} offen` },
+    { key:'wiso', icon:'⚖️', title:'WiSo', main: sw.pts+' Punkte', sub:`${sw.count} Aufgaben · 60 Min<br>${sw.mc+sw.zuord} Test/Zuordnung · ${sw.open} offen` },
+  ];
+
+  const el = document.getElementById('statsBar');
+  el.innerHTML = chips.map(c => `
+    <div class="stat-chip ${c.key===activeGroup?'active':''}">
+      <div class="sc-title">${c.icon} ${c.title}</div>
+      <div class="sc-main">${c.main}</div>
+      <div class="sc-sub">${c.sub}</div>
+    </div>`).join('')
+    + `<div class="stat-chip" style="border-color:#3d2f00">
+      <div class="sc-title">🏆 Gesamt</div>
+      <div class="sc-main">300 Punkte</div>
+      <div class="sc-sub">3 Prüfungsteile<br>300 Min gesamt</div>
+    </div>`;
+
+  // Динамічний підзаголовок
+  const sub = document.getElementById('hdrSub');
+  if(activeGroup==='lagerlogistik') sub.textContent = `Lagerlogistik · ${sl.count} Aufgaben · 100 Punkte · 150 Min`;
+  else if(activeGroup==='guterumschlag') sub.textContent = `Güterumschlag · ${sg.count} Aufgaben · ${sg.pts} Punkte · 90 Min`;
+  else if(activeGroup==='wiso') sub.textContent = `WiSo · ${sw.count} Aufgaben · ${sw.pts} Punkte · 60 Min`;
+  else sub.textContent = `3 Prüfungsteile · ${sl.count+sg.count+sw.count} Aufgaben · 300 Punkte gesamt`;
+}
+
 // ===== VOCAB =====
 // ===== СЛОВНИК: попап як в LagerLogistik Pro =====
 function makeWordsClickable(container){
@@ -1450,6 +1504,7 @@ function showToast(msg){
 
 // INIT
 renderVocabPanel();
+renderStatsBar('lagerlogistik');
 goTab('a1', document.querySelector('#subTabs .tab'));
 updateProgress();
 </script>
