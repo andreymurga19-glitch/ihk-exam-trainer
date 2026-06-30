@@ -819,6 +819,247 @@ a5:{
      hint:'💡 Зарплата співробітників, податки, клієнти постачальника — це не твоя справа і не потрібно для замовлень. Що потрібно щоб з ним зв\'язатись?',
      ans:'3. Genaue Anschrift des Lieferanten'}
   ]
+},
+
+a6:{
+  label: 'Wirtschafts- und Sozialkunde (WiSo) — 30 Aufgaben, 60 Min, 100 Punkte',
+  isMC: true,
+  sit: `<p>Diese Aufgabe besteht aus <strong>30 Einzelaufgaben</strong> im Multiple-Choice-, Zuordnungs- und Reihenfolge-Format. Die Aufgaben beziehen sich auf verschiedene Mitarbeiter und Auszubildende der Eltron GmbH.</p>`,
+  qs: [
+    {id:'WI-1',pts:3,type:'mc',
+     text:'Frau Sarah Hamer, volljährig, hat mit der Eltron GmbH einen Ausbildungsvertrag zur Ausbildung als Fachkraft für Lagerlogistik abgeschlossen. Frau Hamer erfährt, dass in Deutschland die Berufsausbildung grundsätzlich im Rahmen des dualen Systems durchgeführt wird. Erklären Sie, was unter dem dualen System der Berufsausbildung zu verstehen ist!',
+     options:['1. Die praktische Ausbildung erfolgt nur in der Schule, die theoretische Ausbildung nur im Ausbildungsbetrieb.','2. Auszubildende müssen an jedem Tag die Schule und den Betrieb besuchen.','3. Die Schule und der Ausbildungsbetrieb erstellen den Ausbildungsrahmenplan.','4. Während der Ausbildung müssen mindestens zwei Praktika in anderen Betrieben absolviert werden.','5. Die Berufsausbildung erfolgt an zwei Lernorten, der Schule und dem Ausbildungsbetrieb.'],
+     correct:'5',
+     exp:'🇺🇦 "Duales System" — подвійна система. Питання: де саме навчається учень? Скільки місць навчання задіяно?',
+     hint:'💡 "Dual" = подвійний = два місця. Школа (теорія) + підприємство (практика) = два Lernorte.',
+     ans:'5. Die Berufsausbildung erfolgt an zwei Lernorten, der Schule und dem Ausbildungsbetrieb.'},
+
+    {id:'WI-2',pts:3,type:'mc',
+     text:'Wer ist bei der Eltron GmbH zur Berufsausbildung berechtigt?',
+     options:['1. Nur Personen, die die Abschlussprüfung einer Fachoberschule bestanden haben','2. Nur Personen, die die Meisterprüfung bestanden haben','3. Nur Personen, die seit mindestens sechs Monaten bei der Eltron GmbH arbeiten','4. Nur Personen, die die persönliche und fachliche Eignung für die Berufsausbildung nachweisen','5. Nur studierte Berufspädagogen'],
+     correct:'4',
+     exp:'🇺🇦 За BBiG (Berufsbildungsgesetz) — хто має право навчати учнів на підприємстві? Які умови потрібні для Ausbilder/Ausbildungsbetrieb?',
+     hint:'💡 Закон вимагає 2 типи придатності: persönliche (особиста, напр. не засуджений) і fachliche (фахова кваліфікація).',
+     ans:'4. Nur Personen, die die persönliche und fachliche Eignung für die Berufsausbildung nachweisen'},
+
+    {id:'WI-3',pts:3,type:'mc',
+     text:'Frau Hamer übernimmt mit Abschluss des Ausbildungsvertrags eine Reihe verschiedener Verpflichtungen. Prüfen Sie, welche Verpflichtung sie insbesondere hat!',
+     options:['1. Die Pflicht, nach der Berufsausbildung für ein Jahr für die Eltron GmbH zu arbeiten','2. Die Pflicht, sich darum zu bemühen, die berufliche Handlungsfähigkeit zu erwerben','3. Die Pflicht, alle Schäden, die sie am Ausbildungsplatz verursacht, selbst zu bezahlen','4. Die Pflicht, zu jeder Zeit während der Ausbildung telefonisch erreichbar zu sein','5. Die Pflicht, im Urlaub an außerbetrieblichen Weiterbildungsmaßnahmen teilzunehmen'],
+     correct:'2',
+     exp:'🇺🇦 За BBiG § 13 — основні обов\'язки учня (Auszubildender). Яка з них є справжньою юридичною Pflicht (а не вигадкою)?',
+     hint:'💡 Учень зобов\'язаний СТАРАТИСЯ навчитися (Bemühenspflicht), а не нести фінансову чи телефонну відповідальність.',
+     ans:'2. Die Pflicht, sich darum zu bemühen, die berufliche Handlungsfähigkeit zu erwerben'},
+
+    {id:'WI-4',pts:3,type:'mc',
+     text:'Stellen Sie fest, welche Rechtsgrundlage beim Ausfüllen des Berufsausbildungsvertrags für Frau Hamer von zentraler Bedeutung ist!',
+     options:['1. Betriebsverfassungsgesetz','2. Handelsgesetzbuch','3. Berufsbildungsgesetz','4. Jugendarbeitsschutzgesetz','5. Mutterschutzgesetz'],
+     correct:'3',
+     exp:'🇺🇦 Який закон РЕГУЛЮЄ зміст Berufsausbildungsvertrag (договір про навчання)?',
+     hint:'💡 Назва закону прямо містить "Berufsbildung" (професійне навчання) — це найочевидніша підказка.',
+     ans:'3. Berufsbildungsgesetz (BBiG)'},
+
+    {id:'WI-5',pts:2,type:'open',
+     text:'Wie viele Monate Probezeit durften im Berufsausbildungsvertrag von Frau Hamer maximal vereinbart werden? Tragen Sie die Anzahl der Monate ein!',
+     exp:'🇺🇦 За BBiG є чітко визначений максимальний термін Probezeit (випробувального терміну) для учнівського договору.',
+     hint:'💡 За законом максимум — від 1 до 4 місяців.',
+     ans:'4 Monate (gemäß § 20 BBiG: Probezeit mindestens 1 Monat, höchstens 4 Monate)'},
+
+    {id:'WI-6',pts:3,type:'mc',
+     text:'Für Frau Hamer fallen Personalkosten an. Die Eltron GmbH zahlt als Arbeitgeber gesetzliche und freiwillige Sozialleistungen. Geben Sie die Position an, die zur Gruppe der gesetzlichen Sozialleistungen gehört!',
+     options:['1. Arbeitgeberanteil zur gesetzlichen Sozialversicherung','2. Urlaubsgeld','3. Arbeitgeberanteil zu vermögenswirksamen Leistungen','4. Leistungen für betriebliche Altersversorgung','5. Bezahlte Ausfallzeiten wegen Umzugs'],
+     correct:'1',
+     exp:'🇺🇦 Gesetzliche Sozialleistungen = обов\'язкові за законом. Freiwillige = добровільні бонуси роботодавця. Яка з 5 опцій ОБОВ\'ЯЗКОВА за законом?',
+     hint:'💡 Urlaubsgeld, vermögenswirksame Leistungen, Altersversorgung, Umzugskosten — все це ДОБРОВІЛЬНІ виплати. Що залишається обов\'язковим?',
+     ans:'1. Arbeitgeberanteil zur gesetzlichen Sozialversicherung'},
+
+    {id:'WI-7',pts:5,type:'mc',
+     text:'Frau Hamer ist gesetzlich sozialversichert und hat auch private Versicherungen abgeschlossen. Ordnen Sie zu, welche 2 der 5 Versicherungen zu den entsprechenden Leistungen passen:<br><br><strong>Übernahme der Kosten einer notwendigen Operation</strong> — <strong>Altersruhegeld</strong>',
+     options:['1. Gesetzliche Pflegeversicherung','2. Private Haftpflichtversicherung','3. Gesetzliche Rentenversicherung','4. Gesetzliche Krankenversicherung','5. Private Rechtsschutzversicherung'],
+     correctMulti:{'Übernahme der Kosten einer notwendigen Operation':'4','Altersruhegeld':'3'},
+     exp:'🇺🇦 Зіставлення страховок з виплатами. Операція = яка страховка покриває лікування? Altersruhegeld (пенсія по старості) = яка страховка?',
+     hint:'💡 Krankenversicherung = хвороба/лікування. Rentenversicherung = пенсія/старість.',
+     ans:'Übernahme der Kosten einer notwendigen Operation → 4 (Gesetzliche Krankenversicherung)\\nAltersruhegeld → 3 (Gesetzliche Rentenversicherung)'},
+
+    {id:'WI-8',pts:3,type:'mc',
+     text:'Frau Hamer hatte auf dem Gelände der Eltron GmbH einen Unfall mit dem Gabelstapler und wurde leicht verletzt. Prüfen Sie, wer in diesem Fall die anfallenden Kosten der ärztlichen Behandlung von Frau Hamer trägt!',
+     options:['1. Die zuständige Berufsgenossenschaft','2. Die private Haftpflichtversicherung der Auszubildenden','3. Die Krankenversicherung der Auszubildenden','4. Die Betriebshaftpflichtversicherung des Ausbildungsbetriebs','5. Die private Unfallversicherung der Auszubildenden alleine'],
+     correct:'1',
+     exp:'🇺🇦 Нещасний випадок СТАВСЯ НА РОБОТІ (Arbeitsunfall). Хто покриває витрати на лікування виробничих травм?',
+     hint:'💡 Berufsgenossenschaft = страховка від нещасних випадків на виробництві (Unfallversicherung), а не приватна чи звичайна медична страховка.',
+     ans:'1. Die zuständige Berufsgenossenschaft'},
+
+    {id:'WI-9',pts:3,type:'mc',
+     text:'Frau Hamer muss Tätigkeiten verrichten, die nach ihrer Meinung im betrieblichen Ausbildungsplan nicht vorgesehen sind. Sie möchte sich bei der Stelle, die für die Berufsausbildung zuständig ist, beschweren. An welche zuständige Stelle kann sich Frau Hamer in diesem Fall wenden?',
+     options:['1. An eine Anwaltskanzlei','2. An die zuständige Industrie- und Handelskammer','3. An die Gewerkschaft','4. An die Berufsschule','5. An die Agentur für Arbeit'],
+     correct:'2',
+     exp:'🇺🇦 Хто контролює дотримання Ausbildungsplan і вирішує спори про учнівство? Яка офіційна установа відповідає за Berufsausbildung?',
+     hint:'💡 IHK (Industrie- und Handelskammer) — офіційний наглядовий орган для всіх питань Ausbildung, включно зі спорами.',
+     ans:'2. An die zuständige Industrie- und Handelskammer'},
+
+    {id:'WI-10',pts:3,type:'mc',
+     text:'Stellen Sie fest, welches Ereignis für Frau Hamer zur unmittelbaren Beendigung des Ausbildungsverhältnisses führt!',
+     options:['1. Die Zulassung zur vorzeitigen Abschlussprüfung','2. Die Bekanntgabe des Bestehens der Abschlussprüfung','3. Der letzte Berufsschultag','4. Der Beginn der Sommerferien','5. Das Nicht-Bestehen der schriftlichen Abschlussprüfung im ersten Versuch'],
+     correct:'2',
+     exp:'🇺🇦 Коли ЮРИДИЧНО закінчується учнівський договір? Яка саме подія — миттєвий тригер закінчення?',
+     hint:'💡 За § 21 BBiG — учнівство закінчується в момент ОГОЛОШЕННЯ результату (Bekanntgabe), що іспит складено, а не в інший день.',
+     ans:'2. Die Bekanntgabe des Bestehens der Abschlussprüfung'},
+
+    {id:'WI-11',pts:4,type:'mc',
+     text:'Frau Lara Kösters hat bei der Müller GmbH ihre Ausbildung zur Fachkraft für Lagerlogistik erfolgreich beendet. Sie schließt zum 01.05.2026 mit der Eltron GmbH einen Arbeitsvertrag über ein unbefristetes Arbeitsverhältnis. Es gibt gesetzliche Regelungen, die nur für das Ausbildungsverhältnis gelten und Regelungen, die nur für das Arbeitsverhältnis gültig sind. Ordnen Sie zu:<br><br><strong>Die Probezeit beträgt maximal 6 Monate.</strong> — <strong>Die Höhe der Vergütung muss von Jahr zu Jahr steigen.</strong> — <strong>Eine ordentliche Kündigung nach der Probezeit von Seiten des Betriebs ist nicht möglich.</strong> — <strong>Es ist ein Ausbildungsnachweis zu führen.</strong>',
+     options:['1. Regelungen zum Ausbildungsverhältnis','2. Regelungen zum Arbeitsverhältnis'],
+     correctMulti:{'Die Probezeit beträgt maximal 6 Monate.':'2','Die Höhe der Vergütung muss von Jahr zu Jahr steigen.':'1','Eine ordentliche Kündigung nach der Probezeit von Seiten des Betriebs ist nicht möglich.':'1','Es ist ein Ausbildungsnachweis zu führen.':'1'},
+     exp:'🇺🇦 Порівняй правила Ausbildungsverhältnis (учнівство, BBiG) і Arbeitsverhältnis (звичайна робота, після навчання). Які правила належать до якого типу?',
+     hint:'💡 Probezeit 6 місяців = типово для звичайної РОБОТИ. Зростаюча зарплата щороку, заборона звільнення, Ausbildungsnachweis (звіт учня) — все це особливості УЧНІВСТВА.',
+     ans:'Probezeit max. 6 Monate → 2 (Arbeitsverhältnis)\\nVergütung steigt jährlich → 1 (Ausbildungsverhältnis)\\nKündigungsschutz nach Probezeit → 1 (Ausbildungsverhältnis)\\nAusbildungsnachweis führen → 1 (Ausbildungsverhältnis)'},
+
+    {id:'WI-12',pts:3,type:'mc',
+     text:'In dem mit der Eltron GmbH abgeschlossenen Arbeitsvertrag wurde unter anderem vereinbart: Monatsentgelt 2.700,00 € – das sind 200,00 € über dem Tariflohn, 18 Arbeitstage Jahresurlaub – bei 5 Arbeitstagen je Kalenderwoche. Beurteilen Sie die Rechtslage!',
+     options:['1. Der Vertrag ist in allen Punkten rechtsgültig.','2. Der Vertrag ist so lange vollständig rechtsgültig, bis er von einer Seite erfolgreich angefochten wird.','3. Nur der Urlaubsanspruch ist nichtig.','4. Nur das übertarifliche Entgelt ist nichtig, ansonsten ist der Vertrag rechtsgültig.','5. Der Vertrag ist komplett nichtig, da der gesetzliche Mindesturlaub unterschritten wird.'],
+     correct:'3',
+     exp:'🇺🇦 Gesetzlicher Mindesturlaub (Bundesurlaubsgesetz) при 5-денному тижні = 20 робочих днів мінімум. 18 днів менше за мінімум — що з цим пунктом договору?',
+     hint:'💡 Зарплата вища за тариф — це нормально (Günstigkeitsprinzip). Але відпустка нижча за законний мінімум — ця частина недійсна (nichtig), решта договору залишається чинною.',
+     ans:'3. Nur der Urlaubsanspruch ist nichtig. (Der gesetzliche Mindesturlaub bei 5-Tage-Woche beträgt 20 Arbeitstage — 18 Tage unterschreiten diesen Mindestanspruch und sind daher nichtig; der restliche Vertrag bleibt gültig.)'},
+
+    {id:'WI-13',pts:5,type:'open',
+     text:'Frau Kösters erhält ihre monatliche Entgeltabrechnung, die unter anderem folgende Angaben enthält: Bruttoentgelt 2.700,00 € | Lohnsteuer 233,50 € | Kirchensteuer 18,68 € | Arbeitnehmeranteil zur ges. Sozialversicherung insgesamt 21,1 %. Ermitteln Sie den Auszahlungsbetrag in €!',
+     exp:'🇺🇦 Розрахунок Netto з Brutto. Спочатку знайди суму соціального страхування у € (21,1% від брутто), потім відніми всі відрахування від брутто.',
+     hint:'💡 Sozialversicherung: 2.700 € × 21,1% = ? €. Auszahlung = Brutto − Lohnsteuer − Kirchensteuer − Sozialversicherung.',
+     ans:'Sozialversicherung: 2.700,00 € × 21,1% = 569,70 €\\nAuszahlungsbetrag = 2.700,00 − 233,50 − 18,68 − 569,70 = 1.878,12 €'},
+
+    {id:'WI-14',pts:3,type:'mc',
+     text:'Bei der Eltron GmbH finden im Juni 2026 Betriebsratswahlen statt. Prüfen Sie, ob sich Frau Kösters in den Betriebsrat wählen lassen darf!',
+     options:['1. Ja, weil sie volljährig ist.','2. Ja, weil sie eine abgeschlossene Berufsausbildung hat.','3. Nein, weil sie noch nicht lange genug bei der Eltron GmbH beschäftigt ist.','4. Nein, weil sie kein Gewerkschaftsmitglied ist.','5. Nein, weil sie sich zuerst für die Jugend- und Auszubildendenvertretung zur Wahl stellen muss.'],
+     correct:'3',
+     exp:'🇺🇦 За BetrVG (Betriebsverfassungsgesetz) — щоб БУТИ ОБРАНИМ у Betriebsrat, потрібен мінімальний стаж роботи на підприємстві. Frau Kösters щойно почала (01.05.2026).',
+     hint:'💡 Wahlrecht (право голосувати) ≠ Wählbarkeit (право бути обраним). Для обрання потрібно 6 місяців стажу на підприємстві (§ 8 BetrVG).',
+     ans:'3. Nein, weil sie noch nicht lange genug bei der Eltron GmbH beschäftigt ist. (Wählbar ist gem. § 8 BetrVG erst nach 6 Monaten Betriebszugehörigkeit.)'},
+
+    {id:'WI-15',pts:3,type:'mc',
+     text:'Frau Kösters möchte sich fortbilden. In einer Fachzeitschrift findet sie folgende Anzeige: "Mit der Fortbildung zum Geprüften Logistikmeister stehen in der Logistikbranche viele Türen offen... Für diese Fortbildung fallen Kosten von etwa 4.000,00 € an." Geben Sie an, welchen Vorteil Frau Kösters durch diese Fortbildung hätte!',
+     options:['1. Sie kann durch die Fortbildung sicher sein, dass sie ihren Arbeitsplatz bei der Eltron GmbH nie verliert.','2. Sie hat keinen Vorteil durch die Fortbildung, denn sie muss die 4.000,00 € selbst bezahlen.','3. Sie kann sich nur nach einer entsprechenden Fortbildung selbstständig machen.','4. Sie hat durch die Fortbildung das Recht, selbst Auszubildende bei der Eltron GmbH auszubilden.','5. Sie erreicht durch die Fortbildung eine höhere Qualifizierung und hat die Möglichkeit beruflich aufzusteigen.'],
+     correct:'5',
+     exp:'🇺🇦 Який РЕАЛЬНИЙ та загальний переваг має Fortbildung (підвищення кваліфікації) до рівня Meister?',
+     hint:'💡 Думай широко: Meistertitel дає вищу кваліфікацію, не лише одну конкретну можливість (як самозайнятість чи навчання учнів — це лише ПОБІЧНІ ефекти, не головна перевага).',
+     ans:'5. Sie erreicht durch die Fortbildung eine höhere Qualifizierung und hat die Möglichkeit beruflich aufzusteigen.'},
+
+    {id:'WI-16',pts:3,type:'mc',
+     text:'Mehrere Mitarbeiter der Eltron GmbH wollen Streitigkeiten vor Gericht klären lassen. Prüfen Sie, in welchem Fall das Sozialgericht zuständig ist!',
+     options:['1. Ein Mitarbeiter streitet mit der gesetzlichen Krankenkasse um die Übernahme von Kosten für Zahnersatz.','2. Ein Mitarbeiter hält seine Kündigung für ungerechtfertigt.','3. Ein Mitarbeiter streitet mit dem Arbeitgeber um die Überstundenvergütung.','4. Ein Mitarbeiter beschuldigt einen anderen Mitarbeiter, ihn während der Arbeit bestohlen zu haben.','5. Ein Mitarbeiter fühlt sich bei der Diensteinteilung ständig benachteiligt.'],
+     correct:'1',
+     exp:'🇺🇦 Sozialgericht — спеціалізований суд для спорів з касами соціального страхування (Krankenkasse, Rentenversicherung, тощо). Яка ситуація стосується саме цього?',
+     hint:'💡 Kündigung та Überstunden → Arbeitsgericht. Крадіжка → кримінальний суд. Krankenkasse спір → саме Sozialgericht.',
+     ans:'1. Ein Mitarbeiter streitet mit der gesetzlichen Krankenkasse um die Übernahme von Kosten für Zahnersatz.'},
+
+    {id:'WI-17',pts:4,type:'mc',
+     text:'Die 4 Säulen mit den Grundfreiheiten für Bürger und Unternehmen des Europäischen Binnenmarkts traten zum 01.01.1993 in Kraft. Ordnen Sie zu:<br><br><strong>Import und Export von Lebensmitteln</strong> — <strong>Wegfall von Grenzkontrollen für Urlauber</strong> — <strong>Öffnung der Telekommunikationsmärkte</strong> — <strong>Geldanlage in anderen EU-Ländern</strong>',
+     options:['1. Freier Personenverkehr','2. Freier Warenverkehr','3. Freier Dienstleistungsverkehr','4. Freier Kapitalverkehr'],
+     correctMulti:{'Import und Export von Lebensmitteln':'2','Wegfall von Grenzkontrollen für Urlauber':'1','Öffnung der Telekommunikationsmärkte':'3','Geldanlage in anderen EU-Ländern':'4'},
+     exp:'🇺🇦 4 основні свободи ЄС. Зіставляй приклад до правильної свободи: товари, люди, послуги, чи капітал/гроші?',
+     hint:'💡 Lebensmittel = товар (Ware). Grenzkontrollen für Urlauber = люди (Personen). Telekommunikationsmärkte = послуги (Dienstleistung). Geldanlage = капітал (Kapital).',
+     ans:'Import/Export von Lebensmitteln → 2 (Freier Warenverkehr)\\nWegfall von Grenzkontrollen → 1 (Freier Personenverkehr)\\nÖffnung Telekommunikationsmärkte → 3 (Freier Dienstleistungsverkehr)\\nGeldanlage in EU-Ländern → 4 (Freier Kapitalverkehr)'},
+
+    {id:'WI-18',pts:5,type:'mc',
+     text:'Nach einigen Jahren als Mitarbeiter bei der Eltron GmbH möchte Lenny Woll den Schritt in die Selbstständigkeit wagen. Er möchte einen kleinen Transport- und Logistikbetrieb gründen. Bringen Sie die folgenden Schritte bei einer Existenzgründung in die richtige Reihenfolge:<br><br><strong>Mit den geschätzten Zahlen zu Umsatzerlösen und Kosten die Finanzierung mit der Bank klären</strong> — <strong>Investition des Darlehens in einen Transporter</strong> — <strong>Entwicklung einer Geschäftsidee</strong> — <strong>Geschäftskonto eröffnen und dort das Darlehen der Bank gutschreiben lassen</strong> — <strong>Businessplan erstellen</strong>',
+     options:['1','2','3','4','5'],
+     correctMulti:{'Entwicklung einer Geschäftsidee':'1','Businessplan erstellen':'2','Mit den geschätzten Zahlen zu Umsatzerlösen und Kosten die Finanzierung mit der Bank klären':'3','Geschäftskonto eröffnen und dort das Darlehen der Bank gutschreiben lassen':'4','Investition des Darlehens in einen Transporter':'5'},
+     exp:'🇺🇦 Логічна послідовність заснування бізнесу: спочатку ідея, потім план, потім фінансування, потім рахунок, потім інвестиція.',
+     hint:'💡 Ідея → План (Businessplan включає цифри) → Переговори з банком → Відкриття рахунку → Витрата грошей на транспорт.',
+     ans:'1. Entwicklung einer Geschäftsidee\\n2. Businessplan erstellen\\n3. Mit den geschätzten Zahlen die Finanzierung mit der Bank klären\\n4. Geschäftskonto eröffnen und Darlehen gutschreiben lassen\\n5. Investition des Darlehens in einen Transporter'},
+
+    {id:'WI-19',pts:2,type:'multiselect',
+     text:'Während des Gründungsprozesses muss sich Herr Woll auch Gedanken über einen optimalen Standort machen. Bestimmen Sie 2 Faktoren, die bei der Standortwahl berücksichtigt werden müssen!',
+     options:['1. Kulturelles Freizeitangebot am Standort','2. Führungsstil im Unternehmen','3. Umsatzsteuersatz','4. Verkehrsanbindung','5. Social-Media-Auftritt des Unternehmens','6. Konkurrenz in der Umgebung'],
+     correctMulti:null,
+     exp:'🇺🇦 Standortfaktoren (фактори вибору місця) для логістичного бізнесу — що реально важливо при виборі локації?',
+     hint:'💡 Думай про логістику: транспортна доступність і конкуренти поблизу — це класичні Standortfaktoren. Інші опції не стосуються місця розташування.',
+     ans:'4. Verkehrsanbindung\\n6. Konkurrenz in der Umgebung'},
+
+    {id:'WI-20',pts:3,type:'mc',
+     text:'Neben der Eintragung ins Handelsregister bestehen Pflichten zur Anmeldung des neuen Unternehmens. Nennen Sie die Stelle, bei der das Unternehmen unter anderem angemeldet werden muss!',
+     options:['1. Arbeitsamt','2. Gewerbeamt','3. Polizeibehörde','4. Bauamt','5. Ordnungsamt'],
+     correct:'2',
+     exp:'🇺🇦 Кожен новий бізнес (Gewerbe) в Німеччині потрібно зареєструвати в одній конкретній установі.',
+     hint:'💡 Назва установи прямо містить слово "Gewerbe" (підприємницька діяльність).',
+     ans:'2. Gewerbeamt'},
+
+    {id:'WI-21',pts:3,type:'mc',
+     text:'Im abgelaufenen Geschäftsjahr hat die Eltron GmbH weniger Gewinn als erwartet erzielt. Stellen Sie fest, welche Ursache dafür infrage kommt!',
+     options:['1. Die Nachfrage nach Logistikdienstleistungen war größer als erwartet.','2. Die wirtschaftliche Entwicklung in der Branche entsprach der positiven Prognose.','3. Angestrebte Preiserhöhungen konnten nicht wie geplant umgesetzt werden.','4. Fällige Kredite wurden durch Kredite mit niedrigeren Zinsen ersetzt.','5. Rationalisierungsmaßnahmen führten in der gewerblichen Lagerhaltung zu Kostensenkungen.'],
+     correct:'3',
+     exp:'🇺🇦 Шукай ЄДИНУ опцію, яка пояснює МЕНШИЙ прибуток. Решта варіантів означають покращення чи нейтральність.',
+     hint:'💡 Більший попит, позитивний прогноз, нижчі відсотки, зниження витрат — все це ПОЗИТИВНО для прибутку. Що єдине негативне?',
+     ans:'3. Angestrebte Preiserhöhungen konnten nicht wie geplant umgesetzt werden.'},
+
+    {id:'WI-22',pts:3,type:'mc',
+     text:'Die Eltron GmbH prüft aus ökologischen Gründen geeignete Maßnahmen zur Reduzierung des Materialverbrauchs. Stellen Sie fest, welche Maßnahme der Eltron GmbH hierfür geeignet ist!',
+     options:['1. Die Parkplätze der Eltron GmbH werden zukünftig auch nachts voll beleuchtet.','2. Die Eltron GmbH wechselt zu einem günstigeren Stromanbieter.','3. In allen Abteilungen wird verpflichtend die Mülltrennung eingeführt.','4. Zur Reinigung der Sozialräume werden künftig zusätzlich biologisch abbaubare Reiniger genutzt.','5. Rundschreiben werden künftig nicht mehr ausgedruckt, sondern per E-Mail verschickt.'],
+     correct:'5',
+     exp:'🇺🇦 Питання саме про зменшення СПОЖИВАННЯ МАТЕРІАЛІВ (Materialverbrauch), а не енергії чи екології в цілому. Яка опція безпосередньо економить матеріал?',
+     hint:'💡 Освітлення, постачальник струму, миючі засоби — не про матеріал. Mülltrennung — про сортування, не зменшення. Що конкретно ЗМЕНШУЄ використання паперу?',
+     ans:'5. Rundschreiben werden künftig nicht mehr ausgedruckt, sondern per E-Mail verschickt.'},
+
+    {id:'WI-23',pts:3,type:'mc',
+     text:'Die Auszubildende Melissa Kamp kauft einen Kühlschrank "Eisbär XL" zum Aktionspreis 595,00 €. Beim Auspacken entdeckt Frau Kamp, dass der Kühlschrank an der rechten Außenseite einen 1,50 m langen, tiefen Kratzer hat. Stellen Sie fest, welcher Mangel hier vorliegt!',
+     options:['1. Ein Mangel in der Quantität','2. Ein Mangel in der Identität','3. Ein Mangel in der Zuverlässigkeit','4. Ein Mangel in der Beschaffenheit','5. Ein Mangel in der Qualität'],
+     correct:'4',
+     exp:'🇺🇦 Подряпина — це дефект ЯКОЇ категорії? Це не про кількість, не про "не той товар" — це про фізичний СТАН (Beschaffenheit) самого продукту.',
+     hint:'💡 Beschaffenheit = фізичні властивості/стан товару (зовнішній вигляд, цілісність поверхні).',
+     ans:'4. Ein Mangel in der Beschaffenheit'},
+
+    {id:'WI-24',pts:3,type:'mc',
+     text:'Frau Kamp ist sehr verärgert über den beschädigten Kühlschrank und möchte Rechte wegen dieser Schlechtleistung geltend machen. Bestimmen Sie das Recht, das Frau Kamp SOFORT geltend machen kann!',
+     options:['1. Den Kaufpreis zurückfordern','2. Das Recht auf Nacherfüllung','3. Schadenersatz wegen vorsätzlicher Beschädigung des Kühlschranks verlangen','4. Den Rücktritt vom Kaufvertrag vornehmen','5. Den Kaufvertrag widerrufen, da es sich um einen Fernabsatzvertrag handelt'],
+     correct:'2',
+     exp:'🇺🇦 При дефекті товару покупець спочатку має право на Nacherfüllung (усунення дефекту) — це ПЕРШИЙ крок за законом, перш ніж можна вимагати інше.',
+     hint:'💡 Rücktritt, Kaufpreis zurückfordern, Schadenersatz — всі ці права доступні лише ПІСЛЯ невдалої Nacherfüllung. Яке право можна вимагати одразу?',
+     ans:'2. Das Recht auf Nacherfüllung'},
+
+    {id:'WI-25',pts:4,type:'open',
+     text:'Frau Kamp und der Elektrohändler einigen sich auf eine Minderung des Kaufpreises um 20 %. Ermitteln Sie den neuen Bruttoverkaufspreis, den der Elektrohändler auf der neuen Rechnung für Frau Kamp ausweist! (Ursprünglicher Preis: 595,00 € inkl. Umsatzsteuer)',
+     exp:'🇺🇦 Простий розрахунок зниження ціни на 20%. Знайди новий брутто-ціну (з ПДВ).',
+     hint:'💡 595,00 € × (100% − 20%) = 595,00 € × 0,80 = ?',
+     ans:'595,00 € × 0,80 = 476,00 € (neuer Bruttoverkaufspreis)'},
+
+    {id:'WI-26',pts:3,type:'mc',
+     text:'Der Staat wirkt in einer sozialen Marktwirtschaft durch zahlreiche Eingriffe auf das Wirtschaftsgeschehen ein. Stellen Sie fest, bei welcher staatlichen Maßnahme ein gesetzlicher Verstoß vorliegt!',
+     options:['1. Der Staat erleichtert die steuerlichen Abschreibungsmöglichkeiten für Unternehmen.','2. Der Staat erhöht das Existenzminimum für die Einkommensbesteuerung.','3. Der Staat gewährt Unternehmen in strukturschwachen Regionen Subventionen.','4. Der Staat greift in die Tarifverhandlungen der Gewerkschaften und Arbeitgeber ein.','5. Der Staat vergibt öffentliche Aufträge.'],
+     correct:'4',
+     exp:'🇺🇦 У соціальній ринковій економіці є принцип Tarifautonomie (автономії переговорів про зарплату) — держава НЕ МАЄ ПРАВА втручатись у ці переговори.',
+     hint:'💡 Subventionen, Steuererleichterungen, öffentliche Aufträge — нормальні державні інструменти. Втручання в Tarifverhandlungen порушує конституційний принцип Tarifautonomie.',
+     ans:'4. Der Staat greift in die Tarifverhandlungen der Gewerkschaften und Arbeitgeber ein. (Verstößt gegen die grundgesetzlich geschützte Tarifautonomie.)'},
+
+    {id:'WI-27',pts:3,type:'mc',
+     text:'Private Haushalte erhalten Transferzahlungen vom Staat. Geben Sie ein Beispiel dafür an!',
+     options:['1. Das Land Hessen unterstützt anteilig den Bau einer öffentlichen Sportanlage.','2. Ein Rentner schenkt seinem Enkel 50,00 € zum Geburtstag.','3. Ein Mitarbeiter der Eltron GmbH zahlt für seinen privaten Pkw die Kraftfahrzeugsteuer.','4. Sie helfen drei Stunden pro Woche ehrenamtlich in einem Altersheim.','5. Eine Mitarbeiterin der Eltron GmbH erhält Kindergeld für ihre zwei Kinder.'],
+     correct:'5',
+     exp:'🇺🇦 Transferzahlung = виплата ВІД держави ДО приватної особи без зустрічної послуги (не зарплата за роботу). Яка з опцій — саме така виплата?',
+     hint:'💡 Sportanlage = державні витрати, не трансфер особі. Кfz-Steuer = податок (протилежний напрямок). Kindergeld — класичний приклад трансферу від держави сім\'ї.',
+     ans:'5. Eine Mitarbeiterin der Eltron GmbH erhält Kindergeld für ihre zwei Kinder.'},
+
+    {id:'WI-28',pts:3,type:'mc',
+     text:'Die nachstehende Abbildung informiert auszugsweise über die Phasen der Konjunktur (Aufschwung/Expansion → Hochkonjunktur → Rückschlag/Rezession → Tiefstand/Depression → Neuer Aufschwung). Welche Aussage können Sie der Abbildung entnehmen?',
+     options:['1. In der Expansionsphase sinken die Absätze.','2. In der Rezessionsphase nimmt die Produktion zu.','3. In der Hochkonjunktur sind Arbeitskräfte gesucht.','4. In der Rezessionsphase steigt die Kapazitätsauslastung.','5. In der Depressionsphase ist die Arbeitslosigkeit auf einem Tiefstand.'],
+     correct:'3',
+     exp:'🇺🇦 Конʼюнктурний цикл: Hochkonjunktur (пік) — характеризується високим попитом на робочу силу. Перевір логіку кожного твердження проти діаграми.',
+     hint:'💡 Expansionsphase: продажі РОСТУТЬ (не падають). Rezession: виробництво ЗМЕНШУЄТЬСЯ. Hochkonjunktur: "Arbeitskräfte gesucht" — прямо на діаграмі.',
+     ans:'3. In der Hochkonjunktur sind Arbeitskräfte gesucht.'},
+
+    {id:'WI-29',pts:3,type:'mc',
+     text:'Der Staat kann verschiedene konjunkturpolitische Maßnahmen durchführen. Prüfen Sie, in welchem Fall Maßnahme und Zielsetzung zueinander passen!',
+     options:['1. Durch Erhöhung öffentlicher Ausgaben wird beabsichtigt, die Konjunktur zu dämpfen.','2. Durch Erhöhung der Subventionen wird beabsichtigt, die Investitionstätigkeit der Unternehmen anzuregen.','3. Durch Erhöhung der Einkommensteuer wird beabsichtigt, die private Nachfrage zu fördern.','4. Durch Einsparungen in den öffentlichen Haushalten wird beabsichtigt, den Konjunkturaufschwung zu unterstützen.','5. Durch Erhöhung des Umsatzsteuerregelsatzes wird beabsichtigt, die Konjunktur zu beleben.'],
+     correct:'2',
+     exp:'🇺🇦 Конʼюнктурна політика: яка комбінація "захід → мета" логічно правильна (захід РЕАЛЬНО досягає заявленої мети)?',
+     hint:'💡 Вищі держвидатки СТИМУЛЮЮТЬ (не гальмують) кон\'юнктуру. Вищий податок ЗМЕНШУЄ попит (не сприяє). Субсидії дійсно стимулюють інвестиції — правильна пара.',
+     ans:'2. Durch Erhöhung der Subventionen wird beabsichtigt, die Investitionstätigkeit der Unternehmen anzuregen.'},
+
+    {id:'WI-30',pts:3,type:'mc',
+     text:'Die Geldmenge im Euroraum soll erhöht werden. Wer kann diese Maßnahme praktisch umsetzen?',
+     options:['1. Die Weltbank','2. Die Deutsche Bundesbank','3. Die Europäische Zentralbank','4. Die Finanzminister des Euroraums','5. Die Regierungschefs der Euro-Zone'],
+     correct:'3',
+     exp:'🇺🇦 Хто контролює грошову масу в зоні Євро? Яка інституція має повноваження для монетарної політики?',
+     hint:'💡 EZB (Europäische Zentralbank) — єдина установа з повноваженнями монетарної політики в Eurozone, не національні центробанки чи уряди.',
+     ans:'3. Die Europäische Zentralbank (EZB)'}
+  ]
 }
 };
 
@@ -840,7 +1081,7 @@ function goGroup(group, btn){
     goTab('a5', null);
   } else if(group === 'wiso'){
     subTabs.style.display = 'none';
-    goTab('wiso', null);
+    goTab('a6', null);
   } else if(group === 'vocab'){
     subTabs.style.display = 'none';
     goTab('vocab', null);
@@ -854,18 +1095,8 @@ function goTab(tab, btn){
     btn.classList.add('on');
   }
   if(tab==='vocab'){ renderVocabPage(); return; }
-  if(tab==='wiso'){ renderWisoPlaceholder(); return; }
   renderAufgabe(DATA[tab]);
   updateProgress();
-}
-
-function renderWisoPlaceholder(){
-  document.getElementById('sidebar').innerHTML = '<div class="sb-label">WiSo</div>';
-  document.getElementById('content').innerHTML = `
-    <div class="sit-box">
-      <div class="sit-lbl">⚖️ Wirtschafts- und Sozialkunde</div>
-      <p>Розділ WiSo ще не доданий. Скинь фото питань — і я додам їх сюди.</p>
-    </div>`;
 }
 
 function renderAufgabe(auf){
@@ -893,6 +1124,7 @@ function renderSidebar(auf){
 function renderCard(q){
   const id=q.id.replace(/\./g,'_');
   const isMC = q.type === 'mc';
+  const isMultiselect = q.type === 'multiselect';
   const isZuordnung = !!q.correctMulti;
 
   let answerInput;
@@ -906,10 +1138,15 @@ function renderCard(q){
           <div class="zuord-opts" data-term="${term}">
             ${q.options.map(opt=>{
               const val = opt.split('.')[0].trim();
-              return `<button type="button" class="zuord-btn" data-val="${val}" onclick="selectZuord('${id}','${term.replace(/'/g,"\\'")}','${val}',this)">${opt}</button>`;
+              return `<button type="button" class="zuord-btn" data-val="${val}" onclick="selectZuord('${id}','${term.replace(/'/g,"\'")}','${val}',this)">${opt}</button>`;
             }).join('')}
           </div>
         </div>`).join('')}
+    </div>`;
+  } else if(isMultiselect){
+    answerInput = `<div class="mc-options" id="mswrap_${id}">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">👉 Обери ВСІ правильні варіанти (можна кілька):</div>
+      ${q.options.map((opt,i)=>`<button type="button" class="mc-opt" data-val="${opt.split('.')[0].trim()}" onclick="toggleMultiselect('${id}', this)">${opt}</button>`).join('')}
     </div>`;
   } else if(isMC){
     answerInput = `<div class="mc-options" id="mcwrap_${id}">
@@ -925,7 +1162,7 @@ function renderCard(q){
         <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
           <span class="qbadge">${q.id}</span>
           <span class="qpts">⭐ ${q.pts} Punkt${q.pts>1?'e':''}</span>
-          ${isZuordnung ? '<span class="qpts" style="color:#a78bfa">🔗 Zuordnung</span>' : (isMC ? '<span class="qpts" style="color:#a78bfa">🔘 Multiple Choice</span>' : '')}
+          ${isZuordnung ? '<span class="qpts" style="color:#a78bfa">🔗 Zuordnung</span>' : (isMultiselect ? '<span class="qpts" style="color:#a78bfa">☑️ Mehrfachauswahl</span>' : (isMC ? '<span class="qpts" style="color:#a78bfa">🔘 Multiple Choice</span>' : ''))}
         </div>
         <div class="qtext selectable">${q.text}</div>
       </div>
@@ -962,6 +1199,10 @@ function selectZuord(id, term, val, btn){
   row.dataset.selectedVal = val;
 }
 
+function toggleMultiselect(id, btn){
+  btn.classList.toggle('selected');
+}
+
 function tog(id){document.getElementById(id).classList.toggle('on')}
 
 function showAnswer(id, qid){
@@ -991,6 +1232,10 @@ function clearQ(id){
     mcWrap.dataset.selected = '';
     mcWrap.querySelectorAll('.mc-opt').forEach(b=>b.classList.remove('selected'));
   }
+  const msWrap = document.getElementById('mswrap_'+id);
+  if(msWrap){
+    msWrap.querySelectorAll('.mc-opt').forEach(b=>b.classList.remove('selected'));
+  }
   const zWrap = document.getElementById('zwrap_'+id);
   if(zWrap){
     zWrap.querySelectorAll('.zuord-opts').forEach(o=>{ o.dataset.selectedVal=''; });
@@ -1005,9 +1250,10 @@ function clearQ(id){
 async function check(qid,id,pts){
   const aufgabe=DATA[curTab];
   const q=aufgabe.qs.find(x=>x.id===qid);
-  // Збираємо відповідь: Zuordnung, MC вибір, textarea, або contenteditable таблиця
+  // Збираємо відповідь: Zuordnung, Multiselect, MC вибір, textarea, або contenteditable таблиця
   let userAns = '';
   const zWrap = document.getElementById('zwrap_'+id);
+  const msWrap = document.getElementById('mswrap_'+id);
   const mcWrap = document.getElementById('mcwrap_'+id);
   if(zWrap){
     const pairs = [];
@@ -1017,6 +1263,9 @@ async function check(qid,id,pts){
       pairs.push(`${term} → ${val}`);
     });
     userAns = pairs.join('\n');
+  } else if(msWrap){
+    const selected = Array.from(msWrap.querySelectorAll('.mc-opt.selected')).map(b=>b.dataset.val);
+    userAns = selected.length ? selected.join(', ') : '';
   } else if(mcWrap){
     userAns = mcWrap.dataset.selected || '';
   } else {
@@ -1177,7 +1426,7 @@ function renderVocabPanel(){
   el.innerHTML=vocab.map(w=>`
     <div class="vs-item">
       <span class="vs-word">${w}</span>
-      <button class="vs-del" onclick="removeVoc('${w.replace(/'/g,"\\'")}')">✕</button>
+      <button class="vs-del" onclick="removeVoc('${w.replace(/'/g,"\'")}')">✕</button>
     </div>`).join('');
 }
 
@@ -1189,7 +1438,7 @@ function renderVocabPage(){
     <div class="vocab-grid">${vocab.length?vocab.map(w=>`
       <div class="vocab-card">
         <span style="color:var(--gold);font-weight:600;">${w}</span>
-        <button class="vs-del" onclick="removeVoc('${w.replace(/'/g,"\\'")}');renderVocabPage()">✕</button>
+        <button class="vs-del" onclick="removeVoc('${w.replace(/'/g,"\'")}');renderVocabPage()">✕</button>
       </div>`).join(''):'<div style="color:var(--muted);padding:20px;">Словник порожній.</div>'}</div>`;
 }
 
