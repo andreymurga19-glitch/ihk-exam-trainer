@@ -721,6 +721,93 @@ a5:{
      ans:'3. Genaue Anschrift des Lieferanten'}
   ]
 }
+};,
+
+    {id:'MC-4',pts:3,type:'mc',
+     text:'Welche technischen Anforderungen werden an das Förderband (für die Schachtel-Kommissionierung) aus ökologischen und wirtschaftlichen Gesichtspunkten gestellt?',
+     options:['1. Das Förderband läuft die ganze Zeit durch, außer man betätigt den Notausschalter.','2. Bei Leerlauf des Förderbands schaltet es sich ab und kann erst wieder eingeschaltet werden, wenn man die Anlage neu startet.','3. Bei Leerlauf des Förderbands schaltet sich dieses automatisch ab und schaltet sich erst bei erneutem Förderbedarf ein.','4. Das Abschalten des Förderbands erfolgt automatisch in einem festen Takt.','5. Das Förderband darf nur eingeschaltet werden, wenn kein Unstetigförderer verfügbar ist.'],
+     correct:'3',
+     exp:'🇺🇦 З економічної та екологічної точки зору — конвеєр не повинен працювати марно (Leerlauf = холостий хід). Який варіант економить енергію без втрати функціональності?',
+     hint:'💡 Автоматичне вимкнення при простої та автоматичне ввімкнення при появі роботи — найекономічніше та найзручніше рішення.',
+     ans:'3. Bei Leerlauf des Förderbands schaltet sich dieses automatisch ab und schaltet sich erst bei erneutem Förderbedarf ein.'},
+
+    {id:'MC-5',pts:3,type:'mc',
+     text:'Bei den Förderbändern stellen Sie während des Betriebs am Motor schleifende Geräusche fest. Wie verhalten Sie sich richtig?',
+     options:['1. Sie schalten das Förderband sofort ab und informieren einen Techniker.','2. Sie schalten das Förderband nicht ab und informieren sofort einen Techniker.','3. Sie schalten das Förderband ab und sofort wieder ein, damit man das Geräusch nicht hört.','4. Sie schalten das Förderband ab und reparieren den Motor umgehend.','5. Sie schalten das Förderband nicht ab, sondern sprühen nur Öl auf den Motor.'],
+     correct:'1',
+     exp:'🇺🇦 Дивний шум у моторі = можлива поломка, небезпека. Правильна реакція працівника без технічної кваліфікації?',
+     hint:'💡 Безпека перш за все: зупинити техніку + покликати фахівця. Самому ремонтувати не можна (немає кваліфікації)!',
+     ans:'1. Sie schalten das Förderband sofort ab und informieren einen Techniker.'},
+
+    {id:'MC-6',pts:3,type:'mc',
+     text:'Durch die neue Kommissionierstraße soll die Kommissionierung eines Auftrags in verschiedenen Etagen und Hallen gleichzeitig durchgeführt werden und auf der Warenausgangsfläche wieder zusammengeführt werden. Benennen Sie diese Kommissioniermethode!',
+     options:['1. Auftragsorientierte, serielle Kommissionierung','2. Serienorientierte, parallele Kommissionierung','3. Auftragsorientierte, manuelle Kommissionierung','4. Auftragsorientierte, parallele Kommissionierung','5. Auftragsorientierte, zentrale Kommissionierung'],
+     correct:'4',
+     exp:'🇺🇦 Одне замовлення (Auftrag) комплектується ОДНОЧАСНО (gleichzeitig) в різних місцях — це паралельна обробка одного замовлення.',
+     hint:'💡 "gleichzeitig in verschiedenen Hallen" = паралельно (parallel), і це стосується одного Auftrags (замовлення-орієнтована).',
+     ans:'4. Auftragsorientierte, parallele Kommissionierung'},
+
+    {id:'MC-7',pts:3,type:'mc',
+     text:'In der automatischen Packstraße werden 2-wellige Faltschachteln verwendet. Was versteht man unter 2-welligem Verpackungsmaterial?',
+     options:['1. 2-welliges Verpackungsmaterial wird durch das Verkleben von Kunststoff und Wellpappe zu einer Verpackungseinheit.','2. 2-welliges Verpackungsmaterial ist das Verbinden von Kunststoff und Wellpappe auf der Europalette.','3. 2-welliges Verpackungsmaterial bedeutet eine maximal 2-fache Stapelung auf der Europalette.','4. 2-welliges Verpackungsmaterial bedeutet eine 2-fache Belastung des Raumvolumens je Kartonage in cm³.','5. 2-welliges Verpackungsmaterial wird durch das Verkleben von 3 glatten und 2 welligen Pappen erreicht.'],
+     correct:'5',
+     exp:'🇺🇦 "2-wellig" стосується структури самого картону (скільки шарів гофри), а не упаковки чи палети.',
+     hint:'💡 Структура картону: glatte Pappe (гладкий) + wellige Pappe (гофрований). 2-wellig = 2 шари гофри між гладкими шарами.',
+     ans:'5. 2-welliges Verpackungsmaterial wird durch das Verkleben von 3 glatten und 2 welligen Pappen erreicht.'},
+
+    {id:'MC-8',pts:3,type:'mc',
+     text:'Eltron GmbH beliefert Einzelhändler mit Damenbekleidung. Schachteln haben Bruttogewicht 8-18 kg. Für den Versand muss das Bruttogewicht jeder Schachtel ermittelt werden. Welche Waage wählen Sie?',
+     options:['1. Tischwaage (0 kg bis 15 kg)','2. Tischwaage (5 kg bis 30 kg)','3. Palettenwaage (20 kg bis 250 kg)','4. Plattformwaage (10 kg bis 50 kg)','5. Palettenwaage (15 kg bis 400 kg)'],
+     correct:'2',
+     exp:'🇺🇦 Вага коробок: 8-18 кг. Потрібні ваги, що ПОВНІСТЮ покривають цей діапазон і не завеликі для звичайних коробок (не палетна вага).',
+     hint:'💡 Палетні ваги для важких вантажів на палетах. Для коробок 8-18 кг потрібна Tischwaage з підходящим діапазоном.',
+     ans:'2. Tischwaage (Wiegebereich: 5 kg bis 30 kg)'},
+
+    {id:'MC-9',pts:5,type:'open',
+     text:'Verpackungsstation muss monatlich gereinigt und halbjährlich gewartet werden. Berechnen Sie die Gesamtarbeitszeit für Reinigung und Wartung in den nächsten 6 Monaten in Stunden!<br><br><table class="qt"><tr><th></th><th>Reinigung Zeit</th><th>Intervall</th><th>Wartung Zeit</th><th>Intervall</th></tr><tr><td>Umreifer 1</td><td>10 Min</td><td>monatlich</td><td>15 Min</td><td>halbjährlich</td></tr><tr><td>Umreifer 2</td><td>10 Min</td><td>monatlich</td><td>15 Min</td><td>halbjährlich</td></tr><tr><td>Rollenbahnen</td><td>30 Min</td><td>monatlich</td><td>30 Min</td><td>halbjährlich</td></tr></table>',
+     exp:'🇺🇦 За 6 місяців: Reinigung (monatlich) відбувається 6 разів, Wartung (halbjährlich) відбувається 1 раз. Підсумуй всі хвилини окремо для кожної машини, потім за 6 місяців.',
+     hint:'💡 Reinigung за місяць: 10+10+30=50 Min × 6 Monate = ? Wartung (1 раз за 6 міс): 15+15+30 = ? Сума всього в хвилинах → переведи в години.',
+     ans:'Reinigung pro Monat: 10+10+30 = 50 Min × 6 Monate = 300 Min\nWartung (halbjährlich, 1×): 15+15+30 = 60 Min\nGesamt: 300 + 60 = 360 Min : 60 = 6 Stunden'},
+
+    {id:'MC-10',pts:5,type:'mc',
+     text:'An einem Umreifungsautomaten ist das Umreifungsband aufgebraucht. Bringen Sie die Tätigkeiten in die richtige Reihenfolge:<br><br><strong>Strom einschalten</strong> — <strong>Test durchführen, ob der Automat wieder korrekt gurtet</strong> — <strong>Neue Rolle einlegen</strong> — <strong>Anlage stromlos schalten</strong> — <strong>Leere Rolle entfernen</strong>',
+     options:['1','2','3','4','5'],
+     correctMulti:{'Anlage stromlos schalten':'1','Leere Rolle entfernen':'2','Neue Rolle einlegen':'3','Strom einschalten':'4','Test durchführen, ob der Automat wieder korrekt gurtet':'5'},
+     exp:'🇺🇦 Безпека перш за все: спочатку вимкнути живлення, потім фізична заміна, потім ввімкнути і перевірити.',
+     hint:'💡 Логічний порядок: вимкнути струм → прибрати стару рулону → вставити нову → ввімкнути струм → протестувати.',
+     ans:'1. Anlage stromlos schalten\n2. Leere Rolle entfernen\n3. Neue Rolle einlegen\n4. Strom einschalten\n5. Test durchführen, ob der Automat wieder korrekt gurtet'},
+
+    {id:'MC-11',pts:3,type:'mc',
+     text:'Durch die unternehmerische Tätigkeit der Eltron GmbH wird auch die Umwelt belastet. Nennen Sie die Maßnahme, die die Umweltbelastung verringern kann!',
+     options:['1. Als Dienstwagen werden nur noch Dieselfahrzeuge gekauft.','2. Es werden mehr Bestellungen mit geringerer Bestellmenge ausgeführt.','3. Wegeoptimierte Tourenplanung, um die Treibstoffmenge zu reduzieren','4. Höhere Einkaufsmenge von Strom aus fossilen Energieträgern','5. Versandeinheiten werden nicht mehr gebändert, sondern 3-fach mit Folie umwickelt.'],
+     correct:'3',
+     exp:'🇺🇦 Лише один варіант реально зменшує екологічне навантаження — всі інші або нейтральні, або шкідливі.',
+     hint:'💡 Diesel, fossile Energie, більше плівки — все погіршує екологію. Що реально економить паливо?',
+     ans:'3. Wegeoptimierte Tourenplanung, um die Treibstoffmenge zu reduzieren'},
+
+    {id:'MC-12',pts:3,type:'mc',
+     text:'Sie erklären einem neuen Mitarbeiter, warum Unternehmen laut Gewerbeabfallverordnung Abfälle getrennt sammeln und entsorgen müssen. Welche Begründung wählen Sie?',
+     options:['1. So soll erreicht werden, dass alle Abfälle zur richtigen Deponie gebracht werden.','2. So soll vermieden werden, dass Abfälle im Unternehmen anfallen.','3. So soll die Recyclingmenge reduziert werden.','4. So soll eine stoffliche und energetische Verwertung der Abfälle ermöglicht werden.','5. So soll die Abfallmenge reduziert werden.'],
+     correct:'4',
+     exp:'🇺🇦 Gewerbeabfallverordnung вимагає роздільний збір сміття саме для того, щоб ЦЕ сміття можна було переробити (Verwertung).',
+     hint:'💡 Мета роздільного збору — не зменшення кількості сміття, а можливість його ПЕРЕРОБИТИ.',
+     ans:'4. So soll eine stoffliche und energetische Verwertung der Abfälle ermöglicht werden.'},
+
+    {id:'MC-13',pts:4,type:'open',
+     text:'Der Lagervorrat für "Federbein Y31A" reicht bei einem täglichen Verbrauch von 180 Stück für 25 Tage. Berechnen Sie, wie viele Tage der Vorrat reicht, wenn der tägliche Verbrauch um 25% steigt!',
+     exp:'🇺🇦 Спочатку знайди загальний запас (Vorrat), потім новий денний розхід (+25%), потім скільки днів вистачить нового розходу.',
+     hint:'💡 Vorrat = 180 × 25 = ? Stück. Neuer Verbrauch = 180 × 1,25 = ? Stück/Tag. Neue Tage = Vorrat / neuer Verbrauch.',
+     ans:'Vorrat: 180 Stück × 25 Tage = 4.500 Stück\nNeuer Verbrauch: 180 × 1,25 = 225 Stück/Tag\nNeue Reichweite: 4.500 : 225 = 20 Tage'},
+
+    {id:'MC-14',pts:3,type:'mc',
+     text:'Gelagerte Güter sind bestimmten Lagerbedingungen ausgesetzt. Geben Sie an, was man unter Lagerbedingungen versteht!',
+     options:['1. Haltbarkeit, Materialart, Belüftung','2. Menge, Entnahmehäufigkeit, Temperatur','3. Temperatur, Belüftung, Feuchtigkeit','4. Volumen, Feuchtigkeit, Wert','5. Gewicht, Volumen, Temperatur'],
+     correct:'3',
+     exp:'🇺🇦 Lagerbedingungen — це фізичні умови зберігання в приміщенні складу (клімат), а не властивості самого товару чи логістичні показники.',
+     hint:'💡 Шукай варіант де всі три параметри — це УМОВИ ПРИМІЩЕННЯ (клімат), а не характеристики товару.',
+     ans:'3. Temperatur, Belüftung, Feuchtigkeit'}
+  ]
+}
 };
 
 // ===== RENDER =====
