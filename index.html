@@ -112,6 +112,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .ai-res pre,.correct-pre{white-space:pre-wrap;font-family:'Inter',sans-serif;font-size:13px;line-height:1.7}
 [contenteditable]:focus{border-color:#22c55e !important;background:#071510 !important}
 [contenteditable]:empty:before{content:attr(placeholder);color:#374151;font-style:italic}
+.mc-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.mc-opt{text-align:left;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.mc-opt:hover{border-color:var(--acc);background:#162035}
+.mc-opt.selected{border-color:var(--acc);background:#1a2d4f;color:#93c5fd;font-weight:600}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gold);color:#111;font-weight:700;font-size:13px;padding:8px 22px;border-radius:20px;z-index:999;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
@@ -521,6 +525,202 @@ a4:{
      ans:'1. Zustand: keine Risse, Scheuerstellen oder Beschädigungen am Gurt\n2. LC-Wert (Lashing Capacity): ausreichende Zurrkraft für das Ladegut'}
   ]
 }
+},
+
+a5:{
+  label: 'Aufgabe 3 — Rationeller und qualitätssichernder Güterumschlag (36 Aufgaben, 90 Min, Multiple-Choice)',
+  isMC: true,
+  sit: `<p>Diese Aufgabe besteht aus <strong>36 Einzelaufgaben</strong> im Multiple-Choice-, Zuordnungs- und Reihenfolge-Format. Bei Multiple-Choice wählen Sie die EINE richtige Antwort. Bei Zuordnungsaufgaben ordnen Sie Begriffe zu. Bei Reihenfolgeaufgaben bringen Sie Schritte in die richtige Ordnung.</p>`,
+  qs: [
+    {id:'MC-1',pts:3,type:'mc',
+     text:'Im betrieblichen Materialfluss unterscheidet man stetige und unstetige Fördermittel. Ordnen Sie zu:<br><br><strong>Hebebühne</strong> — <strong>Kettenförderer</strong> — <strong>Rollenbahn</strong> — <strong>Lastenaufzug</strong> — <strong>Regalbediengerät</strong>',
+     options:['1. Stetige Fördermittel','2. Unstetige Fördermittel'],
+     correctMulti:{'Hebebühne':'2','Kettenförderer':'1','Rollenbahn':'1','Lastenaufzug':'2','Regalbediengerät':'1'},
+     exp:'🇺🇦 Stetige Fördermittel = безперервний рух (конвеєр, стрічка). Unstetige = окремі цикли підйому/опускання (ліфт, підйомник).',
+     hint:'💡 Kettenförderer, Rollenbahn, Regalbediengerät рухаються безперервно. Hebebühne і Lastenaufzug роблять окремі підйоми.',
+     ans:'Hebebühne → 2 (unstetig)\nKettenförderer → 1 (stetig)\nRollenbahn → 1 (stetig)\nLastenaufzug → 2 (unstetig)\nRegalbediengerät → 1 (stetig)'},
+
+    {id:'MC-2',pts:3,type:'mc',
+     text:'Im Einheitenlager sollen die Höhen der Lagereinheiten (50 cm bis 1,80 m) erfasst werden. Welches Messwerkzeug ist geeignet (so klein wie möglich)?',
+     options:['1. Lineal','2. Laser-Entfernungsmesser','3. Messschieber','4. Gliedermaßstab/Zollstock','5. Ultraschallentfernungsmesser'],
+     correct:'4',
+     exp:'🇺🇦 Потрібен компактний інструмент для висот до 1,80 м, який можна носити з собою.',
+     hint:'💡 Lineal закороткий. Messschieber для дрібних деталей. Лазер/ультразвук завеликі і дорогі для цього. Що складається і легко носити?',
+     ans:'4. Gliedermaßstab/Zollstock'},
+
+    {id:'MC-3',pts:3,type:'open',
+     text:'Auf Schachteln sehen Sie die Längenangabe <strong>25 Inch</strong>. Berechnen Sie die Längenangabe in Zentimeter! (1 Inch = 2,54 cm)',
+     exp:'🇺🇦 Просте переведення одиниць — дюйми в сантиметри.',
+     hint:'💡 25 × 2,54 = ?',
+     ans:'25 × 2,54 cm = 63,50 cm'},
+
+    {id:'MC-15',pts:3,type:'mc',
+     text:'Im Lager fallen täglich 25 t Pappe an, die zu Ballen gepresst wird. Die Pappe soll in den Wertstoffkreislauf zurückgeführt werden. Welche Maßnahme ist geeignet?',
+     options:['1. Entsorgen über zugelassene Deponie','2. Abgabe an bundesweit zugelassenen Recycling-Betrieb','3. Verbrennen der Papp-Ballen','4. Entsorgen über Bio-Müll','5. Zuführen zum Restmüll'],
+     correct:'2',
+     exp:'🇺🇦 "In den Wertstoffkreislauf zurückführen" = переробка, а не утилізація. Лише один варіант означає переробку.',
+     hint:'💡 Deponie, verbrennen, Bio-Müll, Restmüll — все це НЕ переробка. Що залишається?',
+     ans:'2. Abgabe an bundesweit zugelassenen Recycling-Betrieb'},
+
+    {id:'MC-16',pts:4,type:'open',
+     text:'Täglich fallen 25 t Pappe an, gepresst zu Ballen à 200 kg. Ermitteln Sie anhand der Tabelle, wie viele ganze Ballen Sie maximal auf dem Fahrzeug mit der größten Gesamtladefläche verladen können!<br><br><table class="qt"><tr><th>Fahrzeug</th><th>Ladefläche m²</th><th>Volumen m³</th><th>Nutzlast kg</th></tr><tr><td>Nr.1 3-achs-Sattelauflieger</td><td>33,45</td><td>85,31</td><td>24.000</td></tr><tr><td>Nr.2 Motorwagen</td><td>14,64</td><td>36,60</td><td>9.000</td></tr><tr><td>Nr.3 Motorwagen/Anhänger</td><td>17,08+19,52</td><td>42,70+48,80</td><td>9.000+16.000</td></tr><tr><td>Nr.4 Mega-Trailer</td><td>33,73</td><td>101,18</td><td>24.000</td></tr><tr><td>Nr.5 Jumbo-Hängerzug</td><td>19,00</td><td>57,00</td><td>6.000</td></tr></table>',
+     exp:'🇺🇦 Спочатку знайди транспорт з найбільшою ЗАГАЛЬНОЮ площею завантаження (Ladefläche), потім врахуй обмеження по вантажопідйомності (Nutzlast).',
+     hint:'💡 Найбільша Ladefläche = Nr.4 Mega-Trailer (33,73 m²). Але перевір чи не обмежує Nutzlast: 24.000 kg ÷ 200 kg = скільки балів?',
+     ans:'Größte Gesamtladefläche: Nr. 4 Mega-Trailer (33,73 m²)\nNutzlast-Grenze: 24.000 kg : 200 kg/Ballen = 120 Ballen\n(Ladefläche/Volumen reichen aus → Nutzlast ist die Grenze)\nAntwort: 120 Ballen'},
+
+    {id:'MC-17',pts:3,type:'mc',
+     text:'Der Empfänger fordert ein Beförderungspapier für den Transport der Pappballen per LKW. Welches Beförderungspapier?',
+     options:['1. CIM-Frachtbrief','2. TIR-Carnet','3. Air Waybill','4. Sicherheitsdatenblatt','5. CMR-Frachtbrief'],
+     correct:'5',
+     exp:'🇺🇦 CIM = залізниця. TIR = міжнародні авто перевезення поза ЄС (карнет, не основний документ). Air Waybill = авіа. Який документ для звичайного автоперевезення?',
+     hint:'💡 Стандартний документ для перевезення вантажу вантажівкою (LKW) в Європі.',
+     ans:'5. CMR-Frachtbrief'},
+
+    {id:'MC-18',pts:3,type:'mc',
+     text:'Logistische Tätigkeiten: Planen, Durchführen, Kontrollieren. Ordnen Sie zu:<br><br><strong>Lieferschein mit Ware vergleichen</strong> — <strong>Lagerstruktur festlegen</strong> — <strong>Güter einlagern</strong>',
+     options:['1. Planung','2. Durchführung','3. Kontrolle'],
+     correctMulti:{'Lieferschein mit Ware vergleichen':'3','Lagerstruktur festlegen':'1','Güter einlagern':'2'},
+     exp:'🇺🇦 Planung = заздалегідь продумати. Durchführung = виконати дію. Kontrolle = перевірити результат.',
+     hint:'💡 Порівняння накладної з товаром — це перевірка. Структура складу — заздалегідь спланована. Einlagern — фізична дія.',
+     ans:'Lieferschein mit Ware vergleichen → 3 (Kontrolle)\nLagerstruktur festlegen → 1 (Planung)\nGüter einlagern → 2 (Durchführung)'},
+
+    {id:'MC-19',pts:3,type:'mc',
+     text:'Bei der jährlichen Inventur werden häufig Bestandsdifferenzen festgestellt. Welche Maßnahme reduziert Inventurdifferenzen?',
+     options:['1. Reduzierung der Kunden','2. Kommissionierung auf Europaletten','3. Beschriftung der fertigen Versandeinheiten','4. Schulung der Mitarbeiter','5. Reduzierung der Artikel je Kunde'],
+     correct:'4',
+     exp:'🇺🇦 Inventurdifferenzen виникають через помилки людей (неправильний підрахунок, переплутані артикули). Що найкраще зменшує людські помилки?',
+     hint:'💡 Думай: причина різниць — людський фактор. Що допомагає зменшити помилки персоналу?',
+     ans:'4. Schulung der Mitarbeiter'},
+
+    {id:'MC-20',pts:3,type:'mc',
+     text:'ABC-Analyse: 10% der Menge = 60% des Warenwerts, 40% der Menge = 30% des Warenwerts, 50% der Menge = 10% des Warenwerts. Welches Diagramm (1-5) gibt die Werte korrekt wieder?',
+     options:['1','2','3','4','5'],
+     correct:'1',
+     exp:'🇺🇦 Класична Lorenzkurve ABC-аналізу: А-товари (мало штук, багато вартості) спочатку круто йдуть вгору, потім крива стає пологішою для B і C.',
+     hint:'💡 Кумулятивно: 10% Menge → 60% Wert; 10+40=50% Menge → 60+30=90% Wert; 50+50=100% Menge → 90+10=100% Wert. Шукай графік з точками (10,60), (50,90), (100,100).',
+     ans:'Diagramm 1 — zeigt die typische ABC-Lorenzkurve mit den Punkten (10%/60%), (50%/90%), (100%/100%)'},
+
+    {id:'MC-21',pts:3,type:'mc',
+     text:'Güter wurden seit 8 Monaten nicht entnommen. Sie werden nicht mehr produziert und durch Neuentwicklungen ersetzt. Die Geschäftsleitung entscheidet, die Güter zu entsorgen. Worum handelt es sich?',
+     options:['1. Um eine Sortimentsbereinigung','2. Um eine Sortimentsüberprüfung','3. Um eine Sortimentsauswahl','4. Um eine Sortimentsanalyse','5. Um eine Sortimentserweiterung'],
+     correct:'1',
+     exp:'🇺🇦 Видалення застарілих, непотрібних товарів з асортименту — як це називається?',
+     hint:'💡 "Bereinigung" = очищення/прибирання. Товари прибирають з асортименту.',
+     ans:'1. Um eine Sortimentsbereinigung'},
+
+    {id:'MC-22',pts:4,type:'open',
+     text:'Meldebestand = 600 Stück, Mindestbestand = 180 Stück. Heute (29.04.2026) zu Arbeitsbeginn: 340 Stück im Lagerfach. Täglich werden 60 Stück entnommen. Heute zusätzlich 40 Stück entnommen.<br><br>Ermitteln Sie das Datum (TT.MM.JJJJ), an dem der Mindestbestand bei Arbeitsende erreicht wird!',
+     exp:'🇺🇦 Складна задача з датами! Спочатку врахуй сьогоднішнє додаткове вилучення 40 шт, потім рахуй скільки днів треба щоб дійти до 180 шт при щоденному споживанні 60 шт.',
+     hint:'💡 Сьогодні кінець дня: 340 - 40 (додаткове) - 60 (звичайне) = 240 Stück. Потім: (240-180)/60 = скільки ще днів?',
+     ans:'Bestand heute Arbeitsende: 340 - 40 - 60 = 240 Stück\nNoch zu verbrauchen bis Mindestbestand: 240 - 180 = 60 Stück\nTage bis dahin: 60 : 60 = 1 Tag\nDatum: 30.04.2026'},
+
+    {id:'MC-23',pts:3,type:'mc',
+     text:'Sie sollen angelieferte giftige Güter einlagern. Welches Lager ist geeignet?',
+     options:['1. Verschlusslager','2. Kühllager','3. Freilager','4. Gefahrstofflager','5. Kleinteilelager'],
+     correct:'4',
+     exp:'🇺🇦 Отруйні (giftige) речовини — це Gefahrstoff (небезпечна речовина). Яке сховище призначене саме для цього?',
+     hint:'💡 Думай напряму: для небезпечних речовин існує спеціальне сховище з відповідною назвою.',
+     ans:'4. Gefahrstofflager'},
+
+    {id:'MC-24',pts:3,type:'mc',
+     text:'Welche Güter eignen sich besonders für eine Lagerung im Blocklager (Bodenlagerung)?',
+     options:['1. Güter, die das MHD erreicht haben','2. Güter, die nach dem Lifo-Prinzip gelagert werden','3. Güter, die nur in Kleinmengen umgeschlagen werden','4. Güter, die nach dem Fifo-Prinzip gelagert werden','5. Güter mit hoher Diebstahlgefährdung'],
+     correct:'2',
+     exp:'🇺🇦 Blocklager = штабелювання рядами одне на одному. Через структуру штабелів неможливо легко дістати товар знизу — тому підходить тільки для певного принципу обігу.',
+     hint:'💡 У штабелі (Block) можна брати тільки зверху — це означає останній покладений йде першим. Який принцип це?',
+     ans:'2. Güter, die nach dem Lifo-Prinzip gelagert werden'},
+
+    {id:'MC-25',pts:3,type:'mc',
+     text:'Stellplatz 04 06 02 B. Lagerplan: Ziffer 1-2 = Lagerzone, 3-4 = Regal, 5-6 = Feld, 7 = Fach (A=unteres, B=mittleres, C=oberes). Wohin lagern Sie ein?',
+     options:['1. Lagerzone 4, Regal 2, Feld 6, oberes Fach','2. Lagerzone 1, Regal 6, Feld 3, mittleres Fach','3. Lagerzone 4, Regal 6, Feld 2, unteres Fach','4. Lagerzone 4, Regal 6, Feld 2, mittleres Fach','5. Lagerzone 2, Regal 4, Feld 6, oberes Fach'],
+     correct:'4',
+     exp:'🇺🇦 Розбери код по групах цифр: 04 | 06 | 02 | B. Перші дві цифри = зона, наступні дві = регал, наступні дві = поле, остання літера = полиця.',
+     hint:'💡 04=Lagerzone, 06=Regal, 02=Feld, B=mittleres Fach. Зіставляй з варіантами.',
+     ans:'4. Lagerzone 4, Regal 6, Feld 2, mittleres Fach'},
+
+    {id:'MC-26',pts:3,type:'mc',
+     text:'Eltron GmbH plant ein dezentrales Lager in der Nähe eines Kundenstandorts für zuverlässigen Materialnachschub. Welche Aussage ist zutreffend?',
+     options:['1. Die Anzahl der benötigten Flurförderzeuge reduziert sich.','2. Es wird weniger Personal benötigt.','3. Die Lieferzeiten zum Kunden verringern sich.','4. Es werden weniger Artikel ausgeliefert.','5. Die Lagerkosten reduzieren sich.'],
+     correct:'3',
+     exp:'🇺🇦 Dezentrales Lager = склад ближче до клієнта. Яка головна перевага близькості до клієнта?',
+     hint:'💡 Менша відстань = менший час доставки. Логічний прямий наслідок.',
+     ans:'3. Die Lieferzeiten zum Kunden verringern sich.'},
+
+    {id:'MC-27',pts:3,type:'mc',
+     text:'Eltron GmbH wird in betriebliche Abteilungen aufgeteilt (Organigramm). Ordnen Sie zu:<br><br><strong>Zusammenbau von Maschinenteilen</strong> — <strong>Einkauf von Maschinenkomponenten</strong> — <strong>Darstellung des Unternehmens auf der Website</strong> — <strong>Ein- und Auslagerung von Maschinenteilen</strong> — <strong>Weiterentwicklung von Maschinensystemen</strong>',
+     options:['1. Logistik','2. Montage','3. Forschung und Entwicklung','4. Beschaffung','5. Marketing'],
+     correctMulti:{'Zusammenbau von Maschinenteilen':'2','Einkauf von Maschinenkomponenten':'4','Darstellung des Unternehmens auf der Website':'5','Ein- und Auslagerung von Maschinenteilen':'1','Weiterentwicklung von Maschinensystemen':'3'},
+     exp:'🇺🇦 Кожна дія належить конкретному відділу підприємства. Логічно зіставляй дію з назвою відділу.',
+     hint:'💡 Zusammenbau=складання=Montage. Einkauf=закупівля=Beschaffung. Website=Marketing. Ein-/Auslagerung=Logistik. Weiterentwicklung=Forschung.',
+     ans:'Zusammenbau → 2 (Montage)\nEinkauf → 4 (Beschaffung)\nWebsite → 5 (Marketing)\nEin-/Auslagerung → 1 (Logistik)\nWeiterentwicklung → 3 (Forschung und Entwicklung)'},
+
+    {id:'MC-28',pts:3,type:'mc',
+     text:'Der Lagerleiter möchte Logistikprozesse für jeden Mitarbeiter verständlich beschreiben. Welcher Dokumententyp ist geeignet?',
+     options:['1. Lieferanweisung','2. Betriebsvereinbarung','3. Tarifvereinbarung','4. Kundenanweisung','5. Arbeitsanweisung'],
+     correct:'5',
+     exp:'🇺🇦 Документ, що описує КОНКРЕТНИЙ робочий процес для співробітників — як це називається?',
+     hint:'💡 "Arbeit" = робота. Документ описує як виконувати роботу.',
+     ans:'5. Arbeitsanweisung, um die Prozesse darzustellen und zu beschreiben'},
+
+    {id:'MC-29',pts:3,type:'mc',
+     text:'Eltron GmbH plant Kommissionierroboter. Informationsfluss soll voll automatisiert werden. Für welche Möglichkeit entscheiden Sie sich?',
+     options:['1. Mitarbeiter gibt Auftragsdaten in Lagerverwaltungsrechner ein, der diese beleglos an Roboter übermittelt.','2. Mitarbeiter erhält Auftragsdaten als Barcode und gibt sie per Scanner ein.','3. Mitarbeiter holt Auftragsdaten ab und gibt sie per Tastatur ein.','4. Mitarbeiter ruft Auftragsdaten ab und gibt sie per Sprache ein.','5. Mitarbeiter erhält Auftragsdaten über Headset und gibt sie per Tastatur ein.'],
+     correct:'1',
+     exp:'🇺🇦 "Voll automatisiert" (повністю автоматизовано) і "beleglos" (без паперу) — який варіант НЕ потребує жодної ручної дії людини в передачі даних роботу?',
+     hint:'💡 Всі інші варіанти мають крок де людина щось вручну вводить/сканує/говорить. Шукай варіант БЕЗ ручного втручання.',
+     ans:'1. Ein Mitarbeiter im Auftragseingang gibt die Auftragsdaten in den Lagerverwaltungsrechner ein, der diese an den Kommissionierroboter beleglos übermittelt.'},
+
+    {id:'MC-30',pts:3,type:'open',
+     text:'Manueller Mitarbeiter: 120 Sekunden pro Position. Kommissionierroboter: 60 Positionen pro Stunde. Berechnen Sie, wie viele Positionen ein Roboter an einem Arbeitstag (8 Stunden) MEHR entnehmen kann als ein Mitarbeiter!',
+     exp:'🇺🇦 Спочатку знайди продуктивність людини за годину, потім за 8 годин для обох, потім різницю.',
+     hint:'💡 Mitarbeiter: 3600 Sek / 120 Sek = позицій/год. × 8 год. Roboter: 60 × 8 = позицій. Знайди різницю.',
+     ans:'Mitarbeiter: 3.600 Sek : 120 Sek = 30 Positionen/Stunde × 8 Std = 240 Positionen/Tag\nRoboter: 60 Positionen/Stunde × 8 Std = 480 Positionen/Tag\nDifferenz: 480 - 240 = 240 Positionen mehr'},
+
+    {id:'MC-31',pts:3,type:'open',
+     text:'Berechnen Sie, um wie viel Prozent sich durch den Einsatz des Kommissionierroboters die Kommissionierleistung erhöht! (Mitarbeiter: 30 Pos./Std, Roboter: 60 Pos./Std)',
+     exp:'🇺🇦 Розрахунок процентного зростання. Формула: (новий - старий) / старий × 100%',
+     hint:'💡 (60 - 30) / 30 × 100 = ?',
+     ans:'(60 - 30) : 30 × 100 = 100% Steigerung'},
+
+    {id:'MC-32',pts:3,type:'open',
+     text:'Kommissionierkosten manuell: 150,00 €/Stunde. Beim Roboter sind die Kosten um 40% höher. Berechnen Sie die Kommissionierkosten beim Roboter pro Stunde!',
+     exp:'🇺🇦 Розрахунок збільшення на відсоток.',
+     hint:'💡 150 € × 1,40 = ? або 150 + (150 × 0,40)',
+     ans:'150,00 € × 1,40 = 210,00 €/Stunde'},
+
+    {id:'MC-33',pts:5,type:'mc',
+     text:'Eltron GmbH plant Folienschrumpfmethode. Gefährdungsbeurteilung zur Anschaffung von Schrumpfpistole und Propangasflaschen. Bringen Sie die Schritte in die richtige Reihenfolge (beginnen mit "Arbeitsbereiche und Tätigkeiten erfassen"):<br><br><strong>Maßnahmen durchführen</strong> — <strong>Gefährdungen ermitteln</strong> — <strong>Wirksamkeit überprüfen</strong> — <strong>Gefährdungen beurteilen</strong> — <strong>Schutzmaßnahmen festlegen</strong>',
+     options:['1','2','3','4','5','6'],
+     correctMulti:{'Arbeitsbereiche und Tätigkeiten erfassen':'1','Gefährdungen ermitteln':'2','Gefährdungen beurteilen':'3','Schutzmaßnahmen festlegen':'4','Maßnahmen durchführen':'5','Wirksamkeit überprüfen':'6'},
+     exp:'🇺🇦 Стандартний процес Gefährdungsbeurteilung (оцінки ризиків) за німецьким законодавством — завжди в одному порядку.',
+     hint:'💡 Логіка: спочатку зрозуміти ЩО роблять (Arbeitsbereiche), потім знайти небезпеки (ermitteln), оцінити їх (beurteilen), вирішити що робити (festlegen), зробити (durchführen), перевірити чи спрацювало (überprüfen).',
+     ans:'1. Arbeitsbereiche und Tätigkeiten erfassen\n2. Gefährdungen ermitteln\n3. Gefährdungen beurteilen\n4. Schutzmaßnahmen festlegen\n5. Maßnahmen durchführen\n6. Wirksamkeit überprüfen'},
+
+    {id:'MC-34',pts:3,type:'mc',
+     text:'Sie erklären einem Azubi die Bedienung einer Verpackungsmaschine inkl. Gefahren und Schutzmaßnahmen. Welche Grundlage verwenden Sie?',
+     options:['1. Sicherheitsdatenblatt der Verpackungsmaschine','2. Betriebsanweisung der Verpackungsmaschine','3. Werbeprospekt der Verpackungsmaschine','4. Konformitätserklärung der Verpackungsmaschine','5. Konnossement der Verpackungsmaschine'],
+     correct:'2',
+     exp:'🇺🇦 Документ з правилами безпечної роботи на КОНКРЕТНІЙ машині — як називається?',
+     hint:'💡 Sicherheitsdatenblatt — для хімічних речовин. Konnossement — морський транспорт. Що залишається для безпеки роботи з машиною?',
+     ans:'2. Betriebsanweisung der Verpackungsmaschine'},
+
+    {id:'MC-35',pts:3,type:'mc',
+     text:'Verpackung in Faltschachteln aus Wellpappe. Aus ökonomischen/ökologischen Gründen sollen Packhilfsmittel eingespart werden. Welche Maßnahme spart Packhilfsmittel?',
+     options:['1. Größtmögliche Faltschachtel nutzen','2. Mehrere Kundenbestellungen zusammen in eine Faltschachtel verpacken','3. Grundsätzlich auf Packhilfsmittel verzichten','4. Mehrwegtransportbehälter zum Verpacken einsetzen','5. Kleinstmögliche Faltschachtel nutzen'],
+     correct:'5',
+     exp:'🇺🇦 Менша упаковка = менше матеріалу для заповнення пустот = економія Packhilfsmittel (наповнювач, плівка тощо).',
+     hint:'💡 Чим менша коробка точно під розмір товару, тим менше треба додаткового заповнювача.',
+     ans:'5. Sie nutzen zum Verpacken die kleinstmögliche Faltschachtel.'},
+
+    {id:'MC-36',pts:3,type:'mc',
+     text:'Sie legen in einer Datenbank eine Lieferantendatei an. Welche Information ist dafür notwendig?',
+     options:['1. Lagerbestand des Lieferanten','2. Bruttogehalt der Mitarbeiter des Lieferanten','3. Genaue Anschrift des Lieferanten','4. Übersicht der gezahlten Steuern des Lieferanten','5. Kundenstamm des Lieferanten'],
+     correct:'3',
+     exp:'🇺🇦 Lieferantendatei (картка постачальника) — яка інформація реально потрібна для зв\'язку та замовлень?',
+     hint:'💡 Зарплата співробітників, податки, клієнти постачальника — це не твоя справа і не потрібно для замовлень. Що потрібно щоб з ним зв\'язатись?',
+     ans:'3. Genaue Anschrift des Lieferanten'}
+  ]
+}
 };
 
 // ===== RENDER =====
@@ -556,12 +756,24 @@ function renderSidebar(auf){
 
 function renderCard(q){
   const id=q.id.replace(/\./g,'_');
+  const isMC = q.type === 'mc';
+
+  let answerInput;
+  if(isMC){
+    answerInput = `<div class="mc-options" id="mcwrap_${id}">
+      ${q.options.map((opt,i)=>`<button type="button" class="mc-opt" data-val="${opt.split('.')[0].trim()}" onclick="selectMC('${id}', this)">${opt}</button>`).join('')}
+    </div>`;
+  } else {
+    answerInput = `<div class="ans-area"><textarea id="ta_${id}" placeholder="Schreibe hier deine Antwort... / Пиши тут..."></textarea></div>`;
+  }
+
   return `<div class="qcard" id="qc_${id}">
     <div class="qcard-top">
       <div>
         <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
           <span class="qbadge">${q.id}</span>
           <span class="qpts">⭐ ${q.pts} Punkt${q.pts>1?'e':''}</span>
+          ${isMC ? '<span class="qpts" style="color:#a78bfa">🔘 Multiple Choice</span>' : ''}
         </div>
         <div class="qtext selectable">${q.text}</div>
       </div>
@@ -572,9 +784,7 @@ function renderCard(q){
     </div>
     <div class="exp-box" id="eb_${id}">${q.exp}</div>
     <div class="hint-box" id="hb_${id}">${q.hint}</div>
-    <div class="ans-area">
-      <textarea id="ta_${id}" placeholder="Schreibe hier deine Antwort... / Пиши тут..."></textarea>
-    </div>
+    ${answerInput}
     <div class="btns" style="margin-top:8px">
       <button class="btn btn-check" onclick="check('${q.id}','${id}',${q.pts})">🤖 AI перевіряє</button>
       <button class="btn" style="background:#1a0d2e;color:#a78bfa;border:1px solid #2d1a4a" onclick="showAnswer('${id}','${q.id}')">📖 Правильна відповідь</button>
@@ -584,6 +794,13 @@ function renderCard(q){
     <div class="ai-loading" id="ld_${id}">⏳ AI аналізує...</div>
     <div class="ai-res" id="ar_${id}"></div>
   </div>`;
+}
+
+function selectMC(id, btn){
+  const wrap = document.getElementById('mcwrap_'+id);
+  wrap.querySelectorAll('.mc-opt').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  wrap.dataset.selected = btn.dataset.val;
 }
 
 function tog(id){document.getElementById(id).classList.toggle('on')}
@@ -608,16 +825,31 @@ function showAnswer(id, qid){
 }
 function scrollQ(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
 function clearQ(id){
-  document.getElementById('ta_'+id).value='';
+  const ta = document.getElementById('ta_'+id);
+  if(ta) ta.value='';
+  const mcWrap = document.getElementById('mcwrap_'+id);
+  if(mcWrap){
+    mcWrap.dataset.selected = '';
+    mcWrap.querySelectorAll('.mc-opt').forEach(b=>b.classList.remove('selected'));
+  }
   const ar=document.getElementById('ar_'+id);
   ar.className='ai-res';ar.innerHTML='';
+  const correctBox = document.getElementById('correct_'+id);
+  if(correctBox){ correctBox.style.display='none'; }
 }
 
 async function check(qid,id,pts){
   const aufgabe=DATA[curTab];
   const q=aufgabe.qs.find(x=>x.id===qid);
-  // Збираємо відповідь: або з textarea або з contenteditable таблиці
-  let userAns = document.getElementById('ta_'+id).value.trim();
+  // Збираємо відповідь: MC вибір, textarea, або contenteditable таблиця
+  let userAns = '';
+  const mcWrap = document.getElementById('mcwrap_'+id);
+  if(mcWrap){
+    userAns = mcWrap.dataset.selected || '';
+  } else {
+    const taEl = document.getElementById('ta_'+id);
+    if(taEl) userAns = taEl.value.trim();
+  }
   // Якщо є contenteditable поля в картці — збираємо їх теж
   const qcard = document.getElementById('qc_'+id);
   if(qcard){
@@ -634,7 +866,7 @@ async function check(qid,id,pts){
       if(tableAns.length > 0) userAns = tableAns.join('\n') + (userAns ? '\n' + userAns : '');
     }
   }
-  if(!userAns){alert('Заповни поля таблиці або напиши відповідь!');return;}
+  if(!userAns){alert('Вибери відповідь або заповни поле!');return;}
   const ld=document.getElementById('ld_'+id);
   const ar=document.getElementById('ar_'+id);
   ld.classList.add('on'); ar.className='ai-res';
