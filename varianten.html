@@ -39,6 +39,7 @@ main{max-width:640px;margin:0 auto;padding:20px 16px 90px}
 .btn{flex:1;padding:10px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
 .bno{background:#1a0808;border:2px solid var(--red);color:var(--red)}
 .bok{background:#0a1a10;border:2px solid var(--green);color:var(--green)}
+.bback{background:var(--s2);border:1px solid var(--border);color:var(--muted)}
 .score-bar{position:fixed;bottom:0;left:0;right:0;background:#0d0f17;border-top:1px solid var(--border);padding:12px 20px;display:flex;justify-content:center;gap:24px}
 .sc{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600}
 .sc.ok{color:var(--green)}.sc.no{color:var(--red)}.sc.tot{color:var(--muted)}
@@ -79,9 +80,6 @@ main{max-width:640px;margin:0 auto;padding:20px 16px 90px}
 
   <div class="section-lbl">⚖️ Verantwortung & Folgen — Відповідальність та наслідки</div>
   <div id="sec5"></div>
-
-  <div class="section-lbl">🔍 QS-Prüfung & Mängelprotokoll — Перевірка якості та протокол</div>
-  <div id="sec6"></div>
 </main>
 
 <div class="score-bar">
@@ -409,94 +407,8 @@ NACH der Entladung — detaillierte Prüfung:
 • При дефектах → протокол про дефекти + повідомити керівника`
       },
     ]
-  },
-  {
-    id: 'sec6',
-    cards: [
-      {
-        de_q: 'Was tragen Sie in ein Mängelprotokoll ein? Nennen Sie 4 Punkte!',
-        ua_q: 'Що ви вносите в протокол про дефекти? Назвіть 4 пункти!',
-        de_a: `1. Datum und Uhrzeit der Feststellung des Mangels.
-2. Artikelbezeichnung und Artikelnummer der betroffenen Ware.
-3. Art und genaue Beschreibung des Mangels (z.B. fehlerhafte Nähte, falsches Material).
-4. Anzahl der betroffenen Stücke.
-5. Name des Mitarbeiters, der den Mangel festgestellt hat.
-6. Unterschrift des Fahrers (bei Transportschäden).
-
-Das Mängelprotokoll ist das wichtigste Dokument für die spätere Reklamation beim Lieferanten.`,
-        ua_a: `1. Дата і час виявлення дефекту.
-2. Найменування та номер артикулу дефектного товару.
-3. Вид і точний опис дефекту (напр. неправильні шви, неправильний матеріал).
-4. Кількість дефектних штук.
-5. Ім'я співробітника, який виявив дефект.
-6. Підпис водія (при транспортних пошкодженнях).
-
-Протокол про дефекти є найважливішим документом для подальшої рекламації у постачальника.`
-      },
-      {
-        de_q: 'Warum wird bei der Qualitätsprüfung nicht die gesamte Lieferung geprüft, sondern nur eine Stichprobe?',
-        ua_q: 'Чому при перевірці якості перевіряється не вся поставка, а лише вибірка?',
-        de_a: `1. Zeitersparnis — die Prüfung der gesamten Lieferung würde zu lange dauern.
-2. Kostenersparnis — weniger Personal und Aufwand nötig.
-3. Statistisch ausreichend — eine repräsentative Stichprobe (z.B. 15%) gibt zuverlässige Aussagen über die Qualität der Gesamtlieferung.
-4. Bei manchen Waren wäre eine 100%-Prüfung zerstörend (z.B. Belastungstests).
-
-Wichtig: Die Stichprobengröße ist vertraglich oder intern festgelegt.
-Im Examen: 15% von 1.500 Stück = 225 Stück zur QS.`,
-        ua_a: `1. Економія часу — перевірка всієї поставки зайняла б занадто багато часу.
-2. Економія коштів — потрібно менше персоналу і ресурсів.
-3. Статистично достатньо — репрезентативна вибірка (напр. 15%) дає надійні висновки про якість всієї поставки.
-4. Для деяких товарів 100% перевірка була б руйнівною (напр. тести на навантаження).
-
-Важливо: Розмір вибірки визначається договором або внутрішніми правилами.
-На екзамені: 15% від 1.500 штук = 225 штук на QS.`
-      },
-      {
-        de_q: 'Was passiert mit der Ware NACH der QS-Prüfung, wenn alles in Ordnung ist?',
-        ua_q: 'Що відбувається з товаром ПІСЛЯ перевірки якості, якщо все гаразд?',
-        de_a: `1. Die Ware wird von der QS-Abteilung freigegeben.
-2. Die Sperrfläche wird aufgehoben — die Ware verlässt die Sperrzone.
-3. Die Ware wird in den normalen Lagerbestand eingelagert.
-4. Im Lagerverwaltungssystem wird der Bestand aktualisiert.
-5. Die Ware steht nun für Kommissionierung und Auslieferung zur Verfügung.
-
-Wichtig: Ohne QS-Freigabe darf die Ware nicht eingelagert oder ausgeliefert werden!`,
-        ua_a: `1. Товар звільняється відділом контролю якості.
-2. Блокування знімається — товар покидає зону блокування (Sperrfläche).
-3. Товар переміщується в нормальний складський запас.
-4. В системі управління складом оновлюється залишок.
-5. Тепер товар доступний для комплектування та відвантаження.
-
-Важливо: Без звільнення QS товар не може бути складований або відвантажений!`
-      },
-      {
-        de_q: 'Was passiert mit der Ware NACH der QS-Prüfung, wenn Mängel festgestellt werden?',
-        ua_q: 'Що відбувається з товаром ПІСЛЯ перевірки якості, якщо виявлено дефекти?',
-        de_a: `1. Die Ware bleibt auf der Sperrfläche — sie wird NICHT freigegeben.
-2. Ein Mängelprotokoll wird erstellt.
-3. Der Vorgesetzte wird informiert.
-4. Der Lieferant wird über die Mängel informiert → Reklamation wird eingeleitet.
-5. Je nach Vereinbarung: Nachbesserung, Ersatzlieferung, Rücksendung oder Preisminderung.
-
-Rechtliche Grundlage: § 437 BGB — Rechte des Käufers bei Mängeln:
-1. Nacherfüllung (vorrangig)
-2. Rücktritt oder Minderung
-3. Schadensersatz`,
-        ua_a: `1. Товар залишається на зоні блокування (Sperrfläche) — НЕ звільняється.
-2. Складається протокол про дефекти (Mängelprotokoll).
-3. Повідомляється керівник.
-4. Постачальник повідомляється про дефекти → починається рекламація.
-5. Залежно від домовленості: усунення дефекту, заміна, повернення або зниження ціни.
-
-Правова основа: § 437 BGB — права покупця при дефектах:
-1. Nacherfüllung (усунення дефекту — першочергово)
-2. Rücktritt або Minderung (відмова або зниження ціни)
-3. Schadensersatz (відшкодування збитків)`
-      },
-    ]
   }
 ];
-
 let cardCount = 0;
 SECTIONS.forEach(s => cardCount += s.cards.length);
 document.getElementById('smax').textContent = cardCount;
@@ -504,6 +416,7 @@ document.getElementById('smax').textContent = cardCount;
 function renderAll(){
   SECTIONS.forEach(sec => {
     const el = document.getElementById(sec.id);
+    if(!el) return;
     el.innerHTML = sec.cards.map((c,i) => {
       const gid = sec.id + '_' + i;
       return `<div class="card-wrap">
@@ -523,8 +436,9 @@ function renderAll(){
             <div class="a-lbl">✅ Antwort / Відповідь</div>
             <div class="a-de">${c.de_a}</div>
             <div class="a-ua">${c.ua_a}</div>
-            <div class="btn-row">
-              <button class="btn bno" onclick="mark('${gid}',false,event)">✗ Nicht gewusst</button>
+            <div class="btn-row" style="margin-top:12px">
+              <button class="btn bback" onclick="flip('${gid}',event)">← Frage</button>
+              <button class="btn bno" onclick="mark('${gid}',false,event)">✗ Nicht</button>
               <button class="btn bok" onclick="mark('${gid}',true,event)">✓ Gewusst</button>
             </div>
           </div>
@@ -542,8 +456,8 @@ function flip(gid, e){
 function mark(gid, ok, e){
   e.stopPropagation();
   results[gid] = ok;
-  const card = document.getElementById('card_'+gid);
-  card.querySelector('.front').style.borderColor = ok ? 'var(--green)' : 'var(--red)';
+  const front = document.getElementById('card_'+gid).querySelector('.front');
+  front.style.borderColor = ok ? 'var(--green)' : 'var(--red)';
   updateScore();
 }
 
@@ -562,14 +476,14 @@ function setLang(l, btn){
 }
 
 function applyLang(){
-  const showDE = lang === 'de' || lang === 'both';
-  const showUA = lang === 'ua' || lang === 'both';
-  document.querySelectorAll('.q-de,.a-de').forEach(el => el.style.display = showDE ? '' : 'none');
-  document.querySelectorAll('.q-ua,.a-ua').forEach(el => el.style.display = showUA ? '' : 'none');
-  document.querySelectorAll('.orig-de').forEach(el => el.style.display = showDE ? '' : 'none');
-  document.querySelectorAll('.orig-ua').forEach(el => el.style.display = showUA ? '' : 'none');
+  const showDE = lang === 'de';
+  const showUA = lang === 'ua';
+  document.querySelectorAll('.q-de,.a-de,.orig-de').forEach(el => el.style.display = showDE ? '' : 'none');
+  document.querySelectorAll('.q-ua,.a-ua,.orig-ua').forEach(el => el.style.display = showUA ? '' : 'none');
 }
 
+let results = {};
+let lang = 'de';
 renderAll();
 applyLang();
 </script>
