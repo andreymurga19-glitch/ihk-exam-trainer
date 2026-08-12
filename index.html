@@ -249,6 +249,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .vt-chip.g{border-color:var(--green)}.vt-chip.r{border-color:var(--red)}
 .vt-next-btn{padding:13px 30px;background:var(--acc);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
 .vt-retry-btn{padding:11px 24px;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px}
+.nav-block{background:var(--s1);border-bottom:2px solid var(--border)}
+.nav-section{border-bottom:1px solid var(--border);padding:6px 12px 8px}
+.nav-section:last-child{border-bottom:none}
+.nav-label-row{margin-bottom:6px}
+.nav-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.nav-btns{display:flex;gap:6px;flex-wrap:wrap}
+.nav-btn{padding:6px 12px;border-radius:7px;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap}
+.nav-btn:hover{border-color:var(--acc);color:var(--text)}
+.nav-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 </style>
 </head>
 <body>
@@ -263,30 +272,38 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 
 <div class="stats-bar" id="statsBar"></div>
 
-<div class="nav-group">
-  <div class="nav-label">Розділи екзамену</div>
-  <div class="tabs" id="mainTabs">
-    <button class="tab on" onclick="goGroup('lagerlogistik',this)">📦 Lagerlogistik</button>
-    <button class="tab" onclick="goGroup('guterumschlag',this)">🚛 Güterumschlag</button>
-    <button class="tab" onclick="goGroup('wiso',this)">⚖️ WiSo</button>
+<div class="nav-block">
+  <div class="nav-section">
+    <div class="nav-label-row">
+      <span class="nav-label">📚 Розділи екзамену</span>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn on" id="nb_lager" onclick="goGroup('lagerlogistik',this)">📦 Lagerlogistik</button>
+      <button class="nav-btn" id="nb_guter" onclick="goGroup('guterumschlag',this)">🚛 Güterumschlag</button>
+      <button class="nav-btn" id="nb_wiso" onclick="goGroup('wiso',this)">⚖️ WiSo</button>
+    </div>
   </div>
-</div>
 
-<div class="nav-group" id="subTabsGroup">
-  <div class="nav-label">Підрозділи</div>
-  <div class="tabs" id="subTabs">
-    <button class="tab on" onclick="goTab('a1',this)">📥 Wareneingang</button>
-    <button class="tab" onclick="goTab('a2',this)">🏭 Kommissionierung</button>
-    <button class="tab" onclick="goTab('a3',this)">🦺 Arbeitssicherheit</button>
-    <button class="tab" onclick="goTab('a4',this)">🚚 Versand/Transport</button>
+  <div class="nav-section" id="subSection" style="display:none">
+    <div class="nav-label-row">
+      <span class="nav-label">📂 Підрозділи</span>
+    </div>
+    <div class="nav-btns" id="subTabs">
+      <button class="nav-btn on" onclick="goTab('a1',this)">📥 Wareneingang</button>
+      <button class="nav-btn" onclick="goTab('a2',this)">🏭 Kommissionierung</button>
+      <button class="nav-btn" onclick="goTab('a3',this)">🦺 Arbeitssicherheit</button>
+      <button class="nav-btn" onclick="goTab('a4',this)">🚚 Versand</button>
+    </div>
   </div>
-</div>
 
-<div class="nav-group">
-  <div class="nav-label">Інструменти</div>
-  <div class="tabs">
-    <button class="tab" onclick="goGroup('voice',this)">🎤 Голосовий тренажер</button>
-    <button class="tab" onclick="goGroup('vocab',this)">📚 Словник</button>
+  <div class="nav-section">
+    <div class="nav-label-row">
+      <span class="nav-label">🛠 Інструменти</span>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" id="nb_voice" onclick="goGroup('voice',this)">🎤 Голосовий тренажер</button>
+      <button class="nav-btn" id="nb_vocab" onclick="goGroup('vocab',this)">📚 Словник</button>
+    </div>
   </div>
 </div>
 
@@ -1200,49 +1217,49 @@ a6:{
 
 // ===== RENDER =====
 function goGroup(group, btn){
-  document.querySelectorAll('#mainTabs .tab').forEach(b=>b.classList.remove('on'));
-  if(btn) btn.classList.add('on');
+  // Скидаємо всі nav-btn
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
 
-  const subTabs = document.getElementById('subTabs');
-  renderStatsBar(group);
+  const subSection = document.getElementById('subSection');
 
   if(group === 'lagerlogistik'){
-    subTabs.style.display = 'flex';
-    const sg = document.getElementById('subTabsGroup');
-    if(sg) sg.style.display = '';
-    const firstSub = subTabs.querySelector('.tab');
-    document.querySelectorAll('#subTabs .tab').forEach(b=>b.classList.remove('on'));
-    if(firstSub) firstSub.classList.add('on');
+    document.getElementById('nb_lager').classList.add('on');
+    if(subSection) subSection.style.display = '';
+    // Активуємо першу підвкладку
+    const firstSub = document.querySelector('#subTabs .nav-btn');
+    if(firstSub){
+      document.querySelectorAll('#subTabs .nav-btn').forEach(b=>b.classList.remove('on'));
+      firstSub.classList.add('on');
+    }
     goTab('a1', null);
+
   } else if(group === 'guterumschlag'){
-    subTabs.style.display = 'none';
-    const sg2 = document.getElementById('subTabsGroup');
-    if(sg2) sg2.style.display = 'none';
+    document.getElementById('nb_guter').classList.add('on');
+    if(subSection) subSection.style.display = 'none';
     goTab('a5', null);
+
   } else if(group === 'wiso'){
-    subTabs.style.display = 'none';
-    const sg3 = document.getElementById('subTabsGroup');
-    if(sg3) sg3.style.display = 'none';
+    document.getElementById('nb_wiso').classList.add('on');
+    if(subSection) subSection.style.display = 'none';
     goTab('a6', null);
+
   } else if(group === 'voice'){
-    subTabs.style.display = 'none';
-    const sg4 = document.getElementById('subTabsGroup');
-    if(sg4) sg4.style.display = 'none';
+    document.getElementById('nb_voice').classList.add('on');
+    if(subSection) subSection.style.display = 'none';
     renderVoiceTrainer();
     return;
+
   } else if(group === 'vocab'){
-    subTabs.style.display = 'none';
-    const sg5 = document.getElementById('subTabsGroup');
-    if(sg5) sg5.style.display = 'none';
+    document.getElementById('nb_vocab').classList.add('on');
+    if(subSection) subSection.style.display = 'none';
     goTab('vocab', null);
   }
 }
 
-
 function goTab(tab, btn){
   curTab=tab;
   if(btn){
-    document.querySelectorAll('#subTabs .tab').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('#subTabs .nav-btn').forEach(b=>b.classList.remove('on'));
     btn.classList.add('on');
   }
   if(tab==='vocab'){ renderVocabPage(); return; }
@@ -1889,7 +1906,7 @@ function closeExamMode(){
 
 renderVocabPanel();
 renderStatsBar('lagerlogistik');
-goTab('a1', document.querySelector('#subTabs .tab'));
+goTab('a1', document.querySelector('#subTabs .nav-btn'));
 updateProgress();
 
 // ===== VOICE TRAINER =====
