@@ -79,6 +79,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .tab{padding:11px 18px;font-size:13px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;font-family:'Inter',sans-serif}
 .tab.on{color:var(--acc);border-bottom-color:var(--acc)}
 #subTabs{background:#0d0f17;padding-left:8px}
+.nav-group{background:var(--s1);border-bottom:1px solid var(--border)}
+.nav-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:6px 14px 0;font-weight:600}
+.hdr{background:linear-gradient(135deg,#0c1428,#17233d);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hdr-title{font-size:13px;font-weight:700;color:#fff}
 #subTabs .tab{font-size:12px;padding:8px 14px;color:#7c8aa5}
 #subTabs .tab.on{color:var(--gold);border-bottom-color:var(--gold)}
 .tab:hover:not(.on){color:var(--text)}
@@ -250,10 +254,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 <body>
 
 <div class="hdr">
-  <div>
-    <div class="hdr-title">📦 IHK Exam Trainer — Lagerlogistik Sommer 2026</div>
-    <div class="hdr-sub" id="hdrSub">3 Prüfungsteile · 79 Aufgaben · 300 Punkte gesamt</div>
-  </div>
+  <div class="hdr-title">📦 IHK Trainer — Sommer 2026</div>
   <div class="prog-wrap">
     <div class="prog-txt" id="progTxt">0 / 30</div>
     <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0"></div></div>
@@ -262,19 +263,31 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 
 <div class="stats-bar" id="statsBar"></div>
 
-<div class="tabs" id="mainTabs">
-  <button class="tab on" onclick="goGroup('lagerlogistik',this)">📦 Lagerlogistik</button>
-  <button class="tab" onclick="goGroup('guterumschlag',this)">🚛 Güterumschlag</button>
-  <button class="tab" onclick="goGroup('wiso',this)">⚖️ WiSo</button>
-  <button class="tab" onclick="goGroup('voice',this)">🎤 Голосовий</button>
-  <button class="tab" onclick="goGroup('vocab',this)">📚 Словник</button>
+<div class="nav-group">
+  <div class="nav-label">Розділи екзамену</div>
+  <div class="tabs" id="mainTabs">
+    <button class="tab on" onclick="goGroup('lagerlogistik',this)">📦 Lagerlogistik</button>
+    <button class="tab" onclick="goGroup('guterumschlag',this)">🚛 Güterumschlag</button>
+    <button class="tab" onclick="goGroup('wiso',this)">⚖️ WiSo</button>
+  </div>
 </div>
 
-<div class="tabs" id="subTabs">
-  <button class="tab on" onclick="goTab('a1',this)">📥 Wareneingang</button>
-  <button class="tab" onclick="goTab('a2',this)">🏭 Kommissionierung</button>
-  <button class="tab" onclick="goTab('a3',this)">🦺 Arbeitssicherheit</button>
-  <button class="tab" onclick="goTab('a4',this)">🚚 Versand/Transport</button>
+<div class="nav-group" id="subTabsGroup">
+  <div class="nav-label">Підрозділи</div>
+  <div class="tabs" id="subTabs">
+    <button class="tab on" onclick="goTab('a1',this)">📥 Wareneingang</button>
+    <button class="tab" onclick="goTab('a2',this)">🏭 Kommissionierung</button>
+    <button class="tab" onclick="goTab('a3',this)">🦺 Arbeitssicherheit</button>
+    <button class="tab" onclick="goTab('a4',this)">🚚 Versand/Transport</button>
+  </div>
+</div>
+
+<div class="nav-group">
+  <div class="nav-label">Інструменти</div>
+  <div class="tabs">
+    <button class="tab" onclick="goGroup('voice',this)">🎤 Голосовий тренажер</button>
+    <button class="tab" onclick="goGroup('vocab',this)">📚 Словник</button>
+  </div>
 </div>
 
 <div class="layout">
@@ -1195,22 +1208,32 @@ function goGroup(group, btn){
 
   if(group === 'lagerlogistik'){
     subTabs.style.display = 'flex';
+    const sg = document.getElementById('subTabsGroup');
+    if(sg) sg.style.display = '';
     const firstSub = subTabs.querySelector('.tab');
     document.querySelectorAll('#subTabs .tab').forEach(b=>b.classList.remove('on'));
     if(firstSub) firstSub.classList.add('on');
     goTab('a1', null);
   } else if(group === 'guterumschlag'){
     subTabs.style.display = 'none';
+    const sg2 = document.getElementById('subTabsGroup');
+    if(sg2) sg2.style.display = 'none';
     goTab('a5', null);
   } else if(group === 'wiso'){
     subTabs.style.display = 'none';
+    const sg3 = document.getElementById('subTabsGroup');
+    if(sg3) sg3.style.display = 'none';
     goTab('a6', null);
   } else if(group === 'voice'){
     subTabs.style.display = 'none';
+    const sg4 = document.getElementById('subTabsGroup');
+    if(sg4) sg4.style.display = 'none';
     renderVoiceTrainer();
     return;
   } else if(group === 'vocab'){
     subTabs.style.display = 'none';
+    const sg5 = document.getElementById('subTabsGroup');
+    if(sg5) sg5.style.display = 'none';
     goTab('vocab', null);
   }
 }
