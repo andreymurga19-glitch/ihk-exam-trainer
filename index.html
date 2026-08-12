@@ -1916,8 +1916,15 @@ function renderVtCard(){
       <div class="vt-card-lbl">❓ Aufgabe ${q.id}</div>
       <div class="vt-pts">⭐ ${q.pts} Punkt${q.pts!==1?'e':''}</div>
       <div class="vt-qtext">${q.text}</div>
-      <button class="vt-mic-btn" id="vtMicBtn" onclick="vtToggle()">🎤 Говори відповідь</button>
-      <div class="vt-transcript" id="vtTr">Твоя відповідь з'явиться тут...</div>
+      <textarea id="vtTextInput"
+        placeholder="🎤 Говори через Samsung клавіатуру або пиши тут..."
+        rows="4"
+        style="width:100%;background:var(--s2);border:2px solid var(--acc);border-radius:10px;color:var(--text);padding:12px;font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;resize:none;margin-bottom:10px"
+        oninput="vtHandleInput(this.value)"
+      ></textarea>
+      <button class="vt-mic-btn" id="vtCheckBtn" onclick="vtCheckFromInput()" disabled style="opacity:.5">
+        🤖 AI перевіряє відповідь
+      </button>
       <div class="vt-ai-result" id="vtAi" style="display:none"></div>
       <div class="vt-answer-box" id="vtAns">${(q.ans||q.a||'').replace(/\n/g,'<br>')}</div>
       <div class="vt-btns" id="vtBtns" style="display:none">
@@ -1927,6 +1934,18 @@ function renderVtCard(){
       </div>
     </div>`;
 }
+function vtHandleInput(val){
+  const btn = document.getElementById('vtCheckBtn');
+  if(btn) btn.style.opacity = val.trim() ? '1' : '0.5';
+  if(btn) btn.disabled = !val.trim();
+}
+
+function vtCheckFromInput(){
+  const ta = document.getElementById('vtTextInput');
+  if(!ta || !ta.value.trim()) return;
+  vtCheck(ta.value.trim());
+}
+
 function vtToggle(){vtRecording?vtStop():vtStart();}
 function vtStart(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1982,7 +2001,12 @@ function vtMark(ok){
     else vtDone();
   },600);
 }
-function vtGoCard(i){vtIdx=i;vtTranscript='';renderVtCard();}
+function vtGoCard(i){
+  vtIdx=i;vtTranscript='';
+  const ta=document.getElementById('vtTextInput');
+  if(ta) ta.value='';
+  renderVtCard();
+}
 function vtDone(){
   const ok=vtTodayRes.filter(r=>r===true).length,tot=getVtQuestions(vtDay).length,pct=Math.round(ok/tot*100);
   let vp=JSON.parse(localStorage.getItem('vt_v1')||'{"day":0,"res":{}}');
