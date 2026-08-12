@@ -2,94 +2,154 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎤 Голосовий тренажер</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🎤 IHK Тренажер</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
 :root{--bg:#0b0d13;--s1:#13161f;--s2:#1a1e2b;--border:#252a3a;--acc:#4f7fff;--gold:#f5c842;--green:#22c55e;--red:#ef4444;--text:#e2e8f0;--muted:#64748b;--dim:#94a3b8}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
 
-.hdr{background:linear-gradient(135deg,#0c1428,#17233d);border-bottom:2px solid var(--acc);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#0c1428,#17233d);border-bottom:2px solid var(--acc);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .hdr-title{font-size:14px;font-weight:700;color:#fff}
-.hdr-back{color:var(--acc);font-size:13px;text-decoration:none;font-weight:600}
+.hdr-back{color:var(--acc);font-size:13px;font-weight:600;text-decoration:none;padding:6px 12px;border:1px solid var(--acc);border-radius:7px}
 
-.day-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:0 8px}
-.day-tabs::-webkit-scrollbar{display:none}
-.day-tab{padding:10px 14px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s}
-.day-tab.on{color:var(--acc);border-bottom-color:var(--acc)}
-.day-tab.done{color:var(--green)}
+/* MODE TABS */
+.mode-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--border)}
+.mode-btn{flex:1;padding:11px;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;transition:all .2s}
+.mode-btn.on{color:var(--acc);border-bottom-color:var(--acc);background:var(--s2)}
 
+/* DAY PLAN */
+.plan-bar{background:var(--s2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.plan-info{font-size:12px;color:var(--muted)}
+.plan-progress{display:flex;gap:8px;align-items:center}
+.plan-chip{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace}
+.plan-chip.done{border-color:var(--green);color:var(--green)}
+.plan-chip.partial{border-color:var(--gold);color:var(--gold)}
+.plan-chip.todo{color:var(--muted)}
+
+/* DAY SELECTOR */
+.day-scroll{display:flex;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.day-scroll::-webkit-scrollbar{display:none}
+.day-btn{padding:9px 13px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s;flex-shrink:0}
+.day-btn.on{color:var(--acc);border-bottom-color:var(--acc)}
+.day-btn.done{color:var(--green)}
+.day-btn.partial{color:var(--gold)}
+
+/* MAIN */
 main{max-width:640px;margin:0 auto;padding:16px 16px 100px}
 
-.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+/* PROGRESS */
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .prog-bar{flex:1;height:6px;background:var(--s2);border-radius:3px;overflow:hidden}
 .prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s}
-.prog-txt{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.prog-txt{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap}
 
+/* DOTS */
 .dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
-.dot{width:28px;height:28px;border-radius:7px;background:var(--s2);border:1px solid var(--border);font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.dot{width:28px;height:28px;border-radius:7px;background:var(--s2);border:1px solid var(--border);font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
 .dot.cur{border-color:var(--acc);color:#fff;background:#11192e;border-width:2px}
 .dot.ok{background:#0a1a10;border-color:var(--green);color:var(--green)}
 .dot.no{background:#1a0808;border-color:var(--red);color:var(--red)}
 
-.card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;transition:border-color .3s}
-.card.correct{border-color:var(--green)}
-.card.wrong{border-color:var(--red)}
-.card-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px}
-.card-pts{font-size:11px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
-.card-q{font-size:15px;line-height:1.7;color:var(--text);margin-bottom:16px}
+/* SESSION COUNTER */
+.session-info{text-align:center;font-size:11px;color:var(--muted);margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+.session-dots{display:flex;gap:4px;justify-content:center;margin-bottom:12px}
+.ses-dot{width:10px;height:10px;border-radius:50%;background:var(--s2);border:1px solid var(--border);transition:all .3s}
+.ses-dot.done{background:var(--green);border-color:var(--green)}
+.ses-dot.cur{background:var(--acc);border-color:var(--acc)}
 
+/* FLASHCARD */
+.flashcard{perspective:1200px;margin-bottom:14px;min-height:260px}
+.fc-inner{position:relative;width:100%;min-height:260px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:22px 20px;display:flex;flex-direction:column}
+.fc-front{background:var(--s1);border:1px solid var(--border)}
+.fc-back{background:#091708;border:1px solid #1a4a2a;transform:rotateY(180deg)}
+.fc-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.fc-front .fc-lbl{color:var(--acc)}
+.fc-back .fc-lbl{color:var(--green)}
+.fc-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px}
+.fc-q{font-size:15px;line-height:1.7;color:var(--text);flex:1}
+.fc-a{font-size:13px;line-height:1.75;color:#86efac;flex:1;overflow-y:auto;white-space:pre-wrap}
+.fc-meta{display:flex;justify-content:space-between;margin-top:12px;font-size:11px;color:var(--muted)}
+.fc-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+
+/* FLASHCARD BUTTONS */
+.fc-show-btn{width:100%;padding:12px;border-radius:10px;border:2px solid var(--acc);background:#0d1829;color:#93c5fd;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:8px}
+.fc-action-row{display:flex;gap:8px}
+.fc-btn{flex:1;padding:12px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.fc-btn-back{background:var(--s2);border:1px solid var(--border);color:var(--muted)}
+.fc-btn-no{background:#1a0808;border:2px solid var(--red);color:var(--red)}
+.fc-btn-ok{background:#0a1a10;border:2px solid var(--green);color:var(--green)}
+
+/* VOICE CARD */
+.vcard{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;transition:border-color .3s}
+.vcard.correct{border-color:var(--green)}
+.vcard.wrong{border-color:var(--red)}
+.vcard-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px}
+.vcard-pts{font-size:11px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+.vcard-q{font-size:15px;line-height:1.7;color:var(--text);margin-bottom:16px}
 textarea{width:100%;background:var(--s2);border:2px solid var(--acc);border-radius:10px;color:var(--text);padding:12px;font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;resize:none;margin-bottom:10px;min-height:90px}
-textarea::placeholder{color:var(--muted)}
-
-.btn-check{width:100%;padding:13px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-bottom:10px}
-.btn-check:disabled{opacity:.4;cursor:not-allowed}
-
+textarea::placeholder{color:var(--muted);font-size:13px}
+.v-check-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:10px;transition:opacity .2s}
+.v-check-btn:disabled{opacity:.4;cursor:not-allowed}
 .ai-res{padding:14px;border-radius:10px;font-size:13px;line-height:1.7;display:none;margin-bottom:10px}
 .ai-res.loading{background:var(--s2);border:1px solid var(--border);color:var(--muted);display:block}
 .ai-res.correct{background:#0a1a10;border:1px solid var(--green);color:#86efac;display:block}
 .ai-res.wrong{background:#1a0808;border:1px solid var(--red);color:#fca5a5;display:block}
-
-.dialog-area{border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-top:4px}
-.dialog-lbl{font-size:11px;color:var(--muted);margin-bottom:8px}
-.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.quick-btn{background:var(--s2);border:1px solid var(--border);color:var(--dim);padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
-.quick-btn:hover{border-color:var(--acc);color:#fff}
-.dialog-input-row{display:flex;gap:6px}
-.dialog-input{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif}
-.dialog-send{background:var(--acc);border:none;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600}
-.dialog-resp{margin-top:10px;font-size:13px;line-height:1.75;color:#86efac;white-space:pre-wrap;min-height:0}
-
 .ans-box{background:#091708;border:1px solid #1a4a2a;border-radius:10px;padding:14px;font-size:13px;color:#86efac;white-space:pre-wrap;line-height:1.75;display:none;margin-bottom:10px}
 .ans-box.show{display:block}
+.dialog-area{border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-top:4px;display:none}
+.dialog-area.show{display:block}
+.dialog-lbl{font-size:11px;color:var(--muted);margin-bottom:8px}
+.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.quick-btn{background:var(--s2);border:1px solid var(--border);color:var(--dim);padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif}
+.dialog-row{display:flex;gap:6px}
+.dialog-inp{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif}
+.dialog-send{background:var(--acc);border:none;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600}
+.dialog-resp{margin-top:10px;font-size:13px;line-height:1.75;color:#86efac;white-space:pre-wrap}
+.v-action-row{display:flex;gap:8px;display:none}
+.v-action-row.show{display:flex}
+.v-btn-ans{flex:1;padding:11px;border-radius:9px;background:#0d1829;border:2px solid var(--acc);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.v-btn-no{flex:1;padding:11px;border-radius:9px;background:#1a0808;border:2px solid var(--red);color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.v-btn-ok{flex:1;padding:11px;border-radius:9px;background:#0a1a10;border:2px solid var(--green);color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
 
-.action-btns{display:flex;gap:8px}
-.btn-ans{flex:1;padding:11px;border-radius:9px;background:#0d1829;border:2px solid var(--acc);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-no{flex:1;padding:11px;border-radius:9px;background:#1a0808;border:2px solid var(--red);color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-ok{flex:1;padding:11px;border-radius:9px;background:#0a1a10;border:2px solid var(--green);color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-
+/* DONE */
 .done-screen{text-align:center;padding:40px 20px}
 .done-emoji{font-size:64px;margin-bottom:12px}
 .done-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:8px}
-.done-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.done-sub{font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.6}
+.done-plan{font-size:12px;color:var(--acc);margin-bottom:24px;font-weight:600}
 .score-chips{display:flex;gap:10px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
 .chip{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px}
 .chip .cn{font-size:22px;font-weight:800;color:#fff}
 .chip .cl{font-size:11px;color:var(--muted);margin-top:2px}
 .chip.g{border-color:var(--green)}.chip.r{border-color:var(--red)}
-.btn-next{padding:13px 30px;background:var(--acc);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-retry{padding:11px 24px;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px;display:block;margin-left:auto;margin-right:auto}
+.done-btns{display:flex;flex-direction:column;align-items:center;gap:8px}
+.btn-primary{padding:13px 30px;background:var(--acc);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;max-width:280px}
+.btn-secondary{padding:11px 24px;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;width:100%;max-width:280px}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-title">🎤 Голосовий тренажер</div>
+  <div class="hdr-title">📦 IHK Тренажер — Lagerlogistik</div>
   <a class="hdr-back" href="/">← Назад</a>
 </div>
 
-<div class="day-tabs" id="dayTabs"></div>
+<div class="mode-tabs">
+  <button class="mode-btn on" id="modeFlash" onclick="setMode('flash')">📚 Картки</button>
+  <button class="mode-btn" id="modeVoice" onclick="setMode('voice')">🎤 Голос + AI</button>
+</div>
+
+<div class="plan-bar" id="planBar">
+  <div class="plan-info" id="planInfo">День <span id="planDay">1</span> — план: 2 сесії по 5 питань</div>
+  <div class="plan-progress" id="planProgress"></div>
+</div>
+
+<div class="day-scroll" id="dayScroll"></div>
 <main id="main"></main>
 
 <script>
@@ -965,9 +1025,18 @@ a6:{
 }
 };
 
-const VT_KEY = 'vt_v2';
-let vtDay = 0, vtIdx = 0, vtRes = [], vtDialogCtx = null;
+const KEY = 'ihk_trainer_v1';
+const SESSIONS_PER_DAY = 2; // 2 сесії = 10 карток/відповідей за день
 
+let mode = 'flash';
+let curDay = 0;
+let curIdx = 0;
+let curSes = 0; // поточна сесія (0 або 1)
+let sesResults = [];
+let flipped = false;
+let dialogCtx = null;
+
+// ===== DATA =====
 function getQs(day){
   const all = [];
   ['a1','a2','a3','a4'].forEach(k=>{ if(DATA[k]) DATA[k].qs.forEach(q=>all.push(q)); });
@@ -979,218 +1048,397 @@ function totalDays(){
   return Math.ceil(t/5);
 }
 
-function load(){
-  const p = JSON.parse(localStorage.getItem(VT_KEY)||'{"day":0,"res":{}}');
-  vtDay = p.day||0;
-  return p;
+// ===== STORAGE =====
+function loadState(){
+  return JSON.parse(localStorage.getItem(KEY)||'{"day":0,"days":{}}');
 }
-function save(res){
-  const p = load();
-  if(res!==undefined) p.res[vtDay]=res;
-  p.day = vtDay;
-  localStorage.setItem(VT_KEY, JSON.stringify(p));
+function saveState(dayData){
+  const s = loadState();
+  s.day = curDay;
+  if(dayData) s.days[curDay] = dayData;
+  localStorage.setItem(KEY, JSON.stringify(s));
+}
+function getDayState(day){
+  const s = loadState();
+  return s.days[day] || {flash:[],voice:[]};
 }
 
-function renderDayTabs(){
-  const p = load();
+// ===== MODE =====
+function setMode(m){
+  mode = m;
+  document.getElementById('modeFlash').className = 'mode-btn' + (m==='flash'?' on':'');
+  document.getElementById('modeVoice').className = 'mode-btn' + (m==='voice'?' on':'');
+  curIdx = 0;
+  curSes = 0;
+  sesResults = [];
+  flipped = false;
+  updatePlanBar();
+  renderDays();
+  renderMain();
+}
+
+// ===== DAY =====
+function goDay(d){
+  curDay = d;
+  curIdx = 0;
+  curSes = 0;
+  sesResults = [];
+  flipped = false;
+  saveState();
+  updatePlanBar();
+  renderDays();
+  renderMain();
+}
+
+function updatePlanBar(){
+  const ds = getDayState(curDay);
+  const arr = mode==='flash' ? ds.flash : ds.voice;
+  const done = arr.length;
+  document.getElementById('planDay').textContent = curDay+1;
+
+  // Session dots
+  let dots = '';
+  for(let i=0;i<SESSIONS_PER_DAY;i++){
+    const isDone = i < done;
+    const isCur = i === done && done < SESSIONS_PER_DAY;
+    dots += `<div class="ses-dot ${isDone?'done':isCur?'cur':''}"></div>`;
+  }
+
+  const modeLabel = mode==='flash'?'картки':'відповіді';
+  const remaining = SESSIONS_PER_DAY - done;
+  let infoText = '';
+  if(done >= SESSIONS_PER_DAY){
+    infoText = `✅ План виконано! (${done*5}/${SESSIONS_PER_DAY*5} ${modeLabel})`;
+  } else {
+    infoText = `День ${curDay+1} · залишилось ${remaining} ${remaining===1?'сесія':'сесії'} (${done*5}/${SESSIONS_PER_DAY*5} ${modeLabel})`;
+  }
+  document.getElementById('planInfo').textContent = infoText;
+
+  const prog = document.getElementById('planProgress');
+  prog.innerHTML = `<div class="session-dots" style="margin:0">${dots}</div>`;
+}
+
+function renderDays(){
   const tot = totalDays();
-  document.getElementById('dayTabs').innerHTML = Array.from({length:Math.min(tot,10)},(_,i)=>`
-    <button class="day-tab ${i===vtDay?'on':''} ${p.res[i]&&i!==vtDay?'done':''}"
-      onclick="goDay(${i})">День ${i+1} ${p.res[i]?'✓':''}</button>`
-  ).join('');
+  const s = loadState();
+  let html = '';
+  for(let i=0;i<tot;i++){
+    const ds = s.days[i]||{flash:[],voice:[]};
+    const arr = mode==='flash'?ds.flash:ds.voice;
+    const done = arr.length >= SESSIONS_PER_DAY;
+    const partial = arr.length > 0 && arr.length < SESSIONS_PER_DAY;
+    const cls = i===curDay?'on':done?'done':partial?'partial':'';
+    html += `<button class="day-btn ${cls}" onclick="goDay(${i})">День ${i+1}${done?' ✓':partial?' ●':''}</button>`;
+  }
+  document.getElementById('dayScroll').innerHTML = html;
 }
 
-function goDay(i){
-  vtDay=i; vtIdx=0; vtRes=[];
-  save();
-  renderDayTabs();
-  renderCard();
+// ===== MAIN RENDER =====
+function renderMain(){
+  const ds = getDayState(curDay);
+  const arr = mode==='flash'?ds.flash:ds.voice;
+
+  if(arr.length >= SESSIONS_PER_DAY){
+    renderDayDone();
+    return;
+  }
+
+  if(mode==='flash') renderFlashCard();
+  else renderVoiceCard();
 }
 
-function renderCard(){
-  const qs = getQs(vtDay);
-  const q = qs[vtIdx];
-  const el = document.getElementById('main');
-  if(!el || !q) return;
-
+// ===== SESSION HEADER =====
+function sesHeader(qs){
+  const ds = getDayState(curDay);
+  const arr = mode==='flash'?ds.flash:ds.voice;
+  const sesDone = arr.length;
   const dots = qs.map((_,i)=>`
-    <div class="dot ${i===vtIdx?'cur':vtRes[i]===true?'ok':vtRes[i]===false?'no':''}"
+    <div class="dot ${i===curIdx?'cur':sesResults[i]===true?'ok':sesResults[i]===false?'no':''}"
       onclick="goCard(${i})">${i+1}</div>`).join('');
+  const sesDotHtml = Array.from({length:SESSIONS_PER_DAY},(_,i)=>
+    `<div class="ses-dot ${i<sesDone?'done':i===sesDone?'cur':''}"></div>`).join('');
 
-  el.innerHTML = `
-    <div class="progress-row">
-      <div class="prog-bar"><div class="prog-fill" style="width:${vtIdx/qs.length*100}%"></div></div>
-      <div class="prog-txt">${vtIdx+1}/${qs.length}</div>
+  return `
+    <div class="prog-row">
+      <div class="prog-bar"><div class="prog-fill" style="width:${curIdx/qs.length*100}%"></div></div>
+      <div class="prog-txt">${curIdx+1}/${qs.length} · Сесія ${sesDone+1}/${SESSIONS_PER_DAY}</div>
     </div>
-    <div class="dots">${dots}</div>
+    <div style="display:flex;justify-content:center;gap:4px;margin-bottom:8px">${sesDotHtml}</div>
+    <div class="dots">${dots}</div>`;
+}
 
-    <div class="card" id="vtCard">
-      <div class="card-lbl">❓ Aufgabe ${q.id}</div>
-      <div class="card-pts">⭐ ${q.pts} Punkt${q.pts!==1?'e':''}</div>
-      <div class="card-q">${q.text}</div>
+// ===== FLASHCARD MODE =====
+function renderFlashCard(){
+  const qs = getQs(curDay);
+  const q = qs[curIdx];
+  const el = document.getElementById('main');
 
-      <textarea id="vtInput"
-        placeholder="🎤 Натисни мікрофон на Samsung клавіатурі і говори по-німецьки..."
-        oninput="onInput(this.value)"></textarea>
+  el.innerHTML = sesHeader(qs) + `
+    <div class="flashcard" id="fcWrap">
+      <div class="fc-inner" id="fcInner" onclick="flipCard()">
+        <div class="fc-face fc-front">
+          <div class="fc-lbl">❓ Aufgabe ${q.id}</div>
+          <div class="fc-id">⭐ ${q.pts} Punkte</div>
+          <div class="fc-q">${q.text}</div>
+          <div class="fc-hint">👆 Натисни щоб побачити відповідь</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-lbl">✅ Правильна відповідь</div>
+          <div class="fc-a">${q.ans||''}</div>
+          <div class="fc-meta"><span>Aufgabe ${q.id}</span><span>${q.pts} Punkte</span></div>
+        </div>
+      </div>
+    </div>
+    <div id="fcBtns">
+      <button class="fc-show-btn" onclick="flipCard()">Показати відповідь</button>
+    </div>`;
+  flipped = false;
+}
 
-      <button class="btn-check" id="vtCheckBtn" onclick="checkAnswer()" disabled>
-        🤖 AI перевіряє відповідь
-      </button>
+function flipCard(){
+  flipped = !flipped;
+  const inner = document.getElementById('fcInner');
+  if(inner) inner.classList.toggle('flipped', flipped);
+  const btns = document.getElementById('fcBtns');
+  if(!btns) return;
+  if(flipped){
+    btns.innerHTML = `<div class="fc-action-row">
+      <button class="fc-btn fc-btn-back" onclick="flipCard()">← Питання</button>
+      <button class="fc-btn fc-btn-no" onclick="fcMark(false)">✗ Не знав</button>
+      <button class="fc-btn fc-btn-ok" onclick="fcMark(true)">✓ Знав</button>
+    </div>`;
+  } else {
+    btns.innerHTML = `<button class="fc-show-btn" onclick="flipCard()">Показати відповідь</button>`;
+  }
+}
 
-      <div class="ai-res" id="vtAiRes"></div>
-      <div class="ans-box" id="vtAnsBox">${(q.ans||'').replace(/\n/g,'<br>')}</div>
-      <div id="vtDialog"></div>
+function fcMark(ok){
+  sesResults[curIdx] = ok;
+  const qs = getQs(curDay);
+  flipped = false;
+  if(curIdx < qs.length-1){
+    curIdx++;
+    renderFlashCard();
+  } else {
+    finishSession(sesResults);
+  }
+}
 
-      <div class="action-btns" id="vtActions" style="display:none">
-        <button class="btn-ans" onclick="toggleAns()">📖 Відповідь</button>
-        <button class="btn-no" onclick="mark(false)">✗ Не знав</button>
-        <button class="btn-ok" onclick="mark(true)">✓ Знав</button>
+function goCard(i){ curIdx=i; flipped=false; if(mode==='flash') renderFlashCard(); else renderVoiceCard(); }
+
+// ===== VOICE MODE =====
+function renderVoiceCard(){
+  const qs = getQs(curDay);
+  const q = qs[curIdx];
+  const el = document.getElementById('main');
+
+  el.innerHTML = sesHeader(qs) + `
+    <div class="vcard" id="vCard">
+      <div class="vcard-lbl">❓ Aufgabe ${q.id}</div>
+      <div class="vcard-pts">⭐ ${q.pts} Punkte</div>
+      <div class="vcard-q">${q.text}</div>
+      <textarea id="vInput"
+        placeholder="🎤 Натисни мікрофон Samsung клавіатури і говори по-німецьки... або пиши тут"
+        oninput="onVInput(this.value)"
+        rows="4"></textarea>
+      <button class="v-check-btn" id="vCheckBtn" onclick="vCheck()" disabled>🤖 AI перевіряє відповідь</button>
+      <div class="ai-res" id="vAiRes"></div>
+      <div class="ans-box" id="vAnsBox">${(q.ans||'').replace(/
+/g,'<br>')}</div>
+      <div class="dialog-area" id="vDialog">
+        <div class="dialog-lbl">💬 Запитай AI далі:</div>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="vAskQuick('Як правильно відповісти?')">Як правильно?</button>
+          <button class="quick-btn" onclick="vAskQuick('Що я пропустив?')">Що пропустив?</button>
+          <button class="quick-btn" onclick="vAskQuick('Наведи ідеальну відповідь для екзамену')">Ідеальна відповідь</button>
+        </div>
+        <div class="dialog-row">
+          <input class="dialog-inp" id="vDialogInp" placeholder="Своє питання...">
+          <button class="dialog-send" onclick="vSendDialog()">→</button>
+        </div>
+        <div class="dialog-resp" id="vDialogResp"></div>
+      </div>
+      <div class="v-action-row" id="vActions">
+        <button class="v-btn-ans" onclick="vToggleAns()">📖 Відповідь</button>
+        <button class="v-btn-no" onclick="vMark(false)">✗ Не знав</button>
+        <button class="v-btn-ok" onclick="vMark(true)">✓ Знав</button>
       </div>
     </div>`;
 }
 
-function onInput(val){
-  const btn = document.getElementById('vtCheckBtn');
-  if(btn){ btn.disabled = !val.trim(); btn.style.opacity = val.trim()?'1':'0.4'; }
+function onVInput(val){
+  const btn = document.getElementById('vCheckBtn');
+  if(btn){ btn.disabled=!val.trim(); btn.style.opacity=val.trim()?'1':'0.4'; }
 }
 
-async function checkAnswer(){
-  const input = document.getElementById('vtInput');
-  const aiRes = document.getElementById('vtAiRes');
-  const actions = document.getElementById('vtActions');
-  if(!input || !input.value.trim()) return;
+async function vCheck(){
+  const inp = document.getElementById('vInput');
+  const aiRes = document.getElementById('vAiRes');
+  const actions = document.getElementById('vActions');
+  const dialog = document.getElementById('vDialog');
+  if(!inp||!inp.value.trim()) return;
 
-  const qs = getQs(vtDay);
-  const q = qs[vtIdx];
-  const userAns = input.value.trim();
+  const qs = getQs(curDay);
+  const q = qs[curIdx];
+  const userAns = inp.value.trim();
 
   aiRes.className='ai-res loading';
   aiRes.textContent='⏳ AI перевіряє...';
 
-  const prompt = `Du bist ein IHK-Prüfer für Lagerlogistik.
+  const prompt=`Du bist ein IHK-Prüfer für Lagerlogistik.
 Frage: ${q.text}
 Musterlösung: ${q.ans||''}
 Antwort des Lernenden: ${userAns}
 Bewerte kurz auf Ukrainisch (2-3 Sätze): beginne mit ✅ Richtig! oder ❌ Nicht vollständig. Was war gut? Was fehlte?`;
 
   try{
-    const r = await fetch('/api/gemini',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({prompt})
-    });
-    const d = await r.json();
-    const t = d.candidates?.[0]?.content?.parts?.[0]?.text || d.text || d.result || '';
+    const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const d=await r.json();
+    const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
     if(!t) throw new Error('empty');
-    const correct = t.includes('✅');
-    aiRes.className = 'ai-res ' + (correct?'correct':'wrong');
-    aiRes.innerHTML = t;
-
-    // Показуємо діалог
-    vtDialogCtx = { q: q.text, correct: q.ans||'', user: userAns, ai: t };
-    showDialog();
+    const correct=t.includes('✅');
+    aiRes.className='ai-res '+(correct?'correct':'wrong');
+    aiRes.innerHTML=t;
+    dialogCtx={q:q.text,correct:q.ans||'',user:userAns,ai:t};
+    if(dialog) dialog.className='dialog-area show';
   }catch(e){
     aiRes.className='ai-res wrong';
-    aiRes.textContent='Помилка AI. Перевір відповідь через кнопку "📖 Відповідь".';
+    aiRes.textContent='Помилка AI. Перевір відповідь через кнопку нижче.';
   }
-  if(actions) actions.style.display='flex';
+  if(actions) actions.className='v-action-row show';
 }
 
-function showDialog(){
-  const el = document.getElementById('vtDialog');
-  if(!el) return;
-  el.innerHTML=`
-    <div class="dialog-area">
-      <div class="dialog-lbl">💬 Запитай AI далі:</div>
-      <div class="quick-btns">
-        <button class="quick-btn" onclick="askQuick('Як правильно відповісти?')">Як правильно?</button>
-        <button class="quick-btn" onclick="askQuick('Що я пропустив?')">Що пропустив?</button>
-        <button class="quick-btn" onclick="askQuick('Наведи ідеальну відповідь')">Ідеальна відповідь</button>
-      </div>
-      <div class="dialog-input-row">
-        <input class="dialog-input" id="dialogInput" placeholder="Своє питання...">
-        <button class="dialog-send" onclick="sendDialog()">→</button>
-      </div>
-      <div class="dialog-resp" id="dialogResp"></div>
-    </div>`;
-}
+function vToggleAns(){ document.getElementById('vAnsBox').classList.toggle('show'); }
 
-function askQuick(text){
-  document.getElementById('dialogInput').value = text;
-  sendDialog();
+async function vAskQuick(text){
+  document.getElementById('vDialogInp').value=text;
+  vSendDialog();
 }
-
-async function sendDialog(){
-  const input = document.getElementById('dialogInput');
-  const resp = document.getElementById('dialogResp');
-  if(!input||!resp||!input.value.trim()) return;
-  const ctx = vtDialogCtx;
+async function vSendDialog(){
+  const inp=document.getElementById('vDialogInp');
+  const resp=document.getElementById('vDialogResp');
+  if(!inp||!resp||!inp.value.trim()) return;
+  const ctx=dialogCtx||{};
   resp.textContent='⏳...';
-  resp.style.color='var(--muted)';
-  const prompt = `Контекст: Учень вивчає IHK Lagerlogistik.
-Питання екзамену: ${ctx.q}
+  const prompt=`Контекст: Учень вивчає IHK Lagerlogistik.
+Питання: ${ctx.q}
 Правильна відповідь: ${ctx.correct}
 Відповідь учня: ${ctx.user}
-Попередня оцінка: ${ctx.ai}
-Запит учня: ${input.value.trim()}
+Оцінка AI: ${ctx.ai}
+Запит: ${inp.value.trim()}
 Відповідай коротко і чітко українською.`;
   try{
-    const r = await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-    const d = await r.json();
-    const t = d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
-    resp.textContent = t;
-    resp.style.color='#86efac';
-    input.value='';
-  }catch(e){
-    resp.textContent='Помилка. Спробуй ще раз.';
-    resp.style.color='var(--red)';
-  }
+    const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const d=await r.json();
+    const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
+    resp.textContent=t;
+    inp.value='';
+  }catch(e){resp.textContent='Помилка. Спробуй ще раз.';}
 }
 
-function toggleAns(){
-  document.getElementById('vtAnsBox').classList.toggle('show');
+function vMark(ok){
+  sesResults[curIdx]=ok;
+  const qs=getQs(curDay);
+  if(curIdx<qs.length-1){ curIdx++; renderVoiceCard(); }
+  else finishSession(sesResults);
 }
 
-function mark(ok){
-  vtRes[vtIdx]=ok;
-  document.getElementById('vtCard').className='card '+(ok?'correct':'wrong');
-  const qs = getQs(vtDay);
-  setTimeout(()=>{
-    if(vtIdx < qs.length-1){ vtIdx++; renderCard(); }
-    else showDone();
-  }, 500);
-}
-
-function goCard(i){ vtIdx=i; renderCard(); }
-
-function showDone(){
-  const ok=vtRes.filter(r=>r===true).length;
-  const tot=getQs(vtDay).length;
+// ===== SESSION DONE =====
+function finishSession(results){
+  const ok=results.filter(r=>r===true).length;
+  const tot=results.length;
   const pct=Math.round(ok/tot*100);
-  save({ok,tot,pct});
-  const tot_days=totalDays();
-  const next=vtDay<tot_days-1?vtDay+1:null;
+
+  // Зберігаємо сесію
+  const ds=getDayState(curDay);
+  const arr=mode==='flash'?ds.flash:ds.voice;
+  arr.push({ok,tot,pct,time:new Date().toISOString()});
+  saveState({flash:mode==='flash'?arr:ds.flash||[], voice:mode==='voice'?arr:ds.voice||[]});
+
+  const sesDone=arr.length;
+  const remaining=SESSIONS_PER_DAY-sesDone;
+  const dayComplete=sesDone>=SESSIONS_PER_DAY;
+
+  updatePlanBar();
+  renderDays();
+
+  const s=loadState();
+  const totalDone=Object.values(s.days).filter(d=>{
+    const a=mode==='flash'?d.flash:d.voice;
+    return a&&a.length>=SESSIONS_PER_DAY;
+  }).length;
+
   document.getElementById('main').innerHTML=`
     <div class="done-screen">
       <div class="done-emoji">${pct>=80?'🎉':pct>=60?'👍':'💪'}</div>
       <div class="done-title">${pct>=80?'Відмінно!':pct>=60?'Добре!':'Продовжуй!'}</div>
-      <div class="done-sub">День ${vtDay+1} завершено!</div>
+      <div class="done-sub">Сесія ${sesDone}/${SESSIONS_PER_DAY} · День ${curDay+1}</div>
+      <div class="done-plan">${dayComplete
+        ?`✅ Денний план виконано! (${sesDone*tot}/${SESSIONS_PER_DAY*tot} ${mode==='flash'?'карток':'відповідей'})`
+        :`📋 Залишилось ${remaining} ${remaining===1?'сесія':'сесії'} на сьогодні`}</div>
       <div class="score-chips">
         <div class="chip g"><div class="cn">${ok}</div><div class="cl">Знав</div></div>
         <div class="chip r"><div class="cn">${tot-ok}</div><div class="cl">Не знав</div></div>
         <div class="chip"><div class="cn">${pct}%</div><div class="cl">Результат</div></div>
       </div>
-      ${next!==null
-        ?`<button class="btn-next" onclick="goDay(${next})">День ${next+1} →</button>`
-        :`<button class="btn-next" style="background:var(--gold);color:#111">🏆 Всі дні пройдено!</button>`}
-      <button class="btn-retry" onclick="goDay(${vtDay})">↺ Повторити день ${vtDay+1}</button>
+      <div class="done-btns">
+        ${dayComplete
+          ?`<button class="btn-primary" onclick="goDay(${Math.min(curDay+1,totalDays()-1)})">День ${curDay+2} →</button>`
+          :`<button class="btn-primary" onclick="startNextSession()">▶ Почати сесію ${sesDone+1}</button>`}
+        <button class="btn-secondary" onclick="goDay(${curDay})">↺ Повторити сесію</button>
+      </div>
     </div>`;
-  renderDayTabs();
 }
 
-// INIT
-renderDayTabs();
-renderCard();
+function startNextSession(){
+  curIdx=0; sesResults=[]; flipped=false;
+  renderMain();
+}
+
+function renderDayDone(){
+  const ds=getDayState(curDay);
+  const arr=mode==='flash'?ds.flash:ds.voice;
+  const allOk=arr.reduce((s,ses)=>s+ses.ok,0);
+  const allTot=arr.reduce((s,ses)=>s+ses.tot,0);
+  const pct=Math.round(allOk/allTot*100);
+  const next=curDay<totalDays()-1?curDay+1:null;
+  document.getElementById('main').innerHTML=`
+    <div class="done-screen">
+      <div class="done-emoji">🏆</div>
+      <div class="done-title">День ${curDay+1} завершено!</div>
+      <div class="done-sub">Всі ${SESSIONS_PER_DAY} сесії пройдено</div>
+      <div class="done-plan">Загальний результат: ${allOk}/${allTot} (${pct}%)</div>
+      <div class="score-chips">
+        <div class="chip g"><div class="cn">${allOk}</div><div class="cl">Всього знав</div></div>
+        <div class="chip"><div class="cn">${pct}%</div><div class="cl">За день</div></div>
+      </div>
+      <div class="done-btns">
+        ${next!==null
+          ?`<button class="btn-primary" onclick="goDay(${next})">День ${next+1} →</button>`
+          :`<button class="btn-primary" style="background:var(--gold);color:#111">🎓 Всі дні пройдено!</button>`}
+        <button class="btn-secondary" onclick="resetDay()">↺ Пройти день знову</button>
+      </div>
+    </div>`;
+}
+
+function resetDay(){
+  const s=loadState();
+  if(s.days[curDay]){
+    s.days[curDay]={flash:[],voice:[]};
+    localStorage.setItem(KEY,JSON.stringify(s));
+  }
+  curIdx=0; sesResults=[]; flipped=false;
+  updatePlanBar();
+  renderDays();
+  renderMain();
+}
+
+// ===== INIT =====
+const initState = loadState();
+curDay = initState.day||0;
+updatePlanBar();
+renderDays();
+renderMain();
 </script>
 </body>
 </html>
