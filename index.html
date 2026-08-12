@@ -1443,7 +1443,7 @@ Antworte auf Ukrainisch kurz und klar:
 4. Zeige die korrekte Musterantwort auf Deutsch (IHK-Stil, knapp)`;
   try{
     const r=await fetch('/api/gemini',
-      {method:'POST',headers:{'Content-Type':'application/json'},
+      {method:'POST',headers:{'Content-Type':'application/json','x-api-key':window.ANTHROPIC_KEY||'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
        body:JSON.stringify({prompt})});
     const d=await r.json();
     const txt=d.text||d.error||'Помилка AI';
@@ -1572,7 +1572,7 @@ function showWordPopup(word, x, y){
   // Переклад через Gemini API
   fetch('/api/gemini', {
     method:'POST',
-    headers:{'Content-Type':'application/json'},
+    headers:{'Content-Type':'application/json','x-api-key':window.ANTHROPIC_KEY||'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
     body: JSON.stringify({prompt:`Перекладай одне слово або фразу з німецької на українську. Відповідай ТІЛЬКИ перекладом, без пояснень, без лапок. Слово: "${word}"`})
   }).then(r=>r.json()).then(d=>{
     const el = document.getElementById('popup-trans');
@@ -1974,22 +1974,26 @@ async function vtCheck(ans){
   const qs=getVtQuestions(vtDay),q=qs[vtIdx];
   const ai=document.getElementById('vtAi'),btns=document.getElementById('vtBtns');
   ai.style.display='block';ai.className='vt-ai-result loading';ai.textContent='⏳ AI перевіряє...';
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',max_tokens:250,
-        messages:[{role:'user',content:`Du bist ein IHK-Prüfer für Lagerlogistik.
+  const prompt=`Du bist ein IHK-Prüfer für Lagerlogistik.
 Frage: ${q.text}
 Musterlösung: ${q.ans||q.a||''}
 Antwort des Lernenden: ${ans}
-Bewerte kurz auf Ukrainisch (2-3 Sätze): beginne mit ✅ Richtig! oder ❌ Nicht vollständig. Was war gut? Was fehlte?`}]
-      })
+Bewerte kurz auf Ukrainisch (2-3 Sätze): beginne mit ✅ Richtig! oder ❌ Nicht vollständig. Was war gut? Was fehlte?`;
+  try{
+    const r=await fetch('/api/gemini',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt})
     });
-    const d=await r.json();const t=d.content[0].text;
-    ai.className='vt-ai-result '+(t.includes('✅')?'correct':'wrong');ai.textContent=t;
-  }catch(e){ai.className='vt-ai-result wrong';ai.textContent='Помилка AI. Перевір відповідь вручну.';}
+    const d=await r.json();
+    const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
+    if(!t) throw new Error('empty');
+    ai.className='vt-ai-result '+(t.includes('✅')?'correct':'wrong');
+    ai.textContent=t;
+  }catch(e){
+    ai.className='vt-ai-result wrong';
+    ai.textContent='Помилка AI. Перевір відповідь вручну.';
+  }
   btns.style.display='flex';
 }
 function vtMark(ok){
