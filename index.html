@@ -194,6 +194,57 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .selectable{cursor:text}
 
 @media(max-width:900px){.sidebar{display:none}.vocab-side{display:none}.layout{height:auto}.content{padding:14px}}
+
+/* ===== VOICE TRAINER ===== */
+.vt-wrap{max-width:600px;margin:0 auto;padding:20px 16px 100px}
+.vt-day-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.vt-day-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.vt-day-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.vt-day-btn.done{border-color:var(--green);color:var(--green)}
+.vt-progress{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.vt-prog-bar{flex:1;height:6px;background:var(--s2);border-radius:3px;overflow:hidden}
+.vt-prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s}
+.vt-prog-txt{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.vt-card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:16px;transition:border-color .3s}
+.vt-card.correct{border-color:var(--green)}
+.vt-card.wrong{border-color:var(--red)}
+.vt-card-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:8px}
+.vt-qid{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:8px}
+.vt-qtext{font-size:15px;line-height:1.7;color:var(--text);margin-bottom:16px}
+.vt-pts{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:16px}
+.vt-mic-btn{width:100%;padding:14px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.vt-mic-btn.recording{background:#dc2626;animation:vtPulse 1s infinite}
+.vt-mic-btn:disabled{opacity:.5;cursor:not-allowed}
+@keyframes vtPulse{0%,100%{opacity:1}50%{opacity:.7}}
+.vt-transcript{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:12px;font-size:13px;color:var(--dim);min-height:40px;line-height:1.6;font-style:italic}
+.vt-transcript.active{border-color:var(--acc);color:var(--text)}
+.vt-ai-result{margin-top:12px;padding:14px;border-radius:10px;font-size:13px;line-height:1.7}
+.vt-ai-result.correct{background:#0a1a10;border:1px solid var(--green);color:#86efac}
+.vt-ai-result.wrong{background:#1a0808;border:1px solid var(--red);color:#fca5a5}
+.vt-ai-result.loading{background:var(--s2);border:1px solid var(--border);color:var(--muted)}
+.vt-answer-box{background:#091708;border:1px solid #1a4a2a;border-radius:10px;padding:14px;margin-top:10px;font-size:13px;color:#86efac;white-space:pre-wrap;line-height:1.75;display:none}
+.vt-answer-box.show{display:block}
+.vt-btns{display:flex;gap:8px;margin-top:12px}
+.vt-btn{flex:1;padding:11px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border:none}
+.vt-btn-ans{background:#0d1829;border:2px solid var(--acc);color:#93c5fd}
+.vt-btn-no{background:#1a0808;border:2px solid var(--red);color:var(--red)}
+.vt-btn-ok{background:#0a1a10;border:2px solid var(--green);color:var(--green)}
+.vt-dots{display:flex;gap:5px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.vt-dot{width:26px;height:26px;border-radius:6px;background:var(--s2);border:1px solid var(--border);font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vt-dot.cur{border-color:var(--acc);color:#fff;background:#11192e;border-width:2px}
+.vt-dot.ok{background:#0a1a10;border-color:var(--green);color:var(--green)}
+.vt-dot.no{background:#1a0808;border-color:var(--red);color:var(--red)}
+.vt-done{text-align:center;padding:40px 20px}
+.vt-done-emoji{font-size:64px;margin-bottom:12px}
+.vt-done-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:8px}
+.vt-done-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+.vt-score-chips{display:flex;gap:10px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+.vt-chip{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px}
+.vt-chip .cn{font-size:22px;font-weight:800;color:#fff}
+.vt-chip .cl{font-size:11px;color:var(--muted);margin-top:2px}
+.vt-chip.g{border-color:var(--green)}.vt-chip.r{border-color:var(--red)}
+.vt-next-btn{padding:13px 30px;background:var(--acc);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.vt-retry-btn{padding:11px 24px;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px}
 </style>
 </head>
 <body>
@@ -215,6 +266,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
   <button class="tab on" onclick="goGroup('lagerlogistik',this)">📦 Lagerlogistik</button>
   <button class="tab" onclick="goGroup('guterumschlag',this)">🚛 Güterumschlag</button>
   <button class="tab" onclick="goGroup('wiso',this)">⚖️ WiSo</button>
+  <button class="tab" onclick="goGroup('voice',this)">🎤 Голосовий</button>
   <button class="tab" onclick="goGroup('vocab',this)">📚 Словник</button>
 </div>
 
@@ -1153,6 +1205,10 @@ function goGroup(group, btn){
   } else if(group === 'wiso'){
     subTabs.style.display = 'none';
     goTab('a6', null);
+  } else if(group === 'voice'){
+    subTabs.style.display = 'none';
+    renderVoiceTrainer();
+    return;
   } else if(group === 'vocab'){
     subTabs.style.display = 'none';
     goTab('vocab', null);
