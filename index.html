@@ -1868,6 +1868,140 @@ renderVocabPanel();
 renderStatsBar('lagerlogistik');
 goTab('a1', document.querySelector('#subTabs .tab'));
 updateProgress();
+
+// ===== VOICE TRAINER =====
+function getVtQuestions(dayIdx){
+  const allQs=[];
+  ['a1','a2','a3','a4'].forEach(tab=>{if(DATA[tab])DATA[tab].qs.forEach(q=>allQs.push({...q,tab}));});
+  return allQs.slice(dayIdx*5,(dayIdx+1)*5);
+}
+function getTotalVtDays(){
+  let t=0;['a1','a2','a3','a4'].forEach(tab=>{if(DATA[tab])t+=DATA[tab].qs.length;});
+  return Math.ceil(t/5);
+}
+let vtDay=0,vtIdx=0,vtTodayRes=[],vtTranscript='',vtRecognition=null,vtRecording=false;
+function renderVoiceTrainer(){
+  document.getElementById('sidebar').innerHTML='<div class="sb-label">🎤 Голосовий тренажер</div>';
+  let vp=JSON.parse(localStorage.getItem('vt_v1')||'{"day":0,"res":{}}');
+  vtDay=vp.day||0;vtIdx=0;vtTodayRes=[];
+  renderVtDay();
+}
+function renderVtDay(){
+  let vp=JSON.parse(localStorage.getItem('vt_v1')||'{"day":0,"res":{}}');
+  const tot=getTotalVtDays();
+  const dayTabs=Array.from({length:Math.min(tot,10)},(_,i)=>{
+    const done=vp.res&&vp.res[i];
+    return `<button class="vt-day-btn ${i===vtDay?'on':''} ${done&&i!==vtDay?'done':''}" onclick="vtGoDay(${i})">Tag ${i+1} ${done?'✓':''}</button>`;
+  }).join('');
+  document.getElementById('content').innerHTML=`<div class="vt-wrap"><div class="vt-day-tabs">${dayTabs}</div><div id="vtMain"></div></div>`;
+  renderVtCard();
+}
+function vtGoDay(i){
+  vtDay=i;vtIdx=0;vtTodayRes=[];vtTranscript='';
+  let vp=JSON.parse(localStorage.getItem('vt_v1')||'{"day":0,"res":{}}');
+  vp.day=i;localStorage.setItem('vt_v1',JSON.stringify(vp));
+  renderVtDay();
+}
+function renderVtCard(){
+  const qs=getVtQuestions(vtDay),q=qs[vtIdx],el=document.getElementById('vtMain');
+  if(!el||!q)return;
+  const dots=qs.map((_,i)=>`<div class="vt-dot ${i===vtIdx?'cur':vtTodayRes[i]===true?'ok':vtTodayRes[i]===false?'no':''}" onclick="vtGoCard(${i})">${i+1}</div>`).join('');
+  el.innerHTML=`
+    <div class="vt-progress">
+      <div class="vt-prog-bar"><div class="vt-prog-fill" style="width:${vtIdx/qs.length*100}%"></div></div>
+      <div class="vt-prog-txt">${vtIdx+1}/${qs.length}</div>
+    </div>
+    <div class="vt-dots">${dots}</div>
+    <div class="vt-card" id="vtCard">
+      <div class="vt-card-lbl">❓ Aufgabe ${q.id}</div>
+      <div class="vt-pts">⭐ ${q.pts} Punkt${q.pts!==1?'e':''}</div>
+      <div class="vt-qtext">${q.text}</div>
+      <button class="vt-mic-btn" id="vtMicBtn" onclick="vtToggle()">🎤 Говори відповідь</button>
+      <div class="vt-transcript" id="vtTr">Твоя відповідь з'явиться тут...</div>
+      <div class="vt-ai-result" id="vtAi" style="display:none"></div>
+      <div class="vt-answer-box" id="vtAns">${(q.ans||q.a||'').replace(/\n/g,'<br>')}</div>
+      <div class="vt-btns" id="vtBtns" style="display:none">
+        <button class="vt-btn vt-btn-ans" onclick="document.getElementById('vtAns').classList.toggle('show')">📖 Відповідь</button>
+        <button class="vt-btn vt-btn-no" onclick="vtMark(false)">✗ Не знав</button>
+        <button class="vt-btn vt-btn-ok" onclick="vtMark(true)">✓ Знав</button>
+      </div>
+    </div>`;
+}
+function vtToggle(){vtRecording?vtStop():vtStart();}
+function vtStart(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Потрібен Chrome!');return;}
+  vtRecognition=new SR();vtRecognition.lang='de-DE';
+  vtRecognition.continuous=true;vtRecognition.interimResults=true;
+  const btn=document.getElementById('vtMicBtn'),tr=document.getElementById('vtTr');
+  btn.className='vt-mic-btn recording';btn.innerHTML='⏹ Зупинити';vtRecording=true;
+  vtRecognition.onresult=e=>{
+    let fin='',int='';
+    for(let i=e.resultIndex;i<e.results.length;i++)
+      e.results[i].isFinal?fin+=e.results[i][0].transcript:int+=e.results[i][0].transcript;
+    tr.textContent=fin||int;tr.className='vt-transcript active';vtTranscript=fin||int;
+  };
+  vtRecognition.onerror=()=>vtStop();
+  vtRecognition.onend=()=>{if(vtRecording)vtStop();};
+  vtRecognition.start();
+}
+function vtStop(){
+  vtRecording=false;if(vtRecognition)vtRecognition.stop();
+  const btn=document.getElementById('vtMicBtn');
+  btn.className='vt-mic-btn';btn.innerHTML='🎤 Говорити знову';
+  if(vtTranscript&&vtTranscript.trim())vtCheck(vtTranscript);
+}
+async function vtCheck(ans){
+  const qs=getVtQuestions(vtDay),q=qs[vtIdx];
+  const ai=document.getElementById('vtAi'),btns=document.getElementById('vtBtns');
+  ai.style.display='block';ai.className='vt-ai-result loading';ai.textContent='⏳ AI перевіряє...';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',max_tokens:250,
+        messages:[{role:'user',content:`Du bist ein IHK-Prüfer für Lagerlogistik.
+Frage: ${q.text}
+Musterlösung: ${q.ans||q.a||''}
+Antwort des Lernenden: ${ans}
+Bewerte kurz auf Ukrainisch (2-3 Sätze): beginne mit ✅ Richtig! oder ❌ Nicht vollständig. Was war gut? Was fehlte?`}]
+      })
+    });
+    const d=await r.json();const t=d.content[0].text;
+    ai.className='vt-ai-result '+(t.includes('✅')?'correct':'wrong');ai.textContent=t;
+  }catch(e){ai.className='vt-ai-result wrong';ai.textContent='Помилка AI. Перевір відповідь вручну.';}
+  btns.style.display='flex';
+}
+function vtMark(ok){
+  vtTodayRes[vtIdx]=ok;
+  document.getElementById('vtCard').className='vt-card '+(ok?'correct':'wrong');
+  const qs=getVtQuestions(vtDay);
+  setTimeout(()=>{
+    if(vtIdx<qs.length-1){vtIdx++;vtTranscript='';renderVtCard();}
+    else vtDone();
+  },600);
+}
+function vtGoCard(i){vtIdx=i;vtTranscript='';renderVtCard();}
+function vtDone(){
+  const ok=vtTodayRes.filter(r=>r===true).length,tot=getVtQuestions(vtDay).length,pct=Math.round(ok/tot*100);
+  let vp=JSON.parse(localStorage.getItem('vt_v1')||'{"day":0,"res":{}}');
+  vp.res[vtDay]={ok,tot,pct};localStorage.setItem('vt_v1',JSON.stringify(vp));
+  const nx=vtDay<getTotalVtDays()-1?vtDay+1:null;
+  document.getElementById('vtMain').innerHTML=`<div class="vt-done">
+    <div class="vt-done-emoji">${pct>=80?'🎉':pct>=60?'👍':'💪'}</div>
+    <div class="vt-done-title">${pct>=80?'Ausgezeichnet!':pct>=60?'Gut gemacht!':'Weiter üben!'}</div>
+    <div class="vt-done-sub">Tag ${vtDay+1} abgeschlossen!</div>
+    <div class="vt-score-chips">
+      <div class="vt-chip g"><div class="cn">${ok}</div><div class="cl">Знав</div></div>
+      <div class="vt-chip r"><div class="cn">${tot-ok}</div><div class="cl">Не знав</div></div>
+      <div class="vt-chip"><div class="cn">${pct}%</div><div class="cl">Результат</div></div>
+    </div>
+    ${nx!==null?`<button class="vt-next-btn" onclick="vtGoDay(${nx})">Tag ${nx+1} →</button>`:`<button class="vt-next-btn" style="background:var(--gold);color:#111">🏆 Alle geschafft!</button>`}
+    <br><button class="vt-retry-btn" onclick="vtGoDay(${vtDay})">↺ Wiederholen</button>
+  </div>`;
+}
+
 </script>
 </body>
 </html>
