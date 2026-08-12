@@ -88,7 +88,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .tab:hover:not(.on){color:var(--text)}
 
 /* LAYOUT */
-.layout{display:flex;height:calc(100vh - 92px)}
+.layout{display:flex;height:calc(100vh - 160px)}
 .sidebar{width:210px;min-width:210px;background:var(--s1);border-right:1px solid var(--border);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--s3) transparent}
 .content{flex:1;overflow-y:auto;padding:22px 24px 60px}
 .vocab-side{width:230px;min-width:230px;background:var(--s1);border-left:1px solid var(--border);overflow-y:auto}
@@ -1921,15 +1921,10 @@ function getTotalVtDays(){
 }
 let vtDay=0,vtIdx=0,vtTodayRes=[],vtTranscript='',vtRecognition=null,vtRecording=false;
 function renderVoiceTrainer(){
-  // Показуємо layout якщо прихований
-  const layout = document.querySelector('.layout');
-  if(layout) layout.style.display = '';
   document.getElementById('sidebar').innerHTML='<div class="sb-label">🎤 Голосовий тренажер</div>';
-  const content = document.getElementById('content');
-  if(content) content.innerHTML='<div style="padding:20px;color:var(--muted)">⏳ Завантаження...</div>';
   let vp=JSON.parse(localStorage.getItem('vt_v1')||'{"day":0,"res":{}}');
   vtDay=vp.day||0;vtIdx=0;vtTodayRes=[];
-  setTimeout(renderVtDay, 50);
+  renderVtDay();
 }
 function renderVtDay(){
   let vp=JSON.parse(localStorage.getItem('vt_v1')||'{"day":0,"res":{}}');
