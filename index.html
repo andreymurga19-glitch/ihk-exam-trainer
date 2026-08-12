@@ -1989,12 +1989,82 @@ Bewerte kurz auf Ukrainisch (2-3 Sätze): beginne mit ✅ Richtig! oder ❌ Nich
     const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
     if(!t) throw new Error('empty');
     ai.className='vt-ai-result '+(t.includes('✅')?'correct':'wrong');
-    ai.textContent=t;
+    ai.innerHTML=t+'<div id="vtDialogArea" style="margin-top:12px;border-top:1px solid rgba(255,255,255,0.1);padding-top:10px"></div>';
+    vtShowDialogInput(q, ans, t);
   }catch(e){
     ai.className='vt-ai-result wrong';
     ai.textContent='Помилка AI. Перевір відповідь вручну.';
   }
   btns.style.display='flex';
+}
+
+function vtShowDialogInput(q, userAns, prevResponse){
+  const area = document.getElementById('vtDialogArea');
+  if(!area) return;
+  area.innerHTML=`
+    <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:6px">💬 Запитай AI далі:</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <button onclick="vtAskFollowup(this,'Як правильно відповісти на це питання?')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">Як правильно?</button>
+      <button onclick="vtAskFollowup(this,'Що саме я пропустив у своїй відповіді?')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">Що пропустив?</button>
+      <button onclick="vtAskFollowup(this,'Наведи приклад ідеальної відповіді')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">Ідеальна відповідь</button>
+    </div>
+    <div style="display:flex;gap:6px">
+      <textarea id="vtFollowupInput" placeholder="Або напиши своє питання..." rows="2"
+        style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;padding:8px;font-size:13px;font-family:Inter,sans-serif;resize:none"></textarea>
+      <button onclick="vtSendFollowup()" style="background:#4f7fff;border:none;color:#fff;padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap">→ Надіслати</button>
+    </div>
+    <div id="vtFollowupResp" style="margin-top:10px;font-size:13px;line-height:1.7;color:#86efac;white-space:pre-wrap"></div>`;
+
+  // Зберігаємо контекст для діалогу
+  window.vtDialogCtx = {
+    question: q.text,
+    correctAnswer: q.ans||q.a||'',
+    userAnswer: userAns,
+    lastResponse: prevResponse
+  };
+}
+
+async function vtAskFollowup(btn, text){
+  document.getElementById('vtFollowupInput').value = text;
+  vtSendFollowup();
+}
+
+async function vtSendFollowup(){
+  const input = document.getElementById('vtFollowupInput');
+  const resp = document.getElementById('vtFollowupResp');
+  if(!input||!resp) return;
+  const question = input.value.trim();
+  if(!question) return;
+
+  const ctx = window.vtDialogCtx||{};
+  resp.textContent = '⏳ AI думає...';
+  resp.style.color = '#64748b';
+
+  const prompt = `Контекст: Учень вивчає IHK Lagerlogistik.
+Питання екзамену: ${ctx.question}
+Правильна відповідь: ${ctx.correctAnswer}
+Відповідь учня: ${ctx.userAnswer}
+Попередня оцінка AI: ${ctx.lastResponse}
+
+Запит учня: ${question}
+
+Відповідай коротко і чітко українською мовою. Якщо питають "як правильно" — дай конкретну відповідь в форматі екзамену.`;
+
+  try{
+    const r = await fetch('/api/gemini',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt})
+    });
+    const d = await r.json();
+    const t = d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
+    resp.textContent = t;
+    resp.style.color = '#86efac';
+    input.value = '';
+  }catch(e){
+    resp.textContent = 'Помилка. Спробуй ще раз.';
+    resp.style.color = '#ef4444';
+  }
 }
 function vtMark(ok){
   vtTodayRes[vtIdx]=ok;
