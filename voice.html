@@ -32,10 +32,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 /* DAY SELECTOR */
 .day-scroll{display:flex;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:0 8px}
 .day-scroll::-webkit-scrollbar{display:none}
-.day-btn{padding:9px 13px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s;flex-shrink:0}
+.day-btn{padding:8px 12px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:56px}
 .day-btn.on{color:var(--acc);border-bottom-color:var(--acc)}
 .day-btn.done{color:var(--green)}
 .day-btn.partial{color:var(--gold)}
+.day-btn.today{background:rgba(79,127,255,0.08)}
+.day-date{font-size:12px;font-weight:700;display:flex;align-items:center;gap:3px}
+.day-mins{font-size:10px;font-weight:500;color:var(--green);font-family:'JetBrains Mono',monospace}
+.today-dot{width:5px;height:5px;border-radius:50%;background:var(--acc);display:inline-block}
 
 /* MAIN */
 main{max-width:640px;margin:0 auto;padding:16px 16px 100px}
@@ -1390,19 +1394,63 @@ function renderAll() {
   renderContent();
 }
 
+function getDayDate(dayIdx) {
+  // День 0 = перший день навчання (зберігається в DB)
+  const db = loadDB();
+  const startISO = db.startDate || new Date().toISOString().slice(0,10);
+  const start = new Date(startISO);
+  start.setDate(start.getDate() + dayIdx);
+  return start;
+}
+
+function formatDayLabel(date) {
+  const months = ['січ','лют','бер','квіт','трав','черв','лип','серп','вер','жовт','лист','груд'];
+  return `${date.getDate()} ${months[date.getMonth()]}`;
+}
+
+function isToday(date) {
+  const today = new Date();
+  return date.toDateString() === today.toDateString();
+}
+
 function renderDayTabs() {
   const db = loadDB();
+  // Зберігаємо дату початку якщо ще немає
+  if (!db.startDate) {
+    db.startDate = new Date().toISOString().slice(0,10);
+    saveDB(db);
+  }
   const tot = totalDays();
   let html = '';
   for (let i = 0; i < tot; i++) {
     const rec = db.days[i];
-    let cls = i === state.day ? 'day-btn on' : 'day-btn';
-    let suffix = '';
-    if (rec) {
-      if (isDayComplete(rec)) { cls += ' done'; suffix = ' ✓'; }
-      else if (totalDone(rec) > 0) { cls += ' partial'; suffix = ' ●'; }
+    const date = getDayDate(i);
+    const today = isToday(date);
+    const dateLabel = formatDayLabel(date);
+
+    // Хвилини за цей день
+    let mins = 0;
+    if (rec && rec.time) {
+      mins = rec.time.reduce((s,t) => s + t.minutes, 0);
     }
-    html += `<button class="${cls}" onclick="setDay(${i})">День ${i+1}${suffix}</button>`;
+    // + активна сесія якщо це поточний день
+    if (i === state.day && state.sessionStart) {
+      mins += Math.round((Date.now() - state.sessionStart) / 60000);
+    }
+
+    let cls = 'day-btn';
+    if (i === state.day) cls += ' on';
+    if (today && i !== state.day) cls += ' today';
+    if (rec && isDayComplete(rec)) cls += ' done';
+    else if (rec && totalDone(rec) > 0) cls += ' partial';
+
+    const minsLabel = mins > 0 ? `<span class="day-mins">${mins}хв</span>` : '';
+    const todayBadge = today ? '<span class="today-dot"></span>' : '';
+
+    html += `<button class="${cls}" onclick="setDay(${i})">
+      <span class="day-date">${dateLabel}${todayBadge}</span>
+      ${minsLabel}
+    </button>`;
   }
   const el = document.getElementById('dayScroll');
   if (el) el.innerHTML = html;
