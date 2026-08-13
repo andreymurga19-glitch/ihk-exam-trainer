@@ -157,6 +157,13 @@ textarea::placeholder{color:var(--muted);font-size:13px}
 .time-row:last-child{border-bottom:none}
 .v-action-row{display:none}
 .v-action-row.show{display:flex}
+
+.plan-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.plan-stats{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text)}
+.stat-item{color:var(--text)}.stat-item.done{color:var(--green)}
+.stat-sep{color:var(--muted)}
+.plan-bar-wrap{height:4px;background:var(--s2);border-radius:2px;overflow:hidden}
+.plan-bar-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--green));border-radius:2px;transition:width .4s}
 </style>
 </head>
 <body>
@@ -1417,27 +1424,23 @@ function renderPlanBar() {
   const el = document.getElementById('planBar');
   if (!el) return;
 
-  const counters = renderQCounters(rec);
-  const counterHtml = counters.map(c => `
-    <div class="q-counter">
-      <span class="qc-id">П${c.idx+1}</span>
-      <span class="qc-flash ${c.flashDone>=c.reps?'done':''}">📚${c.flashDone}/${c.reps}</span>
-      <span class="qc-voice ${c.voiceDone>=c.reps?'done':''}">🎤${c.voiceDone}/${c.reps}</span>
-    </div>`).join('');
+  const totalAll = TOTAL_FLASH + TOTAL_VOICE;
+  const doneAll = fd + vd;
+  const pctAll = Math.round(doneAll / totalAll * 100);
 
   el.innerHTML = `
     <div class="plan-top">
-      <div class="plan-mode-progress">
-        <span>${modeLabel}: <strong>${modeDone}/${modeTotal}</strong></span>
-        <div class="mini-bar"><div class="mini-fill" style="width:${modeTotal>0?Math.round(modeDone/modeTotal*100):0}%"></div></div>
+      <div class="plan-stats">
+        <span class="stat-item">📚 <strong>${fd}/${TOTAL_FLASH}</strong></span>
+        <span class="stat-sep">·</span>
+        <span class="stat-item">🎤 <strong>${vd}/${TOTAL_VOICE}</strong></span>
+        <span class="stat-sep">·</span>
+        <span class="stat-item ${pctAll>=100?'done':''}"><strong>${pctAll}%</strong></span>
       </div>
-      <div class="plan-time">⏱ ${todayMin} хв сьогодні</div>
+      <div class="plan-time">⏱ ${todayMin} хв</div>
     </div>
-    <div class="plan-counters">${counterHtml}</div>
-    <div class="plan-overall">
-      📚 ${fd}/${TOTAL_FLASH} &nbsp;|&nbsp; 🎤 ${vd}/${TOTAL_VOICE} &nbsp;|&nbsp;
-      Всього: ${fd+vd}/${TOTAL_FLASH+TOTAL_VOICE}
-      (${Math.round((fd+vd)/(TOTAL_FLASH+TOTAL_VOICE)*100)}%)
+    <div class="plan-bar-wrap">
+      <div class="plan-bar-fill" style="width:${pctAll}%"></div>
     </div>`;
 }
 
