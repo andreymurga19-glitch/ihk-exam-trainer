@@ -147,6 +147,10 @@ textarea::placeholder{color:var(--muted);font-size:13px}
 .plan-overall{font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;margin-top:4px}
 .dot small{font-size:8px;line-height:1;display:block}
 .dot.partial{background:#1a1500;border-color:var(--gold);color:var(--gold)}
+.round-dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.round-dot{width:32px;height:32px;border-radius:50%;background:var(--s2);border:2px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;transition:all .3s}
+.round-dot.done{background:var(--green);border-color:var(--green);color:#fff}
+.round-dot.cur{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 0 8px rgba(79,127,255,0.5)}
 .done-stats{background:var(--s2);border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
 .time-history{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:16px;width:100%;max-width:280px;margin-left:auto;margin-right:auto}
 .time-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
@@ -1531,13 +1535,16 @@ function fcMark(ok) {
 
 function getDots(rec, mode) {
   const arr = mode === 'flash' ? rec.flash : rec.voice;
-  return [0,1,2,3,4].map(i => {
-    const done = arr[i] >= REPS_PER_QUESTION;
-    const cur = i === state.qIdx;
-    const partial = arr[i] > 0 && arr[i] < REPS_PER_QUESTION;
-    const cls = cur ? 'cur' : done ? 'ok' : partial ? 'partial' : '';
-    return `<div class="dot ${cls}" onclick="jumpToQ(${i})">${i+1}<br><small>${arr[i]}/${REPS_PER_QUESTION}</small></div>`;
+  const round = currentRound(rec, mode); // поточний раунд 0-9
+
+  // 10 кіл — прогрес раундів
+  const circles = Array.from({length: REPS_PER_QUESTION}, (_, i) => {
+    const done = round > i; // раунд пройдено
+    const cur = round === i; // поточний раунд
+    return `<div class="round-dot ${done?'done':cur?'cur':''}">${i+1}</div>`;
   }).join('');
+
+  return `<div class="round-dots">${circles}</div>`;
 }
 
 function jumpToQ(i) {
