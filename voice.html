@@ -1044,6 +1044,21 @@ a6:{
 }
 };
 
+
+// UA ПАТЧ — додаємо ua_q та ua_a до питань
+(function addUAFields(){
+  const UA = {"1.1": ("Назвіть 2 дані з накладної, які ви перевіряєте перед розвантаженням!", "1. Одержувач — перевірити ім"я та адресу\n2. Дата доставки — чи доставлено вчасно?\n\nІнші: відправник, номерний знак авто, номер замовлення.\nВажливо: ДО розвантаження перевіряємо ТІЛЬКИ документи."), "1.2": ("Під час розвантаження ви не виявляєте пошкоджень. Заповніть накладну!", "1. Вписати дату доставки: 28.04.2026\n2. Підписати у полі "Ware erhalten".\n\n⚠️ При пошкодженнях: внести Vorbehalt + скласти протокол!"), "1.3": ("Назвіть 3 дефекти Euro-палет, через які їх не можна обміняти!", "1. Зламані або відсутні дошки настилу\n2. Відсутні або пошкоджені кубики-опори\n3. Відсутній або нечитабельний знак EPAL"), "1.4": ("Поясніть 4 види дефектів на прикладі "Спортивні штани, довгі, сірі"", "Identität: Доставлено не той товар (чорні замість сірих)\nQuantität: Неправильна кількість (1.400 замість 1.500)\nQualität: Дефекти виготовлення (неправильні шви)\nBeschaffenheit: Неправильний матеріал або розмір"), "1.5": ("Eltron GmbH перевіряє 15% від 1.500 шт. Розрахуйте кількість!", "1.500 × 15 / 100 = 225 штук → до відділу QS"), "1.6": ("Частина артикулу розміщується на Sperrfläche (S 20). Поясніть чому!", "Товар ще не пройшов перевірку якості.\nНа Sperrfläche зберігається товар не звільнений для продажу.\nТак запобігається відвантаження неперевіреного товару."), "1.7": ("Заповніть внутрішній транспортний документ для арт. 240150 (225 шт.)!", "До зони: C | Артикул: 240150 | До відділу: Qualitätssicherung\nКількість: 225 | Накладна: 55016-20\nПовернення: Зона C, Sperrfläche S 20"), "1.8": ("Назвіть одну можливість Nacherfüllung яку Eltron може вимагати першочергово!", "Nachbesserung: продавець усуває дефектні шви.\nАбо: Ersatzlieferung — нова безпечна ware."), "1.9.1": ("12 Euro-палет, 6 місяців, 20€/палета/місяць. Розрахуйте витрати!", "12 × 6 × 20,00 € = 1.440,00 €"), "1.9.2": ("Економія 7.800€. Витрати зберігання 1.440€. Фактична економія?", "7.800,00 € − 1.440,00 € = 6.360,00 €"), "1.10.1": ("120 м"ячів. Частки: Р=5, Ж=4, С=3, З=3. Розрахуйте кількість кожного!", "Сума: 15\nЧервоний: 120/15×5=40\nЖовтий: 120/15×4=32\nСиній: 120/15×3=24\nЗелений: 120/15×3=24\nПеревірка: 40+32+24+24=120 ✓"), "1.10.2": ("Яку функцію виконує склад при створенні наборів?", "Sortimentsfunktion (функція асортименту).\nСклад збирає з окремих артикулів індивідуальні набори."), "1.10.3": ("Як захистити нижній шар наборів від пошкодження Euro-палетою?", "Покласти прокладку з картону (гофрокартону) або плівки між палетою і нижнім шаром."), "2.1.1": ("Ви забираєте товари з полочного стелажу. Поясніть цей вид підготовки!", "Статична підготовка (statische Bereitstellung).\nТовар стоїть нерухомо. Комплектувальник сам іде до товару (людина-до-товару)."), "2.1.2": ("Одна перевага статичної підготовки над динамічною?", "Менші інвестиційні витрати: не потрібна складна технічна установка.")};
+  ['a1','a2','a3','a4'].forEach(k=>{
+    if(!DATA[k]) return;
+    DATA[k].qs.forEach(q=>{
+      if(UA[q.id]){
+        q.ua_q = UA[q.id][0];
+        q.ua_a = UA[q.id][1];
+      }
+    });
+  });
+})();
+
 // ============================================================
 // CORE STATE
 // ============================================================
@@ -1060,6 +1075,7 @@ let state = {
   flipped: false,
   dialogCtx: null,
   sessionStart: null, // Date.now() коли почали сесію
+  flashLang: 'de',    // 'de' | 'ua'
 };
 
 // ============================================================
@@ -1133,13 +1149,32 @@ function isVoiceComplete(rec) {
   return voiceDone(rec) >= TOTAL_VOICE;
 }
 
-// Знаходимо наступне питання яке ще не добито до 10 разів
+// Знаходимо наступне питання в поточному раунді
+// Раунд = один прохід всіх 5 питань
 function nextQIdx(rec, mode) {
   const arr = mode === 'flash' ? rec.flash : rec.voice;
   for (let i = 0; i < QUESTIONS_PER_DAY; i++) {
     if (arr[i] < REPS_PER_QUESTION) return i;
   }
   return -1; // всі виконані
+}
+
+// Поточний раунд = мінімальна кількість повторень серед всіх питань
+function currentRound(rec, mode) {
+  const arr = mode === 'flash' ? rec.flash : rec.voice;
+  return Math.min(...arr);
+}
+
+// Наступне питання в раунді: питання з кількістю = поточний раунд
+function nextQInRound(rec, mode) {
+  const arr = mode === 'flash' ? rec.flash : rec.voice;
+  const round = currentRound(rec, mode);
+  if (round >= REPS_PER_QUESTION) return -1; // всі виконані
+  // Шукаємо перше питання яке ще не пройшло цей раунд
+  for (let i = 0; i < QUESTIONS_PER_DAY; i++) {
+    if (arr[i] === round) return i;
+  }
+  return -1;
 }
 
 // ============================================================
@@ -1254,8 +1289,8 @@ function setMode(m) {
   state.mode = m;
   state.flipped = false;
 
-  // Знаходимо перше невиконане питання
-  const idx = nextQIdx(rec, m);
+  // Знаходимо перше питання в поточному раунді
+  const idx = nextQInRound(rec, m);
   state.qIdx = idx >= 0 ? idx : 0;
 
   startSession(db, state.day);
@@ -1382,12 +1417,23 @@ function renderContent() {
 function renderFlashCard(q, rec) {
   const el = document.getElementById('main');
   const done = rec.flash[state.qIdx];
-  const remaining = REPS_PER_QUESTION - done;
+  const round = currentRound(rec, 'flash'); // поточний раунд (0-9)
+  const remaining = REPS_PER_QUESTION - round;
+
+  // DE/UA мова — перемикач
+  const showUA = state.flashLang === 'ua';
+  const qText = showUA && q.ua_q ? q.ua_q : q.text;
+  const aText = showUA && q.ua_a ? q.ua_a : (q.ans||'');
 
   el.innerHTML = `
     <div class="rep-counter">
-      Питання ${state.qIdx+1}/5 · Картка ${done+1}/${REPS_PER_QUESTION}
-      · Залишилось: ${remaining}
+      Раунд ${round+1}/${REPS_PER_QUESTION} · Питання ${state.qIdx+1}/5
+    </div>
+    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:8px">
+      <button onclick="state.flashLang='de';renderContent()"
+        style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:${!showUA?'var(--acc)':'var(--s2)'};color:${!showUA?'#fff':'var(--muted)'};font-size:11px;cursor:pointer;font-family:Inter,sans-serif">DE</button>
+      <button onclick="state.flashLang='ua';renderContent()"
+        style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:${showUA?'var(--acc)':'var(--s2)'};color:${showUA?'#fff':'var(--muted)'};font-size:11px;cursor:pointer;font-family:Inter,sans-serif">UA</button>
     </div>
     <div class="dots">${getDots(rec, 'flash')}</div>
 
@@ -1396,12 +1442,12 @@ function renderFlashCard(q, rec) {
         <div class="fc-face fc-front">
           <div class="fc-lbl">❓ Aufgabe ${q.id}</div>
           <div class="fc-id">⭐ ${q.pts} Punkte</div>
-          <div class="fc-q">${q.text}</div>
+          <div class="fc-q">${qText}</div>
           <div class="fc-hint">👆 Натисни щоб побачити відповідь</div>
         </div>
         <div class="fc-face fc-back">
           <div class="fc-lbl">✅ Відповідь</div>
-          <div class="fc-a">${q.ans||''}</div>
+          <div class="fc-a">${aText}</div>
         </div>
       </div>
     </div>
@@ -1427,10 +1473,12 @@ function fcMark(ok) {
   const db = loadDB();
   recordFlash(db, state.day, state.qIdx);
   state.flipped = false;
-  // Переходимо до наступного питання яке ще не виконано
   const rec = getDayRecord(db, state.day);
-  const next = nextQIdx(rec, 'flash');
-  state.qIdx = next >= 0 ? next : state.qIdx;
+  // Переходимо до наступного питання в РАУНДІ
+  const next = nextQInRound(rec, 'flash');
+  if (next >= 0) {
+    state.qIdx = next;
+  }
   renderAll();
 }
 
@@ -1585,8 +1633,11 @@ function vMark(ok) {
   const db = loadDB();
   recordVoice(db, state.day, state.qIdx);
   const rec = getDayRecord(db, state.day);
-  const next = nextQIdx(rec, 'voice');
-  state.qIdx = next >= 0 ? next : state.qIdx;
+  // Переходимо до наступного питання в РАУНДІ
+  const next = nextQInRound(rec, 'voice');
+  if (next >= 0) {
+    state.qIdx = next;
+  }
   renderAll();
 }
 
@@ -1662,7 +1713,7 @@ setInterval(() => {
   state.day = db.currentDay || 0;
   state.qIdx = 0;
   const rec = getDayRecord(db, state.day);
-  const idx = nextQIdx(rec, state.mode);
+  const idx = nextQInRound(rec, state.mode);
   state.qIdx = idx >= 0 ? idx : 0;
   startSession(db, state.day);
   renderAll();
