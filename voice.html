@@ -131,6 +131,29 @@ textarea::placeholder{color:var(--muted);font-size:13px}
 .btn-primary{padding:13px 30px;background:var(--acc);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;max-width:280px}
 .btn-secondary{padding:11px 24px;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;width:100%;max-width:280px}
 </style>
+<style>
+/* ДОДАТКОВІ СТИЛІ ДЛЯ НОВОЇ ЛОГІКИ */
+.rep-counter{font-size:12px;color:var(--muted);text-align:center;margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+.plan-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.plan-mode-progress{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text)}
+.mini-bar{width:80px;height:5px;background:var(--s2);border-radius:3px;overflow:hidden}
+.mini-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s}
+.plan-time{font-size:11px;color:var(--muted);white-space:nowrap}
+.plan-counters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.q-counter{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:11px;display:flex;gap:6px;align-items:center}
+.qc-id{color:var(--muted);font-family:'JetBrains Mono',monospace}
+.qc-flash,.qc-voice{color:var(--dim)}
+.qc-flash.done,.qc-voice.done{color:var(--green)}
+.plan-overall{font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;margin-top:4px}
+.dot small{font-size:8px;line-height:1;display:block}
+.dot.partial{background:#1a1500;border-color:var(--gold);color:var(--gold)}
+.done-stats{background:var(--s2);border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.time-history{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:16px;width:100%;max-width:280px;margin-left:auto;margin-right:auto}
+.time-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+.time-row:last-child{border-bottom:none}
+.v-action-row{display:none}
+.v-action-row.show{display:flex}
+</style>
 </head>
 <body>
 
@@ -140,15 +163,11 @@ textarea::placeholder{color:var(--muted);font-size:13px}
 </div>
 
 <div class="mode-tabs">
-  <button class="mode-btn on" id="modeFlash" onclick="setMode('flash')">📚 Картки</button>
-  <button class="mode-btn" id="modeVoice" onclick="setMode('voice')">🎤 Голос + AI</button>
+  <button class="mode-btn on" id="modeFlash" onclick="setMode('flash')">📚 Картки (50/день)</button>
+  <button class="mode-btn" id="modeVoice" onclick="setMode('voice')">🎤 Голос (50/день)</button>
 </div>
 
-<div class="plan-bar" id="planBar">
-  <div class="plan-info" id="planInfo">День <span id="planDay">1</span> — план: 2 сесії по 5 питань</div>
-  <div class="plan-progress" id="planProgress"></div>
-</div>
-
+<div class="plan-bar" id="planBar"></div>
 <div class="day-scroll" id="dayScroll"></div>
 <main id="main"></main>
 
@@ -1025,157 +1044,355 @@ a6:{
 }
 };
 
-const KEY = 'ihk_trainer_v1';
-const SESSIONS_PER_DAY = 2; // 2 сесії = 10 карток/відповідей за день
+// ============================================================
+// CORE STATE
+// ============================================================
+const KEY = 'ihk_v3';
+const QUESTIONS_PER_DAY = 5;
+const REPS_PER_QUESTION = 10; // 10 разів на питання
+const TOTAL_FLASH = QUESTIONS_PER_DAY * REPS_PER_QUESTION; // 50
+const TOTAL_VOICE = QUESTIONS_PER_DAY * REPS_PER_QUESTION; // 50
 
-let mode = 'flash';
-let curDay = 0;
-let curIdx = 0;
-let curSes = 0; // поточна сесія (0 або 1)
-let sesResults = [];
-let flipped = false;
-let dialogCtx = null;
+let state = {
+  mode: 'flash',      // 'flash' | 'voice'
+  day: 0,
+  qIdx: 0,            // поточне питання (0-4)
+  flipped: false,
+  dialogCtx: null,
+  sessionStart: null, // Date.now() коли почали сесію
+};
 
-// ===== DATA =====
-function getQs(day){
+// ============================================================
+// STORAGE
+// ============================================================
+function loadDB() {
+  try { return JSON.parse(localStorage.getItem(KEY) || 'null') || makeDB(); }
+  catch(e) { return makeDB(); }
+}
+function makeDB() {
+  return { currentDay: 0, days: {} };
+}
+function saveDB(db) {
+  localStorage.setItem(KEY, JSON.stringify(db));
+}
+function getDayRecord(db, day) {
+  if (!db.days[day]) {
+    db.days[day] = {
+      // flash[qIdx] = кількість виконаних карток (0-10)
+      flash: [0, 0, 0, 0, 0],
+      // voice[qIdx] = кількість голосових відповідей (0-10)
+      voice: [0, 0, 0, 0, 0],
+      // time: масив { date: ISO, minutes: N }
+      time: [],
+      // активна сесія (для time tracking)
+      sessionStartISO: null,
+    };
+  }
+  return db.days[day];
+}
+
+// ============================================================
+// ПИТАННЯ
+// ============================================================
+function getAllQs() {
   const all = [];
-  ['a1','a2','a3','a4'].forEach(k=>{ if(DATA[k]) DATA[k].qs.forEach(q=>all.push(q)); });
-  return all.slice(day*5, day*5+5);
+  ['a1','a2','a3','a4'].forEach(k => {
+    if (DATA[k]) DATA[k].qs.forEach(q => all.push(q));
+  });
+  return all;
 }
-function totalDays(){
-  let t=0;
-  ['a1','a2','a3','a4'].forEach(k=>{ if(DATA[k]) t+=DATA[k].qs.length; });
-  return Math.ceil(t/5);
+function getDayQs(day) {
+  const all = getAllQs();
+  const start = day * QUESTIONS_PER_DAY;
+  return all.slice(start, start + QUESTIONS_PER_DAY);
 }
-
-// ===== STORAGE =====
-function loadState(){
-  return JSON.parse(localStorage.getItem(KEY)||'{"day":0,"days":{}}');
-}
-function saveState(dayData){
-  const s = loadState();
-  s.day = curDay;
-  if(dayData) s.days[curDay] = dayData;
-  localStorage.setItem(KEY, JSON.stringify(s));
-}
-function getDayState(day){
-  const s = loadState();
-  return s.days[day] || {flash:[],voice:[]};
+function totalDays() {
+  return Math.ceil(getAllQs().length / QUESTIONS_PER_DAY);
 }
 
-// ===== MODE =====
-function setMode(m){
-  mode = m;
-  document.getElementById('modeFlash').className = 'mode-btn' + (m==='flash'?' on':'');
-  document.getElementById('modeVoice').className = 'mode-btn' + (m==='voice'?' on':'');
-  curIdx = 0;
-  curSes = 0;
-  sesResults = [];
-  flipped = false;
-  updatePlanBar();
-  renderDays();
-  renderMain();
+// ============================================================
+// ПРОГРЕС
+// ============================================================
+function flashDone(rec) {
+  // скільки карток виконано сьогодні
+  return rec.flash.reduce((s, v) => s + Math.min(v, REPS_PER_QUESTION), 0);
+}
+function voiceDone(rec) {
+  return rec.voice.reduce((s, v) => s + Math.min(v, REPS_PER_QUESTION), 0);
+}
+function totalDone(rec) {
+  return flashDone(rec) + voiceDone(rec);
+}
+function isDayComplete(rec) {
+  return flashDone(rec) >= TOTAL_FLASH && voiceDone(rec) >= TOTAL_VOICE;
+}
+function isFlashComplete(rec) {
+  return flashDone(rec) >= TOTAL_FLASH;
+}
+function isVoiceComplete(rec) {
+  return voiceDone(rec) >= TOTAL_VOICE;
 }
 
-// ===== DAY =====
-function goDay(d){
-  curDay = d;
-  curIdx = 0;
-  curSes = 0;
-  sesResults = [];
-  flipped = false;
-  saveState();
-  updatePlanBar();
-  renderDays();
-  renderMain();
-}
-
-function updatePlanBar(){
-  const ds = getDayState(curDay);
-  const arr = mode==='flash' ? ds.flash : ds.voice;
-  const done = arr.length;
-  document.getElementById('planDay').textContent = curDay+1;
-
-  // Session dots
-  let dots = '';
-  for(let i=0;i<SESSIONS_PER_DAY;i++){
-    const isDone = i < done;
-    const isCur = i === done && done < SESSIONS_PER_DAY;
-    dots += `<div class="ses-dot ${isDone?'done':isCur?'cur':''}"></div>`;
+// Знаходимо наступне питання яке ще не добито до 10 разів
+function nextQIdx(rec, mode) {
+  const arr = mode === 'flash' ? rec.flash : rec.voice;
+  for (let i = 0; i < QUESTIONS_PER_DAY; i++) {
+    if (arr[i] < REPS_PER_QUESTION) return i;
   }
-
-  const modeLabel = mode==='flash'?'картки':'відповіді';
-  const remaining = SESSIONS_PER_DAY - done;
-  let infoText = '';
-  if(done >= SESSIONS_PER_DAY){
-    infoText = `✅ План виконано! (${done*5}/${SESSIONS_PER_DAY*5} ${modeLabel})`;
-  } else {
-    infoText = `День ${curDay+1} · залишилось ${remaining} ${remaining===1?'сесія':'сесії'} (${done*5}/${SESSIONS_PER_DAY*5} ${modeLabel})`;
-  }
-  document.getElementById('planInfo').textContent = infoText;
-
-  const prog = document.getElementById('planProgress');
-  prog.innerHTML = `<div class="session-dots" style="margin:0">${dots}</div>`;
+  return -1; // всі виконані
 }
 
-function renderDays(){
+// ============================================================
+// TIME TRACKING
+// ============================================================
+function startSession(db, day) {
+  const rec = getDayRecord(db, day);
+  rec.sessionStartISO = new Date().toISOString();
+  state.sessionStart = Date.now();
+  saveDB(db);
+}
+
+function endSession(db, day) {
+  const rec = getDayRecord(db, day);
+  if (!rec.sessionStartISO) return;
+  const minutes = Math.round((Date.now() - new Date(rec.sessionStartISO).getTime()) / 60000);
+  if (minutes > 0) {
+    rec.time.push({
+      date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
+      minutes,
+    });
+  }
+  rec.sessionStartISO = null;
+  state.sessionStart = null;
+  saveDB(db);
+}
+
+function getTodayMinutes(rec) {
+  const today = new Date().toISOString().slice(0, 10);
+  const saved = rec.time
+    .filter(t => t.date === today)
+    .reduce((s, t) => s + t.minutes, 0);
+  // + поточна активна сесія
+  const live = state.sessionStart
+    ? Math.round((Date.now() - state.sessionStart) / 60000)
+    : 0;
+  return saved + live;
+}
+
+function getTimeHistory(rec) {
+  // групуємо по даті
+  const map = {};
+  rec.time.forEach(t => {
+    map[t.date] = (map[t.date] || 0) + t.minutes;
+  });
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  return Object.entries(map)
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .map(([date, min]) => {
+      const label = date === today ? 'Сьогодні'
+        : date === yesterday ? 'Вчора'
+        : date;
+      return { label, minutes: min };
+    });
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+
+// Записуємо що картку пройдено для qIdx
+function recordFlash(db, day, qIdx) {
+  const rec = getDayRecord(db, day);
+  if (rec.flash[qIdx] < REPS_PER_QUESTION) {
+    rec.flash[qIdx]++;
+  }
+  saveDB(db);
+  return rec;
+}
+
+// Записуємо голосову відповідь
+function recordVoice(db, day, qIdx) {
+  const rec = getDayRecord(db, day);
+  if (rec.voice[qIdx] < REPS_PER_QUESTION) {
+    rec.voice[qIdx]++;
+  }
+  saveDB(db);
+  return rec;
+}
+
+// ============================================================
+// RENDER HELPERS (тільки логіка, HTML генерується тут)
+// ============================================================
+function renderProgressBar(rec, mode) {
+  const done = mode === 'flash' ? flashDone(rec) : voiceDone(rec);
+  const total = mode === 'flash' ? TOTAL_FLASH : TOTAL_VOICE;
+  const pct = Math.round(done / total * 100);
+  return { done, total, pct };
+}
+
+function renderQCounters(rec) {
+  // повертає масив { qId, flashDone, voiceDone, reps }
+  return [0,1,2,3,4].map(i => ({
+    idx: i,
+    flashDone: rec.flash[i],
+    voiceDone: rec.voice[i],
+    reps: REPS_PER_QUESTION,
+  }));
+}
+
+// ============================================================
+// MAIN STATE MACHINE
+// ============================================================
+function setMode(m) {
+  const db = loadDB();
+  const rec = getDayRecord(db, state.day);
+
+  // Якщо вже є активна сесія — зберігаємо час
+  if (state.sessionStart) endSession(db, state.day);
+
+  state.mode = m;
+  state.flipped = false;
+
+  // Знаходимо перше невиконане питання
+  const idx = nextQIdx(rec, m);
+  state.qIdx = idx >= 0 ? idx : 0;
+
+  startSession(db, state.day);
+  renderAll();
+}
+
+function setDay(day) {
+  const db = loadDB();
+  if (state.sessionStart) endSession(db, state.day);
+
+  state.day = day;
+  state.qIdx = 0;
+  state.flipped = false;
+
+  const rec = getDayRecord(db, day);
+  db.currentDay = day;
+  startSession(db, day);
+  saveDB(db);
+  renderAll();
+}
+
+function goNextQ() {
+  const db = loadDB();
+  const rec = getDayRecord(db, state.day);
+  const idx = nextQIdx(rec, state.mode);
+  if (idx >= 0) {
+    state.qIdx = idx;
+    state.flipped = false;
+  }
+  renderAll();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderAll() {
+  renderDayTabs();
+  renderPlanBar();
+  renderContent();
+}
+
+function renderDayTabs() {
+  const db = loadDB();
   const tot = totalDays();
-  const s = loadState();
   let html = '';
-  for(let i=0;i<tot;i++){
-    const ds = s.days[i]||{flash:[],voice:[]};
-    const arr = mode==='flash'?ds.flash:ds.voice;
-    const done = arr.length >= SESSIONS_PER_DAY;
-    const partial = arr.length > 0 && arr.length < SESSIONS_PER_DAY;
-    const cls = i===curDay?'on':done?'done':partial?'partial':'';
-    html += `<button class="day-btn ${cls}" onclick="goDay(${i})">День ${i+1}${done?' ✓':partial?' ●':''}</button>`;
+  for (let i = 0; i < tot; i++) {
+    const rec = db.days[i];
+    let cls = i === state.day ? 'day-btn on' : 'day-btn';
+    let suffix = '';
+    if (rec) {
+      if (isDayComplete(rec)) { cls += ' done'; suffix = ' ✓'; }
+      else if (totalDone(rec) > 0) { cls += ' partial'; suffix = ' ●'; }
+    }
+    html += `<button class="${cls}" onclick="setDay(${i})">День ${i+1}${suffix}</button>`;
   }
-  document.getElementById('dayScroll').innerHTML = html;
+  const el = document.getElementById('dayScroll');
+  if (el) el.innerHTML = html;
 }
 
-// ===== MAIN RENDER =====
-function renderMain(){
-  const ds = getDayState(curDay);
-  const arr = mode==='flash'?ds.flash:ds.voice;
+function renderPlanBar() {
+  const db = loadDB();
+  const rec = getDayRecord(db, state.day);
+  const fd = flashDone(rec), vd = voiceDone(rec);
+  const fPct = Math.round(fd / TOTAL_FLASH * 100);
+  const vPct = Math.round(vd / TOTAL_VOICE * 100);
+  const todayMin = getTodayMinutes(rec);
+  const history = getTimeHistory(rec);
 
-  if(arr.length >= SESSIONS_PER_DAY){
-    renderDayDone();
+  const modeLabel = state.mode === 'flash' ? 'картки' : 'голос';
+  const modeDone = state.mode === 'flash' ? fd : vd;
+  const modeTotal = state.mode === 'flash' ? TOTAL_FLASH : TOTAL_VOICE;
+
+  const el = document.getElementById('planBar');
+  if (!el) return;
+
+  const counters = renderQCounters(rec);
+  const counterHtml = counters.map(c => `
+    <div class="q-counter">
+      <span class="qc-id">П${c.idx+1}</span>
+      <span class="qc-flash ${c.flashDone>=c.reps?'done':''}">📚${c.flashDone}/${c.reps}</span>
+      <span class="qc-voice ${c.voiceDone>=c.reps?'done':''}">🎤${c.voiceDone}/${c.reps}</span>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="plan-top">
+      <div class="plan-mode-progress">
+        <span>${modeLabel}: <strong>${modeDone}/${modeTotal}</strong></span>
+        <div class="mini-bar"><div class="mini-fill" style="width:${modeTotal>0?Math.round(modeDone/modeTotal*100):0}%"></div></div>
+      </div>
+      <div class="plan-time">⏱ ${todayMin} хв сьогодні</div>
+    </div>
+    <div class="plan-counters">${counterHtml}</div>
+    <div class="plan-overall">
+      📚 ${fd}/${TOTAL_FLASH} &nbsp;|&nbsp; 🎤 ${vd}/${TOTAL_VOICE} &nbsp;|&nbsp;
+      Всього: ${fd+vd}/${TOTAL_FLASH+TOTAL_VOICE}
+      (${Math.round((fd+vd)/(TOTAL_FLASH+TOTAL_VOICE)*100)}%)
+    </div>`;
+}
+
+function renderContent() {
+  const db = loadDB();
+  const rec = getDayRecord(db, state.day);
+
+  if (state.mode === 'flash' && isFlashComplete(rec)) {
+    renderModeComplete('flash', rec);
+    return;
+  }
+  if (state.mode === 'voice' && isVoiceComplete(rec)) {
+    renderModeComplete('voice', rec);
     return;
   }
 
-  if(mode==='flash') renderFlashCard();
-  else renderVoiceCard();
+  const qs = getDayQs(state.day);
+  const q = qs[state.qIdx];
+  if (!q) return;
+
+  if (state.mode === 'flash') renderFlashCard(q, rec);
+  else renderVoiceCard(q, rec);
 }
 
-// ===== SESSION HEADER =====
-function sesHeader(qs){
-  const ds = getDayState(curDay);
-  const arr = mode==='flash'?ds.flash:ds.voice;
-  const sesDone = arr.length;
-  const dots = qs.map((_,i)=>`
-    <div class="dot ${i===curIdx?'cur':sesResults[i]===true?'ok':sesResults[i]===false?'no':''}"
-      onclick="goCard(${i})">${i+1}</div>`).join('');
-  const sesDotHtml = Array.from({length:SESSIONS_PER_DAY},(_,i)=>
-    `<div class="ses-dot ${i<sesDone?'done':i===sesDone?'cur':''}"></div>`).join('');
-
-  return `
-    <div class="prog-row">
-      <div class="prog-bar"><div class="prog-fill" style="width:${curIdx/qs.length*100}%"></div></div>
-      <div class="prog-txt">${curIdx+1}/${qs.length} · Сесія ${sesDone+1}/${SESSIONS_PER_DAY}</div>
-    </div>
-    <div style="display:flex;justify-content:center;gap:4px;margin-bottom:8px">${sesDotHtml}</div>
-    <div class="dots">${dots}</div>`;
-}
-
-// ===== FLASHCARD MODE =====
-function renderFlashCard(){
-  const qs = getQs(curDay);
-  const q = qs[curIdx];
+// ============================================================
+// FLASHCARD
+// ============================================================
+function renderFlashCard(q, rec) {
   const el = document.getElementById('main');
+  const done = rec.flash[state.qIdx];
+  const remaining = REPS_PER_QUESTION - done;
 
-  el.innerHTML = sesHeader(qs) + `
-    <div class="flashcard" id="fcWrap">
-      <div class="fc-inner" id="fcInner" onclick="flipCard()">
+  el.innerHTML = `
+    <div class="rep-counter">
+      Питання ${state.qIdx+1}/5 · Картка ${done+1}/${REPS_PER_QUESTION}
+      · Залишилось: ${remaining}
+    </div>
+    <div class="dots">${getDots(rec, 'flash')}</div>
+
+    <div class="flashcard">
+      <div class="fc-inner ${state.flipped?'flipped':''}" id="fcInner" onclick="fcFlip()">
         <div class="fc-face fc-front">
           <div class="fc-lbl">❓ Aufgabe ${q.id}</div>
           <div class="fc-id">⭐ ${q.pts} Punkte</div>
@@ -1183,74 +1400,95 @@ function renderFlashCard(){
           <div class="fc-hint">👆 Натисни щоб побачити відповідь</div>
         </div>
         <div class="fc-face fc-back">
-          <div class="fc-lbl">✅ Правильна відповідь</div>
+          <div class="fc-lbl">✅ Відповідь</div>
           <div class="fc-a">${q.ans||''}</div>
-          <div class="fc-meta"><span>Aufgabe ${q.id}</span><span>${q.pts} Punkte</span></div>
         </div>
       </div>
     </div>
+
     <div id="fcBtns">
-      <button class="fc-show-btn" onclick="flipCard()">Показати відповідь</button>
+      ${state.flipped
+        ? `<div class="fc-action-row">
+            <button class="fc-btn fc-btn-back" onclick="fcFlip()">← Питання</button>
+            <button class="fc-btn fc-btn-no" onclick="fcMark(false)">✗ Не знав</button>
+            <button class="fc-btn fc-btn-ok" onclick="fcMark(true)">✓ Знав</button>
+           </div>`
+        : `<button class="fc-show-btn" onclick="fcFlip()">Показати відповідь</button>`
+      }
     </div>`;
-  flipped = false;
 }
 
-function flipCard(){
-  flipped = !flipped;
-  const inner = document.getElementById('fcInner');
-  if(inner) inner.classList.toggle('flipped', flipped);
-  const btns = document.getElementById('fcBtns');
-  if(!btns) return;
-  if(flipped){
-    btns.innerHTML = `<div class="fc-action-row">
-      <button class="fc-btn fc-btn-back" onclick="flipCard()">← Питання</button>
-      <button class="fc-btn fc-btn-no" onclick="fcMark(false)">✗ Не знав</button>
-      <button class="fc-btn fc-btn-ok" onclick="fcMark(true)">✓ Знав</button>
-    </div>`;
-  } else {
-    btns.innerHTML = `<button class="fc-show-btn" onclick="flipCard()">Показати відповідь</button>`;
-  }
+function fcFlip() {
+  state.flipped = !state.flipped;
+  renderContent();
 }
 
-function fcMark(ok){
-  sesResults[curIdx] = ok;
-  const qs = getQs(curDay);
-  flipped = false;
-  if(curIdx < qs.length-1){
-    curIdx++;
-    renderFlashCard();
-  } else {
-    finishSession(sesResults);
-  }
+function fcMark(ok) {
+  const db = loadDB();
+  recordFlash(db, state.day, state.qIdx);
+  state.flipped = false;
+  // Переходимо до наступного питання яке ще не виконано
+  const rec = getDayRecord(db, state.day);
+  const next = nextQIdx(rec, 'flash');
+  state.qIdx = next >= 0 ? next : state.qIdx;
+  renderAll();
 }
 
-function goCard(i){ curIdx=i; flipped=false; if(mode==='flash') renderFlashCard(); else renderVoiceCard(); }
+function getDots(rec, mode) {
+  const arr = mode === 'flash' ? rec.flash : rec.voice;
+  return [0,1,2,3,4].map(i => {
+    const done = arr[i] >= REPS_PER_QUESTION;
+    const cur = i === state.qIdx;
+    const partial = arr[i] > 0 && arr[i] < REPS_PER_QUESTION;
+    const cls = cur ? 'cur' : done ? 'ok' : partial ? 'partial' : '';
+    return `<div class="dot ${cls}" onclick="jumpToQ(${i})">${i+1}<br><small>${arr[i]}/${REPS_PER_QUESTION}</small></div>`;
+  }).join('');
+}
 
-// ===== VOICE MODE =====
-function renderVoiceCard(){
-  const qs = getQs(curDay);
-  const q = qs[curIdx];
+function jumpToQ(i) {
+  state.qIdx = i;
+  state.flipped = false;
+  renderContent();
+}
+
+// ============================================================
+// VOICE CARD
+// ============================================================
+function renderVoiceCard(q, rec) {
   const el = document.getElementById('main');
+  const done = rec.voice[state.qIdx];
+  const remaining = REPS_PER_QUESTION - done;
 
-  el.innerHTML = sesHeader(qs) + `
+  el.innerHTML = `
+    <div class="rep-counter">
+      Питання ${state.qIdx+1}/5 · Відповідь ${done+1}/${REPS_PER_QUESTION}
+      · Залишилось: ${remaining}
+    </div>
+    <div class="dots">${getDots(rec, 'voice')}</div>
+
     <div class="vcard" id="vCard">
       <div class="vcard-lbl">❓ Aufgabe ${q.id}</div>
       <div class="vcard-pts">⭐ ${q.pts} Punkte</div>
       <div class="vcard-q">${q.text}</div>
+
       <textarea id="vInput"
-        placeholder="🎤 Натисни мікрофон Samsung клавіатури і говори по-німецьки... або пиши тут"
+        placeholder="🎤 Говори через Samsung клавіатуру або пиши тут..."
         oninput="onVInput(this.value)"
         rows="4"></textarea>
-      <button class="v-check-btn" id="vCheckBtn" onclick="vCheck()" disabled>🤖 AI перевіряє відповідь</button>
+
+      <button class="v-check-btn" id="vCheckBtn" onclick="vCheck()" disabled>
+        🤖 AI перевіряє відповідь
+      </button>
+
       <div class="ai-res" id="vAiRes"></div>
-      <div class="ans-box" id="vAnsBox">${(q.ans||'').replace(/
-/g,'<br>')}</div>
+      <div class="ans-box" id="vAnsBox">${(q.ans||'').replace(/\n/g,'<br>')}</div>
+
       <div class="dialog-area" id="vDialog">
         <div class="dialog-lbl">💬 Запитай AI далі:</div>
         <div class="quick-btns">
           <button class="quick-btn" onclick="vAskQuick('Як правильно відповісти?')">Як правильно?</button>
           <button class="quick-btn" onclick="vAskQuick('Що я пропустив?')">Що пропустив?</button>
-          <button class="quick-btn" onclick="vAskQuick('Наведи ідеальну відповідь для екзамену')">Ідеальна відповідь</button>
+          <button class="quick-btn" onclick="vAskQuick('Наведи ідеальну відповідь')">Ідеальна відповідь</button>
         </div>
         <div class="dialog-row">
           <input class="dialog-inp" id="vDialogInp" placeholder="Своє питання...">
@@ -1258,6 +1496,7 @@ function renderVoiceCard(){
         </div>
         <div class="dialog-resp" id="vDialogResp"></div>
       </div>
+
       <div class="v-action-row" id="vActions">
         <button class="v-btn-ans" onclick="vToggleAns()">📖 Відповідь</button>
         <button class="v-btn-no" onclick="vMark(false)">✗ Не знав</button>
@@ -1266,179 +1505,169 @@ function renderVoiceCard(){
     </div>`;
 }
 
-function onVInput(val){
+function onVInput(val) {
   const btn = document.getElementById('vCheckBtn');
-  if(btn){ btn.disabled=!val.trim(); btn.style.opacity=val.trim()?'1':'0.4'; }
+  if (btn) { btn.disabled = !val.trim(); btn.style.opacity = val.trim() ? '1' : '0.4'; }
 }
 
-async function vCheck(){
+async function vCheck() {
   const inp = document.getElementById('vInput');
   const aiRes = document.getElementById('vAiRes');
   const actions = document.getElementById('vActions');
   const dialog = document.getElementById('vDialog');
-  if(!inp||!inp.value.trim()) return;
+  if (!inp || !inp.value.trim()) return;
 
-  const qs = getQs(curDay);
-  const q = qs[curIdx];
+  const q = getDayQs(state.day)[state.qIdx];
   const userAns = inp.value.trim();
 
-  aiRes.className='ai-res loading';
-  aiRes.textContent='⏳ AI перевіряє...';
+  aiRes.className = 'ai-res loading';
+  aiRes.textContent = '⏳ AI перевіряє...';
 
-  const prompt=`Du bist ein IHK-Prüfer für Lagerlogistik.
+  const prompt = `Du bist ein IHK-Prüfer für Lagerlogistik.
 Frage: ${q.text}
 Musterlösung: ${q.ans||''}
 Antwort des Lernenden: ${userAns}
 Bewerte kurz auf Ukrainisch (2-3 Sätze): beginne mit ✅ Richtig! oder ❌ Nicht vollständig. Was war gut? Was fehlte?`;
 
-  try{
-    const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-    const d=await r.json();
-    const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
-    if(!t) throw new Error('empty');
-    const correct=t.includes('✅');
-    aiRes.className='ai-res '+(correct?'correct':'wrong');
-    aiRes.innerHTML=t;
-    dialogCtx={q:q.text,correct:q.ans||'',user:userAns,ai:t};
-    if(dialog) dialog.className='dialog-area show';
-  }catch(e){
-    aiRes.className='ai-res wrong';
-    aiRes.textContent='Помилка AI. Перевір відповідь через кнопку нижче.';
+  try {
+    const r = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const d = await r.json();
+    const t = d.candidates?.[0]?.content?.parts?.[0]?.text || d.text || d.result || '';
+    if (!t) throw new Error('empty');
+    const correct = t.includes('✅');
+    aiRes.className = 'ai-res ' + (correct ? 'correct' : 'wrong');
+    aiRes.innerHTML = t;
+    state.dialogCtx = { q: q.text, correct: q.ans||'', user: userAns, ai: t };
+    if (dialog) dialog.className = 'dialog-area show';
+  } catch(e) {
+    aiRes.className = 'ai-res wrong';
+    aiRes.textContent = 'Помилка AI. Перевір відповідь через кнопку нижче.';
   }
-  if(actions) actions.className='v-action-row show';
+  if (actions) actions.className = 'v-action-row show';
 }
 
-function vToggleAns(){ document.getElementById('vAnsBox').classList.toggle('show'); }
+function vToggleAns() {
+  document.getElementById('vAnsBox')?.classList.toggle('show');
+}
 
-async function vAskQuick(text){
-  document.getElementById('vDialogInp').value=text;
+async function vAskQuick(text) {
+  const inp = document.getElementById('vDialogInp');
+  if (inp) inp.value = text;
   vSendDialog();
 }
-async function vSendDialog(){
-  const inp=document.getElementById('vDialogInp');
-  const resp=document.getElementById('vDialogResp');
-  if(!inp||!resp||!inp.value.trim()) return;
-  const ctx=dialogCtx||{};
-  resp.textContent='⏳...';
-  const prompt=`Контекст: Учень вивчає IHK Lagerlogistik.
+
+async function vSendDialog() {
+  const inp = document.getElementById('vDialogInp');
+  const resp = document.getElementById('vDialogResp');
+  if (!inp || !resp || !inp.value.trim()) return;
+  const ctx = state.dialogCtx || {};
+  resp.textContent = '⏳...';
+  const prompt = `Контекст: IHK Lagerlogistik.
 Питання: ${ctx.q}
-Правильна відповідь: ${ctx.correct}
+Правильна: ${ctx.correct}
 Відповідь учня: ${ctx.user}
-Оцінка AI: ${ctx.ai}
+Оцінка: ${ctx.ai}
 Запит: ${inp.value.trim()}
-Відповідай коротко і чітко українською.`;
-  try{
-    const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-    const d=await r.json();
-    const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
-    resp.textContent=t;
-    inp.value='';
-  }catch(e){resp.textContent='Помилка. Спробуй ще раз.';}
+Відповідай коротко українською.`;
+  try {
+    const r = await fetch('/api/gemini', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt}) });
+    const d = await r.json();
+    resp.textContent = d.candidates?.[0]?.content?.parts?.[0]?.text || d.text || d.result || '';
+    inp.value = '';
+  } catch(e) { resp.textContent = 'Помилка.'; }
 }
 
-function vMark(ok){
-  sesResults[curIdx]=ok;
-  const qs=getQs(curDay);
-  if(curIdx<qs.length-1){ curIdx++; renderVoiceCard(); }
-  else finishSession(sesResults);
+function vMark(ok) {
+  const db = loadDB();
+  recordVoice(db, state.day, state.qIdx);
+  const rec = getDayRecord(db, state.day);
+  const next = nextQIdx(rec, 'voice');
+  state.qIdx = next >= 0 ? next : state.qIdx;
+  renderAll();
 }
 
-// ===== SESSION DONE =====
-function finishSession(results){
-  const ok=results.filter(r=>r===true).length;
-  const tot=results.length;
-  const pct=Math.round(ok/tot*100);
+// ============================================================
+// MODE COMPLETE
+// ============================================================
+function renderModeComplete(mode, rec) {
+  const db = loadDB();
+  const history = getTimeHistory(rec);
+  const todayMin = getTodayMinutes(rec);
+  const historyHtml = history.slice(0,5).map(h =>
+    `<div class="time-row"><span>${h.label}</span><strong>${h.minutes} хв</strong></div>`
+  ).join('');
 
-  // Зберігаємо сесію
-  const ds=getDayState(curDay);
-  const arr=mode==='flash'?ds.flash:ds.voice;
-  arr.push({ok,tot,pct,time:new Date().toISOString()});
-  saveState({flash:mode==='flash'?arr:ds.flash||[], voice:mode==='voice'?arr:ds.voice||[]});
+  const otherMode = mode === 'flash' ? 'voice' : 'flash';
+  const otherDone = mode === 'flash' ? isVoiceComplete(rec) : isFlashComplete(rec);
+  const dayDone = isDayComplete(rec);
 
-  const sesDone=arr.length;
-  const remaining=SESSIONS_PER_DAY-sesDone;
-  const dayComplete=sesDone>=SESSIONS_PER_DAY;
-
-  updatePlanBar();
-  renderDays();
-
-  const s=loadState();
-  const totalDone=Object.values(s.days).filter(d=>{
-    const a=mode==='flash'?d.flash:d.voice;
-    return a&&a.length>=SESSIONS_PER_DAY;
-  }).length;
-
-  document.getElementById('main').innerHTML=`
+  document.getElementById('main').innerHTML = `
     <div class="done-screen">
-      <div class="done-emoji">${pct>=80?'🎉':pct>=60?'👍':'💪'}</div>
-      <div class="done-title">${pct>=80?'Відмінно!':pct>=60?'Добре!':'Продовжуй!'}</div>
-      <div class="done-sub">Сесія ${sesDone}/${SESSIONS_PER_DAY} · День ${curDay+1}</div>
-      <div class="done-plan">${dayComplete
-        ?`✅ Денний план виконано! (${sesDone*tot}/${SESSIONS_PER_DAY*tot} ${mode==='flash'?'карток':'відповідей'})`
-        :`📋 Залишилось ${remaining} ${remaining===1?'сесія':'сесії'} на сьогодні`}</div>
-      <div class="score-chips">
-        <div class="chip g"><div class="cn">${ok}</div><div class="cl">Знав</div></div>
-        <div class="chip r"><div class="cn">${tot-ok}</div><div class="cl">Не знав</div></div>
-        <div class="chip"><div class="cn">${pct}%</div><div class="cl">Результат</div></div>
+      <div class="done-emoji">${dayDone ? '🏆' : '✅'}</div>
+      <div class="done-title">
+        ${mode==='flash'?'📚 Картки':'🎤 Голос'} — виконано!
       </div>
+      <div class="done-sub">50/${mode==='flash'?TOTAL_FLASH:TOTAL_VOICE} ${mode==='flash'?'карток':'відповідей'} за день</div>
+
+      <div class="done-stats">
+        <div>📚 Картки: ${flashDone(rec)}/${TOTAL_FLASH}</div>
+        <div>🎤 Голос: ${voiceDone(rec)}/${TOTAL_VOICE}</div>
+        <div>⏱ Сьогодні: ${todayMin} хв</div>
+      </div>
+
+      ${historyHtml ? `<div class="time-history">${historyHtml}</div>` : ''}
+
       <div class="done-btns">
-        ${dayComplete
-          ?`<button class="btn-primary" onclick="goDay(${Math.min(curDay+1,totalDays()-1)})">День ${curDay+2} →</button>`
-          :`<button class="btn-primary" onclick="startNextSession()">▶ Почати сесію ${sesDone+1}</button>`}
-        <button class="btn-secondary" onclick="goDay(${curDay})">↺ Повторити сесію</button>
+        ${!otherDone
+          ? `<button class="btn-primary" onclick="setMode('${otherMode}')">
+              ${otherMode==='flash'?'📚 Почати картки':'🎤 Почати голос'}
+             </button>`
+          : `<button class="btn-primary" style="background:var(--gold);color:#111">
+               🏆 День ${state.day+1} повністю виконано!
+             </button>`
+        }
+        ${state.day < totalDays()-1
+          ? `<button class="btn-secondary" onclick="setDay(${state.day+1})">День ${state.day+2} →</button>`
+          : ''
+        }
       </div>
     </div>`;
 }
 
-function startNextSession(){
-  curIdx=0; sesResults=[]; flipped=false;
-  renderMain();
-}
-
-function renderDayDone(){
-  const ds=getDayState(curDay);
-  const arr=mode==='flash'?ds.flash:ds.voice;
-  const allOk=arr.reduce((s,ses)=>s+ses.ok,0);
-  const allTot=arr.reduce((s,ses)=>s+ses.tot,0);
-  const pct=Math.round(allOk/allTot*100);
-  const next=curDay<totalDays()-1?curDay+1:null;
-  document.getElementById('main').innerHTML=`
-    <div class="done-screen">
-      <div class="done-emoji">🏆</div>
-      <div class="done-title">День ${curDay+1} завершено!</div>
-      <div class="done-sub">Всі ${SESSIONS_PER_DAY} сесії пройдено</div>
-      <div class="done-plan">Загальний результат: ${allOk}/${allTot} (${pct}%)</div>
-      <div class="score-chips">
-        <div class="chip g"><div class="cn">${allOk}</div><div class="cl">Всього знав</div></div>
-        <div class="chip"><div class="cn">${pct}%</div><div class="cl">За день</div></div>
-      </div>
-      <div class="done-btns">
-        ${next!==null
-          ?`<button class="btn-primary" onclick="goDay(${next})">День ${next+1} →</button>`
-          :`<button class="btn-primary" style="background:var(--gold);color:#111">🎓 Всі дні пройдено!</button>`}
-        <button class="btn-secondary" onclick="resetDay()">↺ Пройти день знову</button>
-      </div>
-    </div>`;
-}
-
-function resetDay(){
-  const s=loadState();
-  if(s.days[curDay]){
-    s.days[curDay]={flash:[],voice:[]};
-    localStorage.setItem(KEY,JSON.stringify(s));
+// ============================================================
+// AUTO-SAVE TIME on page hide
+// ============================================================
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && state.sessionStart) {
+    const db = loadDB();
+    endSession(db, state.day);
+    startSession(db, state.day); // одразу новий відлік
   }
-  curIdx=0; sesResults=[]; flipped=false;
-  updatePlanBar();
-  renderDays();
-  renderMain();
-}
+});
 
-// ===== INIT =====
-const initState = loadState();
-curDay = initState.day||0;
-updatePlanBar();
-renderDays();
-renderMain();
+// Оновлюємо таймер кожну хвилину
+setInterval(() => {
+  renderPlanBar();
+}, 60000);
+
+// ============================================================
+// INIT
+// ============================================================
+(function init() {
+  const db = loadDB();
+  state.day = db.currentDay || 0;
+  state.qIdx = 0;
+  const rec = getDayRecord(db, state.day);
+  const idx = nextQIdx(rec, state.mode);
+  state.qIdx = idx >= 0 ? idx : 0;
+  startSession(db, state.day);
+  renderAll();
+})();
+
 </script>
 </body>
 </html>
