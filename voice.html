@@ -999,11 +999,13 @@ function renderFlash(){
   const ua=lang==='ua';
   const qt=ua&&q.ua_q?q.ua_q:q.text;
   const at=ua&&q.ua_a?q.ua_a:(q.de_a||q.ans||'');
+  const clDE=lang==='de'?'lang-btn on':'lang-btn';
+  const clUA=lang==='ua'?'lang-btn on':'lang-btn';
   document.getElementById('main').innerHTML=`
     <div class="q-info">Питання ${qIdx+1} / ${getDayQs(day).length}</div>
     <div class="lang-row">
-      <button class="lang-btn ${lang==='de'?'on':''}" onclick="lang='de';renderMain()">DE</button>
-      <button class="lang-btn ${lang==='ua'?'on':''}" onclick="lang='ua';renderMain()">UA</button>
+      <button class="${clDE}" onclick="setLang('de')">DE</button>
+      <button class="${clUA}" onclick="setLang('ua')">UA</button>
     </div>
     <div class="dots">${dots()}</div>
     <div class="flashcard">
@@ -1025,6 +1027,7 @@ function renderFlash(){
       :`<button class="btn-show" onclick="flipCard()">Показати відповідь</button>`
     }</div>`;
 }
+function setLang(l){lang=l;renderMain();}
 function flipCard(){flipped=!flipped;renderMain();}
 
 function getAns(q){return (q.de_a||q.ans||'').split('\n').join('<br>');}
