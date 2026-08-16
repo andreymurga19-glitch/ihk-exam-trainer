@@ -1040,7 +1040,7 @@ function renderVoice(){
       <textarea id="vInp" placeholder="🎤 Говори через Samsung клавіатуру або пиши тут..." oninput="onVI(this.value)" rows="4"></textarea>
       <button class="v-check" id="vBtn" onclick="vCheck()" disabled>🤖 AI перевіряє</button>
       <div class="ai-res" id="vAi"></div>
-      <div class="ans-box" id="vAns">${(q.de_a||q.ans||'').replace(/
+      <div class="ans-box" id="vAns">${getAns(q)}</div>
 /g,'<br>')}</div>
       <div class="dialog-area" id="vDlg">
         <div class="dlbl">💬 Запитай AI далі:</div>
