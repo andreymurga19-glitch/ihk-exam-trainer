@@ -1070,7 +1070,7 @@ a6:{
     '1.1':['Назвіть 2 дані з накладної які перевіряєте перед розвантаженням!','Перед розвантаженням я перевіряю одержувача — чи дійсно поставка для нас. Потім дивлюсь на дату доставки — чи привезли вчасно.'],
     '1.2':['Під час розвантаження немає пошкоджень. Заповніть накладну!','Я вписую дату 28.04.2026 і підписую у полі Ware erhalten. Цим підтверджую водієві що товар прийнято без пошкоджень.'],
     '1.3':['3 дефекти Euro-палет через які не можна обміняти!','Зламані дошки настилу, пошкоджені кубики-опори, або відсутній знак EPAL.'],
-    '1.4':['Поясніть 4 види дефектів на прикладі спортивних штанів','Identität — не той товар. Quantität — не та кількість. Qualität — дефекти виготовлення. Beschaffenheit — неправильний матеріал або розмір.'],
+    '1.4':['Поясніть 4 види дефектів на прикладі спортивних штанів (арт. 240150, 1.500 шт.)','Identität — доставили не той товар, наприклад чорні штани замість сірих. Quantität — неправильна кількість, наприклад 1400 замість 1500 штук. Qualität — дефекти виготовлення, наприклад погано зшиті шви або дірки. Beschaffenheit — неправильний матеріал або розмір, наприклад бавовна замість поліестеру.'],
     '1.5':['15% від 1500 шт. Розрахуйте!','1500 на 15 ділити на 100 — 225 штук для QS.'],
     '1.6':['Частина артикулу на Sperrfläche. Чому?','Товар ще без QS — не можна класти на склад. Sperrfläche зона для незвільненого товару.'],
     '1.7':['Заповніть внутрішній транспортний документ!','До зони C, артикул 240150, до Qualitätssicherung, 225 штук, накладна 55016-20. Повернути до C на S 20.'],
@@ -1118,7 +1118,7 @@ a6:{
     '1.1':'Vor der Entladung prüfe ich den Empfänger — ob die Lieferung wirklich für uns ist. Dann schaue ich auf das Lieferdatum — ob pünktlich geliefert wurde.',
     '1.2':'Ich trage das Datum 28.04.2026 ein und unterschreibe im Feld Ware erhalten. Damit bestätige ich dem Fahrer die ordnungsgemäße Anlieferung.',
     '1.3':'Tausch ist nicht möglich wenn die Bodenbretter gebrochen sind, die Klötze beschädigt sind, oder das EPAL-Zeichen fehlt.',
-    '1.4':'Identität — falsches Produkt. Quantität — falsche Menge. Qualität — fehlerhafte Verarbeitung. Beschaffenheit — falsches Material oder falsche Größe.',
+    '1.4':'Identität — falsches Produkt geliefert, zum Beispiel schwarze Hosen statt graue. Quantität — falsche Menge, zum Beispiel 1400 statt 1500 Stück. Qualität — fehlerhafte Verarbeitung, zum Beispiel schlechte Nähte oder Löcher. Beschaffenheit — falsches Material oder falsche Größe, zum Beispiel Baumwolle statt Polyester.',
     '1.5':'Ich rechne 1500 mal 15 geteilt durch 100 — das ergibt 225 Stück für die QS.',
     '1.6':'Die Ware hat noch keine QS-Prüfung, deshalb darf ich sie nicht einlagern. Sperrfläche ist die Zone für nicht freigegebene Ware.',
     '1.7':'An Lagerzone C, Artikel 240150, Qualitätssicherung, 225 Stück, Lieferschein 55016-20. Rücksendung Zone C auf S 20.',
@@ -1885,6 +1885,9 @@ window.resetStartDate = function(){
 
 (function init() {
   const db = loadDB();
+  // Скидаємо startDate на сьогодні
+  db.startDate = new Date().toISOString().slice(0,10);
+  saveDB(db);
   state.day = db.currentDay || 0;
   state.qIdx = 0;
   const rec = getDayRecord(db, state.day);
