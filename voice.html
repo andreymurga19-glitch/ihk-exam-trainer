@@ -1676,11 +1676,20 @@ async function vCheck() {
   aiRes.className = 'ai-res loading';
   aiRes.textContent = '⏳ AI перевіряє...';
 
-  const prompt = `Du bist ein IHK-Prüfer für Lagerlogistik.
+  const prompt = `Du bist ein verständnisvoller IHK-Prüfer für Lagerlogistik.
+Der Lernende antwortet mündlich/umgangssprachlich — das ist normal und erlaubt.
+Bewerte den INHALT, nicht die genaue Formulierung.
+
 Frage: ${q.text}
-Musterlösung: ${q.ans||''}
+Musterlösung (Inhaltspunkte): ${q.ans||''}
 Antwort des Lernenden: ${userAns}
-Bewerte kurz auf Ukrainisch (2-3 Sätze): beginne mit ✅ Richtig! oder ❌ Nicht vollständig. Was war gut? Was fehlte?`;
+
+Bewertungsregeln:
+- Wenn der Kerninhalt stimmt → ✅ Richtig! (auch wenn die Formulierung umgangssprachlich ist)
+- Wenn wichtige Punkte fehlen → ❌ Nicht vollständig.
+- Sei kurz: 1-2 Sätze auf Ukrainisch.
+- Beispiel für gute Antwort: "Ich schreibe das Datum und unterschreibe" → das ist korrekt für Aufgabe 1.2
+- Erkläre konkret was noch fehlte (falls etwas fehlt), aber lobe was richtig war.`;
 
   try {
     const r = await fetch('/api/gemini', {
@@ -1719,13 +1728,16 @@ async function vSendDialog() {
   if (!inp || !resp || !inp.value.trim()) return;
   const ctx = state.dialogCtx || {};
   resp.textContent = '⏳...';
-  const prompt = `Контекст: IHK Lagerlogistik.
-Питання: ${ctx.q}
-Правильна: ${ctx.correct}
+  const prompt = `Контекст: підготовка до IHK Lagerlogistik.
+Учень відповідає розмовно — це нормально.
+Питання екзамену: ${ctx.q}
+Правильна відповідь (зміст): ${ctx.correct}
 Відповідь учня: ${ctx.user}
-Оцінка: ${ctx.ai}
-Запит: ${inp.value.trim()}
-Відповідай коротко українською.`;
+Попередня оцінка: ${ctx.ai}
+Запит учня: ${inp.value.trim()}
+
+Відповідай коротко (2-3 речення) українською. 
+Якщо питають "як правильно" або "ідеальна відповідь" — дай відповідь розмовною мовою як говорив би сам учень, не як список.`;
   try {
     const r = await fetch('/api/gemini', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt}) });
     const d = await r.json();
