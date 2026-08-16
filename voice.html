@@ -1884,12 +1884,15 @@ window.resetStartDate = function(){
 };
 
 (function init() {
-  // Скидаємо прогрес — починаємо з 17 серпня
-  localStorage.setItem('ihk_trainer_v1', JSON.stringify({
-    startDate: '2026-08-17',
-    currentDay: 0,
-    days: {}
-  }));
+  // Якщо немає даних або startDate старий — встановлюємо 2026-08-17 один раз
+  const existing = JSON.parse(localStorage.getItem('ihk_trainer_v1') || 'null');
+  if (!existing || existing.startDate !== '2026-08-17') {
+    localStorage.setItem('ihk_trainer_v1', JSON.stringify({
+      startDate: '2026-08-17',
+      currentDay: 0,
+      days: {}
+    }));
+  }
   const db = loadDB();
   // Скидаємо startDate на сьогодні
   db.startDate = new Date().toISOString().slice(0,10);
