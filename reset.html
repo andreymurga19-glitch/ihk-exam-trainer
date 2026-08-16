@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<meta http-equiv="refresh" content="2;url=/voice.html">
+<style>
+body{background:#0b0d13;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center}
+.box{padding:30px}
+.emoji{font-size:60px;margin-bottom:20px}
+h2{font-size:20px;margin-bottom:10px}
+p{color:#64748b;font-size:14px}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="emoji">✅</div>
+  <h2>Прогрес скинуто!</h2>
+  <p>Починається з 17 серпня...<br>Переходжу до тренажера...</p>
+</div>
+<script>
+localStorage.setItem('ihk_trainer_v1', JSON.stringify({
+  startDate: '2026-08-17',
+  currentDay: 0,
+  days: {}
+}));
+setTimeout(function(){ window.location.href = '/voice.html'; }, 1500);
+</script>
+</body></html>
