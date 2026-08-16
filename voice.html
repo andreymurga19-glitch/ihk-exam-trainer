@@ -3,194 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>🎤 IHK Тренажер</title>
+<title>IHK Тренажер</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
-:root{--bg:#0b0d13;--s1:#13161f;--s2:#1a1e2b;--border:#252a3a;--acc:#4f7fff;--gold:#f5c842;--green:#22c55e;--red:#ef4444;--text:#e2e8f0;--muted:#64748b;--dim:#94a3b8}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{--bg:#0b0d13;--s1:#13161f;--s2:#1a1e2b;--border:#252a3a;--acc:#4f7fff;--green:#22c55e;--red:#ef4444;--text:#e2e8f0;--muted:#64748b}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
-
-/* HEADER */
-.hdr{background:linear-gradient(135deg,#0c1428,#17233d);border-bottom:2px solid var(--acc);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hdr{background:linear-gradient(135deg,#0c1428,#17233d);border-bottom:2px solid var(--acc);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
 .hdr-title{font-size:14px;font-weight:700;color:#fff}
 .hdr-back{color:var(--acc);font-size:13px;font-weight:600;text-decoration:none;padding:6px 12px;border:1px solid var(--acc);border-radius:7px}
-
-/* MODE TABS */
 .mode-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--border)}
 .mode-btn{flex:1;padding:11px;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;transition:all .2s}
 .mode-btn.on{color:var(--acc);border-bottom-color:var(--acc);background:var(--s2)}
-
-/* DAY PLAN */
-.plan-bar{background:var(--s2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.plan-info{font-size:12px;color:var(--muted)}
-.plan-progress{display:flex;gap:8px;align-items:center}
-.plan-chip{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace}
-.plan-chip.done{border-color:var(--green);color:var(--green)}
-.plan-chip.partial{border-color:var(--gold);color:var(--gold)}
-.plan-chip.todo{color:var(--muted)}
-
-/* DAY SELECTOR */
 .day-scroll{display:flex;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:0 8px}
 .day-scroll::-webkit-scrollbar{display:none}
 .day-btn{padding:9px 14px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s;flex-shrink:0}
 .day-btn.on{color:var(--acc);border-bottom-color:var(--acc)}
-.day-btn.done{color:var(--green)}
-.day-btn.partial{color:var(--gold)}
-.day-btn.today{background:rgba(79,127,255,0.08)}
-.day-date{font-size:12px;font-weight:700;display:flex;align-items:center;gap:3px}
-.day-mins{font-size:10px;font-weight:500;color:var(--green);font-family:'JetBrains Mono',monospace}
-.today-dot{width:5px;height:5px;border-radius:50%;background:var(--acc);display:inline-block}
-
-/* MAIN */
-main{max-width:640px;margin:0 auto;padding:16px 16px 100px}
-
-/* PROGRESS */
-.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.prog-bar{flex:1;height:6px;background:var(--s2);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s}
-.prog-txt{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap}
-
-/* DOTS */
-.dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
-.dot{width:28px;height:28px;border-radius:7px;background:var(--s2);border:1px solid var(--border);font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
-.dot.cur{border-color:var(--acc);color:#fff;background:#11192e;border-width:2px}
-.dot.ok{background:#0a1a10;border-color:var(--green);color:var(--green)}
-.dot.no{background:#1a0808;border-color:var(--red);color:var(--red)}
-
-/* SESSION COUNTER */
-.session-info{text-align:center;font-size:11px;color:var(--muted);margin-bottom:12px;font-family:'JetBrains Mono',monospace}
-.session-dots{display:flex;gap:4px;justify-content:center;margin-bottom:12px}
-.ses-dot{width:10px;height:10px;border-radius:50%;background:var(--s2);border:1px solid var(--border);transition:all .3s}
-.ses-dot.done{background:var(--green);border-color:var(--green)}
-.ses-dot.cur{background:var(--acc);border-color:var(--acc)}
-
-/* FLASHCARD */
-.flashcard{perspective:1200px;margin-bottom:14px;min-height:260px}
-.fc-inner{position:relative;width:100%;min-height:260px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer}
+main{max-width:640px;margin:0 auto;padding:16px 16px 40px}
+.q-info{text-align:center;font-size:12px;color:var(--muted);margin-bottom:14px;font-family:'JetBrains Mono',monospace}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.dot{width:32px;height:32px;border-radius:50%;background:var(--s2);border:2px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.dot.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.lang-row{display:flex;justify-content:center;gap:8px;margin-bottom:12px}
+.lang-btn{padding:5px 14px;border-radius:6px;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.lang-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.flashcard{perspective:1200px;margin-bottom:14px}
+.fc-inner{position:relative;width:100%;min-height:280px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer}
 .fc-inner.flipped{transform:rotateY(180deg)}
 .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:22px 20px;display:flex;flex-direction:column}
 .fc-front{background:var(--s1);border:1px solid var(--border)}
 .fc-back{background:#091708;border:1px solid #1a4a2a;transform:rotateY(180deg)}
 .fc-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
-.fc-front .fc-lbl{color:var(--acc)}
-.fc-back .fc-lbl{color:var(--green)}
-.fc-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px}
+.fc-front .fc-lbl{color:var(--acc)}.fc-back .fc-lbl{color:var(--green)}
+.fc-id{font-size:11px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
 .fc-q{font-size:15px;line-height:1.7;color:var(--text);flex:1}
 .fc-a{font-size:13px;line-height:1.75;color:#86efac;flex:1;overflow-y:auto;white-space:pre-wrap}
-.fc-meta{display:flex;justify-content:space-between;margin-top:12px;font-size:11px;color:var(--muted)}
-.fc-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
-
-/* FLASHCARD BUTTONS */
-.fc-show-btn{width:100%;padding:12px;border-radius:10px;border:2px solid var(--acc);background:#0d1829;color:#93c5fd;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:8px}
-.fc-action-row{display:flex;gap:8px}
-.fc-btn{flex:1;padding:12px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.fc-btn-back{background:var(--s2);border:1px solid var(--border);color:var(--muted)}
-.fc-btn-no{background:#1a0808;border:2px solid var(--red);color:var(--red)}
-.fc-btn-ok{background:#0a1a10;border:2px solid var(--green);color:var(--green)}
-
-/* VOICE CARD */
-.vcard{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;transition:border-color .3s}
-.vcard.correct{border-color:var(--green)}
-.vcard.wrong{border-color:var(--red)}
+.fc-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:12px}
+.btn-show{width:100%;padding:13px;border-radius:10px;border:2px solid var(--acc);background:#0d1829;color:#93c5fd;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:8px}
+.btn-row{display:flex;gap:8px}
+.btn{flex:1;padding:12px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-back{background:var(--s2);border:1px solid var(--border);color:var(--muted)}
+.btn-next{background:var(--acc);border:none;color:#fff}
+.vcard{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
 .vcard-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px}
-.vcard-pts{font-size:11px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+.vcard-id{font-size:11px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
 .vcard-q{font-size:15px;line-height:1.7;color:var(--text);margin-bottom:16px}
 textarea{width:100%;background:var(--s2);border:2px solid var(--acc);border-radius:10px;color:var(--text);padding:12px;font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;resize:none;margin-bottom:10px;min-height:90px}
 textarea::placeholder{color:var(--muted);font-size:13px}
-.v-check-btn{width:100%;padding:13px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:10px;transition:opacity .2s}
-.v-check-btn:disabled{opacity:.4;cursor:not-allowed}
+.v-check{width:100%;padding:13px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:10px;transition:opacity .2s}
+.v-check:disabled{opacity:.4;cursor:not-allowed}
 .ai-res{padding:14px;border-radius:10px;font-size:13px;line-height:1.7;display:none;margin-bottom:10px}
 .ai-res.loading{background:var(--s2);border:1px solid var(--border);color:var(--muted);display:block}
-.ai-res.correct{background:#0a1a10;border:1px solid var(--green);color:#86efac;display:block}
-.ai-res.wrong{background:#1a0808;border:1px solid var(--red);color:#fca5a5;display:block}
+.ai-res.ok{background:#0a1a10;border:1px solid var(--green);color:#86efac;display:block}
+.ai-res.no{background:#1a0808;border:1px solid var(--red);color:#fca5a5;display:block}
 .ans-box{background:#091708;border:1px solid #1a4a2a;border-radius:10px;padding:14px;font-size:13px;color:#86efac;white-space:pre-wrap;line-height:1.75;display:none;margin-bottom:10px}
 .ans-box.show{display:block}
 .dialog-area{border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-top:4px;display:none}
 .dialog-area.show{display:block}
-.dialog-lbl{font-size:11px;color:var(--muted);margin-bottom:8px}
-.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.quick-btn{background:var(--s2);border:1px solid var(--border);color:var(--dim);padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif}
-.dialog-row{display:flex;gap:6px}
-.dialog-inp{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif}
-.dialog-send{background:var(--acc);border:none;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600}
-.dialog-resp{margin-top:10px;font-size:13px;line-height:1.75;color:#86efac;white-space:pre-wrap}
-.v-action-row{display:flex;gap:8px;display:none}
-.v-action-row.show{display:flex}
+.dlbl{font-size:11px;color:var(--muted);margin-bottom:8px}
+.qbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.qbtn{background:var(--s2);border:1px solid var(--border);color:#94a3b8;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif}
+.drow{display:flex;gap:6px}
+.dinp{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif}
+.dsend{background:var(--acc);border:none;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600}
+.dresp{margin-top:10px;font-size:13px;line-height:1.75;color:#86efac;white-space:pre-wrap}
+.v-btns{display:flex;gap:8px;margin-top:10px}
 .v-btn-ans{flex:1;padding:11px;border-radius:9px;background:#0d1829;border:2px solid var(--acc);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.v-btn-no{flex:1;padding:11px;border-radius:9px;background:#1a0808;border:2px solid var(--red);color:var(--red);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.v-btn-ok{flex:1;padding:11px;border-radius:9px;background:#0a1a10;border:2px solid var(--green);color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-
-/* DONE */
-.done-screen{text-align:center;padding:40px 20px}
-.done-emoji{font-size:64px;margin-bottom:12px}
-.done-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:8px}
-.done-sub{font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.6}
-.done-plan{font-size:12px;color:var(--acc);margin-bottom:24px;font-weight:600}
-.score-chips{display:flex;gap:10px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
-.chip{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px 18px;text-align:center;min-width:80px}
-.chip .cn{font-size:22px;font-weight:800;color:#fff}
-.chip .cl{font-size:11px;color:var(--muted);margin-top:2px}
-.chip.g{border-color:var(--green)}.chip.r{border-color:var(--red)}
-.done-btns{display:flex;flex-direction:column;align-items:center;gap:8px}
-.btn-primary{padding:13px 30px;background:var(--acc);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;max-width:280px}
-.btn-secondary{padding:11px 24px;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;width:100%;max-width:280px}
+.v-btn-next{flex:1;padding:11px;border-radius:9px;background:var(--acc);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
 </style>
-<style>
-/* ДОДАТКОВІ СТИЛІ ДЛЯ НОВОЇ ЛОГІКИ */
-.rep-counter{font-size:12px;color:var(--muted);text-align:center;margin-bottom:10px;font-family:'JetBrains Mono',monospace}
-.plan-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-.plan-mode-progress{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text)}
-.mini-bar{width:80px;height:5px;background:var(--s2);border-radius:3px;overflow:hidden}
-.mini-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s}
-.plan-time{font-size:11px;color:var(--muted);white-space:nowrap}
-.plan-counters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-.q-counter{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:11px;display:flex;gap:6px;align-items:center}
-.qc-id{color:var(--muted);font-family:'JetBrains Mono',monospace}
-.qc-flash,.qc-voice{color:var(--dim)}
-.qc-flash.done,.qc-voice.done{color:var(--green)}
-.plan-overall{font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;margin-top:4px}
-.dot small{font-size:8px;line-height:1;display:block}
-.dot.partial{background:#1a1500;border-color:var(--gold);color:var(--gold)}
-.round-dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
-.round-dot{width:32px;height:32px;border-radius:50%;background:var(--s2);border:2px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;transition:all .3s}
-.round-dot.done{background:var(--green);border-color:var(--green);color:#fff}
-.round-dot.cur{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 0 8px rgba(79,127,255,0.5)}
-.done-stats{background:var(--s2);border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-.time-history{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:16px;width:100%;max-width:280px;margin-left:auto;margin-right:auto}
-.time-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
-.time-row:last-child{border-bottom:none}
-.v-action-row{display:none}
-.v-action-row.show{display:flex}
-
-.plan-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
-.plan-stats{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text)}
-.stat-item{color:var(--text)}.stat-item.done{color:var(--green)}
-.stat-sep{color:var(--muted)}
-.plan-bar-wrap{height:4px;background:var(--s2);border-radius:2px;overflow:hidden}
-.plan-bar-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--green));border-radius:2px;transition:width .4s}
-</style>
-<!-- v2 -->
 </head>
 <body>
-
 <div class="hdr">
   <div class="hdr-title">📦 IHK Тренажер — Lagerlogistik</div>
-  <div style="display:flex;gap:6px;align-items:center">
-  <button onclick="localStorage.removeItem('ihk_trainer_v1');location.reload();"
-    style="background:none;border:1px solid var(--red);color:var(--red);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🗑 Скинути</button>
   <a class="hdr-back" href="/">← Назад</a>
 </div>
-</div>
-
 <div class="mode-tabs">
-  <button class="mode-btn on" id="modeFlash" onclick="setMode('flash')">📚 Картки (50/день)</button>
-  <button class="mode-btn" id="modeVoice" onclick="setMode('voice')">🎤 Голос (50/день)</button>
+  <button class="mode-btn on" id="mFlash" onclick="setMode('flash')">📚 Картки</button>
+  <button class="mode-btn" id="mVoice" onclick="setMode('voice')">🎤 Голос + AI</button>
 </div>
-
-<div class="plan-bar" id="planBar"></div>
 <div class="day-scroll" id="dayScroll"></div>
 <main id="main"></main>
-
 <script>
 const DATA = {
 a1:{
@@ -1063,795 +955,145 @@ a6:{
   ]
 }
 };
-
-
-// UA ПАТЧ — розмовні відповіді від першої особи
-(function addUAFields(){
-  const UA={
-    '1.1':['Назвіть 2 дані з накладної які перевіряєте перед розвантаженням!','Перед розвантаженням я перевіряю одержувача — чи дійсно поставка для нас. Потім дивлюсь на дату доставки — чи привезли вчасно.'],
-    '1.2':['Під час розвантаження немає пошкоджень. Заповніть накладну!','Я вписую дату 28.04.2026 і підписую у полі Ware erhalten. Цим підтверджую водієві що товар прийнято без пошкоджень.'],
-    '1.3':['3 дефекти Euro-палет через які не можна обміняти!','Зламані дошки настилу, пошкоджені кубики-опори, або відсутній знак EPAL.'],
-    '1.4':['Поясніть 4 види дефектів на прикладі спортивних штанів (арт. 240150, 1.500 шт.)','Identität — доставили не той товар, наприклад чорні штани замість сірих. Quantität — неправильна кількість, наприклад 1400 замість 1500 штук. Qualität — дефекти виготовлення, наприклад погано зшиті шви або дірки. Beschaffenheit — неправильний матеріал або розмір, наприклад бавовна замість поліестеру.'],
-    '1.5':['15% від 1500 шт. Розрахуйте!','1500 на 15 ділити на 100 — 225 штук для QS.'],
-    '1.6':['Частина артикулу на Sperrfläche. Чому?','Товар ще без QS — не можна класти на склад. Sperrfläche зона для незвільненого товару.'],
-    '1.7':['Заповніть внутрішній транспортний документ!','До зони C, артикул 240150, до Qualitätssicherung, 225 штук, накладна 55016-20. Повернути до C на S 20.'],
-    '1.8':['Яку Nacherfüllung вимагати першочергово?','Nachbesserung — продавець виправляє шви. Або Ersatzlieferung — нову партію.'],
-    '1.9.1':['12 палет, 6 місяців, 20 євро. Витрати?','12 на 6 на 20 — 1440 євро.'],
-    '1.9.2':['Економія 7800, витрати 1440. Результат?','7800 мінус 1440 — реальна економія 6360 євро.'],
-    '1.10.1':['120 мячів, частки 5-4-3-3. Розрахуйте!','Сума 15. Червоних 40, жовтих 32, синіх 24, зелених 24. Перевірка 120.'],
-    '1.10.2':['Яку функцію виконує склад при наборах?','Sortimentsfunktion — збираємо набори з окремих артикулів.'],
-    '1.10.3':['Як захистити нижній шар від палети?','Кладу прокладку з гофрокартону між палетою і нижнім шаром.'],
-    '2.1.1':['Поясніть вид підготовки з полочного стелажу!','Statische Bereitstellung — товар нерухомий, я сам іду до нього.'],
-    '2.1.2':['Перевага статичної підготовки?','Менші інвестиційні витрати — не потрібні автоматичні системи.'],
-    '2.2.2':['8 рівнів по 40 см, 10 від підлоги. Висота?','10 плюс 8 на 40 — 330 см або 3,30 м.'],
-    '2.2.3':['Вибери пристрій: 2 особи і мін 3 м!','Bulder 1308 — 2 особи і 300 см висоти.'],
-    '2.3':['Опиши Pick-Pack!','Беру товар і одразу кладу у коробку — один крок.'],
-    '2.4.1':['Поясніть Meldebestand!','Кількість при якій роблю нове замовлення щоб не залишитись без товару.'],
-    '2.4.2':['100м/день, 5 днів, 300м мінімум. Meldebestand?','100 на 5 плюс 300 — 800 метрів.'],
-    '2.5.1':['70 позицій, 1,5хв, Basiszeit 5, Zuschlag 25. Час?','70 на 1,5 плюс 5 плюс 25 — 135 хвилин.'],
-    '2.5.2':['Поясніть Basiszeit!','Час на початку і кінці завдання, один раз за замовлення.'],
-    '2.5.3':['Приклад Totzeit!','Чекаю ліфт — непродуктивний час.'],
-    '2.6.1':['Meier Ср→Пт. Müller Сб→Пн. Чи можна?','Meier — ні, термін до четверга. Müller — так, Субота то Понеділок.'],
-    '2.7.1':['2000 палет, 12,50 євро. Витрати?','2000 на 12,50 — 25000 євро.'],
-    '2.7.2.1':['Перевага і недолік пластикових палет?','Перевага: довговічніші гігієнічніші. Недолік: немає EPAL вища ціна.'],
-    '2.7.2.2':['78000 євро, 26000/рік. Окупність?','78000 ділю на 26000 — 3 роки.'],
-    '3.1':['2 причини обходу після нещасного випадку?','Зясувати причину і задокументувати небезпечні місця.'],
-    '3.2':['2 особи при обході?','Sicherheitsbeauftragter і Vorgesetzter.'],
-    '3.3':['Круглий червоний знак з рукою?','Berühren verboten — торкатися заборонено.'],
-    '3.4':['2 заходи проти збоїв конвеєра?','Регулярне обслуговування і тільки справні палети.'],
-    '4.1.1':['Символ стрілки вгору. Що враховувати?','Укладаю вертикально зі стрілками вгору, перекидати не можна.'],
-    '4.1.2':['Висота 2,35м, коробка 50см. Шари?','235 ділю на 50 — 4,7, округляю до 4.'],
-    '4.1.3':['Контейнер 12м×2,33м, коробка 75×40, 7 шарів. Максимум?','16 по довжині, 5 по ширині, 80 на шар, разом 560.'],
-    '4.1.4':['600×13,59кг, 0,453кг/фунт. Вага?','8154 кг ділю на 0,453 — 18000 фунтів.'],
-    '4.1.5':['2 критерії огляду контейнера?','Цілісність стін і дверей. Чистота і сухість.'],
-    '4.1.6.1':['Чому CMR Нюрнберг-Роттердам?','Міжнародне через кордон — CMR обовязкова.'],
-    '4.1.6.2':['715км, 65км/год. Час?','715 ділю на 65 — 11 годин.'],
-    '4.1.7':['Що таке Incoterms?','Визначають витрати, ризик, страховку і митницю.'],
-    '4.1.8':['CIF Halifax?','Cost Insurance Freight — продавець несе все до порту Halifax.'],
-    '4.2.1':['Доповни маршрут!','Müller, Moritz, Sellbacher, Erwin, Windröder, Нюрнберг.'],
-    '4.2.2':['Trägheitskraft при гальмуванні?','Вантаж через інерцію зсувається до кабіни — небезпека перекидання.'],
-    '4.2.3':['Поясніть Reibungskraft!','Сила тертя між вантажем і підлогою утримує вантаж на місці.'],
-    '4.2.4':['Дерево/Дерево сухий 0,20-0,50. Коефіцієнт?','Беру найменше — 0,20.'],
-    '4.2.5':['700кг, μ=0,20, g=10. daN?','7000 Н на 0,20 — 1400 Н ділю на 10 — 140 daN.'],
-    '4.3':['2 критерії Zurrgurte?','Стан без пошкоджень і LC-значення достатнє.']
-  };
-  const DE={
-    '1.1':'Vor der Entladung prüfe ich den Empfänger — ob die Lieferung wirklich für uns ist. Dann schaue ich auf das Lieferdatum — ob pünktlich geliefert wurde.',
-    '1.2':'Ich trage das Datum 28.04.2026 ein und unterschreibe im Feld Ware erhalten. Damit bestätige ich dem Fahrer die ordnungsgemäße Anlieferung.',
-    '1.3':'Tausch ist nicht möglich wenn die Bodenbretter gebrochen sind, die Klötze beschädigt sind, oder das EPAL-Zeichen fehlt.',
-    '1.4':'Identität — falsches Produkt geliefert, zum Beispiel schwarze Hosen statt graue. Quantität — falsche Menge, zum Beispiel 1400 statt 1500 Stück. Qualität — fehlerhafte Verarbeitung, zum Beispiel schlechte Nähte oder Löcher. Beschaffenheit — falsches Material oder falsche Größe, zum Beispiel Baumwolle statt Polyester.',
-    '1.5':'Ich rechne 1500 mal 15 geteilt durch 100 — das ergibt 225 Stück für die QS.',
-    '1.6':'Die Ware hat noch keine QS-Prüfung, deshalb darf ich sie nicht einlagern. Sperrfläche ist die Zone für nicht freigegebene Ware.',
-    '1.7':'An Lagerzone C, Artikel 240150, Qualitätssicherung, 225 Stück, Lieferschein 55016-20. Rücksendung Zone C auf S 20.',
-    '1.8':'Zuerst verlange ich Nachbesserung — Reparatur der Nähte. Alternativ Ersatzlieferung — neue mangelfreie Ware.',
-    '1.9.1':'12 mal 6 mal 20 Euro — das sind 1440 Euro zusätzliche Lagerkosten.',
-    '1.9.2':'7800 minus 1440 — die tatsächliche Einsparung beträgt 6360 Euro.',
-    '1.10.1':'Summe 15. Rot 40, Gelb 32, Blau 24, Grün 24. Probe ergibt 120.',
-    '1.10.2':'Das ist die Sortimentsfunktion — wir stellen aus einzelnen Artikeln kundenspezifische Sets zusammen.',
-    '1.10.3':'Ich lege eine Zwischenlage aus Wellpappe zwischen Palette und unterster Lage.',
-    '2.1.1':'Das ist statische Bereitstellung. Die Ware steht fest, ich gehe selbst zur Ware.',
-    '2.1.2':'Geringere Investitionskosten — keine teuren automatischen Anlagen nötig.',
-    '2.2.2':'10 plus 8 mal 40 — das sind 330 Zentimeter oder 3,30 Meter.',
-    '2.2.3':'Ich wähle Bulder 1308 — er hat 2 Personen und 300 cm Hubhöhe.',
-    '2.3':'Beim Pick-Pack nehme ich den Artikel und lege ihn sofort in den Versandkarton — ein Schritt.',
-    '2.4.1':'Der Meldebestand ist die Menge bei der ich sofort nachbestelle damit ich nicht leer werde.',
-    '2.4.2':'100 mal 5 plus 300 — der Meldebestand beträgt 800 Meter.',
-    '2.5.1':'70 mal 1,5 plus 5 plus 25 — insgesamt 135 Minuten.',
-    '2.5.2':'Basiszeit ist der Aufwand am Anfang und Ende jedes Auftrags — einmal pro Auftrag.',
-    '2.5.3':'Zum Beispiel wenn ich auf den Aufzug warte — das ist Totzeit.',
-    '2.6.1':'Meier — nein, Frist bis Donnerstag aber Abholung Freitag. Müller — ja, Samstag bedeutet Montag.',
-    '2.7.1':'2000 mal 12,50 — das ergibt 25000 Euro Einkaufskosten.',
-    '2.7.2.1':'Vorteil: langlebiger und hygienischer. Nachteil: kein EPAL-Tausch und höhere Anschaffungskosten.',
-    '2.7.2.2':'78000 geteilt durch 26000 — Amortisationszeit 3 Jahre.',
-    '3.1':'Erstens Unfallursache feststellen. Zweitens Gefährdungen dokumentieren.',
-    '3.2':'Der Sicherheitsbeauftragte und der Vorgesetzte.',
-    '3.3':'Das ist das Verbotszeichen Berühren verboten.',
-    '3.4':'Regelmäßige Wartung und nur einwandfreie Europaletten einsetzen.',
-    '4.1.1':'Das Symbol bedeutet diese Seite oben — aufrecht stapeln, kippen verboten.',
-    '4.1.2':'235 geteilt durch 50 ergibt 4,7 — ich runde ab auf 4 Lagen.',
-    '4.1.3':'Länge 16, Breite 5, pro Lage 80, mal 7 — insgesamt 560 Schachteln.',
-    '4.1.4':'600 mal 13,59 ergibt 8154 kg geteilt durch 0,453 — das sind 18000 Pound.',
-    '4.1.5':'Ich prüfe Unversehrtheit von Wänden und Türen sowie Sauberkeit und Trockenheit.',
-    '4.1.6.1':'Weil der Transport grenzüberschreitend ist — CMR-Frachtbrief ist Pflicht.',
-    '4.1.6.2':'715 Kilometer geteilt durch 65 — das sind 11 Stunden.',
-    '4.1.7':'Incoterms regeln Transportkosten, Risikoübergang und Versicherung.',
-    '4.1.8':'CIF bedeutet Cost Insurance Freight — Verkäufer trägt alles bis Hafen Halifax.',
-    '4.2.1':'Müller, Moritz, Sellbacher, Erwin Sommer, Windröder, zurück nach Nürnberg.',
-    '4.2.2':'Beim Bremsen schiebt sich die Palette Richtung Fahrerhaus — Kipp- und Rutschgefahr.',
-    '4.2.3':'Reibungskraft zwischen Ladegut und Ladefläche hält die Ware an ihrem Platz.',
-    '4.2.4':'Ich nehme den niedrigsten Wert aus der Tabelle — für Holz auf Holz trocken ist das 0,20.',
-    '4.2.5':'7000 Newton mal 0,20 ergibt 1400 Newton geteilt durch 10 — das sind 140 daN.',
-    '4.3':'Zustand des Gurtes auf Risse prüfen. LC-Wert muss für das Gewicht ausreichen.'
-  };
+(function(){
+  const DE={'1.1':'Vor der Entladung prüfe ich den Empfänger und das Lieferdatum.','1.2':'Ich trage das Datum 28.04.2026 ein und unterschreibe im Feld Ware erhalten.','1.3':'Tausch nicht möglich: gebrochene Bodenbretter, beschädigte Klötze, fehlendes EPAL-Zeichen.','1.4':'Identität — falsches Produkt. Quantität — falsche Menge. Qualität — fehlerhafte Verarbeitung. Beschaffenheit — falsches Material oder Größe.','1.5':'1500 mal 15 geteilt durch 100 = 225 Stück zur QS.','1.6':'Die Ware hat noch keine QS-Prüfung — Sperrfläche ist Zone für nicht freigegebene Ware.','1.7':'Zone C, Artikel 240150, Qualitätssicherung, 225 Stück, Lieferschein 55016-20. Rück: Zone C, S 20.','1.8':'Nachbesserung — Reparatur der Nähte. Oder Ersatzlieferung — neue mangelfreie Ware.','1.9.1':'12 × 6 × 20 = 1440 Euro Lagerkosten.','1.9.2':'7800 − 1440 = 6360 Euro tatsächliche Einsparung.','1.10.1':'Summe 15. Rot 40, Gelb 32, Blau 24, Grün 24. Probe 120.','1.10.2':'Sortimentsfunktion — Sets aus einzelnen Artikeln zusammenstellen.','1.10.3':'Zwischenlage aus Wellpappe zwischen Palette und unterster Lage.','2.1.1':'Statische Bereitstellung — Ware steht fest, ich gehe selbst zur Ware.','2.1.2':'Geringere Investitionskosten — keine teuren automatischen Anlagen.','2.2.2':'10 + 8×40 = 330 cm = 3,30 m.','2.2.3':'Bulder 1308 — 2 Personen und 300 cm Hubhöhe.','2.3':'Pick-Pack — Artikel direkt beim Entnehmen in Versandkarton legen.','2.4.1':'Meldebestand — Menge bei der ich sofort nachbestelle.','2.4.2':'100×5+300 = 800 Meter.','2.5.1':'70×1,5+5+25 = 135 Minuten.','2.5.2':'Basiszeit — Aufwand am Anfang und Ende jedes Auftrags.','2.5.3':'Warten auf den Aufzug — Totzeit.','2.6.1':'Meier — nein, Frist Donnerstag, Abholung Freitag. Müller — ja, Samstag bedeutet Montag.','2.7.1':'2000×12,50 = 25000 Euro.','2.7.2.1':'Vorteil: langlebiger. Nachteil: kein EPAL-Tausch.','2.7.2.2':'78000÷26000 = 3 Jahre.','3.1':'Unfallursache feststellen und Gefährdungen dokumentieren.','3.2':'Sicherheitsbeauftragter und Vorgesetzter.','3.3':'Berühren verboten.','3.4':'Regelmäßige Wartung und nur einwandfreie Paletten.','4.1.1':'Diese Seite oben — aufrecht stapeln.','4.1.2':'235÷50=4,7 → 4 Lagen.','4.1.3':'16×5×7 = 560 Schachteln.','4.1.4':'8154÷0,453 = 18000 Pound.','4.1.5':'Unversehrtheit und Sauberkeit prüfen.','4.1.6.1':'Grenzüberschreitend — CMR Pflicht.','4.1.6.2':'715÷65 = 11 Stunden.','4.1.7':'Transportkosten, Risiko, Versicherung regeln.','4.1.8':'Cost Insurance Freight bis Hafen Halifax.','4.2.1':'Müller, Moritz, Sellbacher, Erwin, Windröder, Nürnberg.','4.2.2':'Trägheitskraft — Palette schiebt sich Richtung Fahrerhaus.','4.2.3':'Reibungskraft hält Ladegut auf der Ladefläche.','4.2.4':'Niedrigster Wert: 0,20.','4.2.5':'700×10=7000 N × 0,20=1400 N ÷10=140 daN.','4.3':'Zustand und LC-Wert prüfen.'};
+  const UA={'1.1':'Перевіряю одержувача і дату доставки.','1.2':'Вписую дату 28.04.2026 і підписую Ware erhalten.','1.3':'Зламані дошки, пошкоджені кубики, відсутній знак EPAL.','1.4':'Identität — не той товар. Quantität — не та кількість. Qualität — дефекти виготовлення. Beschaffenheit — неправильний матеріал або розмір.','1.5':'1500×15÷100 = 225 штук до QS.','1.6':'Товар без QS — не можна на склад. Sperrfläche для незвільненого товару.','1.7':'Зона C, арт.240150, Qualitätssicherung, 225 шт, накладна 55016-20. Повернути C, S 20.','1.8':'Nachbesserung — виправити шви. Або Ersatzlieferung — нову партію.','1.9.1':'12×6×20 = 1440 євро.','1.9.2':'7800−1440 = 6360 євро.','1.10.1':'Сума 15. Червоних 40, жовтих 32, синіх 24, зелених 24.','1.10.2':'Sortimentsfunktion — збираємо набори.','1.10.3':'Прокладка з картону між палетою і товаром.','2.1.1':'Statische Bereitstellung — товар нерухомий, іду до нього.','2.1.2':'Менші інвестиційні витрати.','2.2.2':'10+8×40=330 см=3,30 м.','2.2.3':'Bulder 1308 — 2 особи і 300 см.','2.3':'Pick-Pack — беру і одразу кладу в коробку.','2.4.1':'Meldebestand — кількість при якій замовляю знову.','2.4.2':'100×5+300=800 м.','2.5.1':'70×1,5+5+25=135 хв.','2.5.2':'Basiszeit — час на початку і кінці завдання.','2.5.3':'Чекаю ліфт — Totzeit.','2.6.1':'Meier — ні, термін четвер а пятниця. Müller — так, субота то понеділок.','2.7.1':'2000×12,50=25000 євро.','2.7.2.1':'Перевага: довговічніші. Недолік: немає EPAL.','2.7.2.2':'78000÷26000=3 роки.','3.1':'Зясувати причину і задокументувати небезпеки.','3.2':'Sicherheitsbeauftragter і Vorgesetzter.','3.3':'Berühren verboten — торкатися заборонено.','3.4':'Обслуговування і тільки справні палети.','4.1.1':'Цією стороною вгору — вертикально.','4.1.2':'235÷50=4,7→4 шари.','4.1.3':'16×5×7=560 коробок.','4.1.4':'8154÷0,453=18000 фунтів.','4.1.5':'Цілісність і чистота.','4.1.6.1':'Міжнародне — CMR обовязкова.','4.1.6.2':'715÷65=11 годин.','4.1.7':'Витрати ризик страховка митниця.','4.1.8':'Cost Insurance Freight до Halifax.','4.2.1':'Müller Moritz Sellbacher Erwin Windröder Нюрнберг.','4.2.2':'Вантаж зсувається до кабіни — небезпека.','4.2.3':'Сила тертя утримує вантаж.','4.2.4':'Найменше значення — 0,20.','4.2.5':'7000×0,20=1400 Н÷10=140 daN.','4.3':'Стан ременя і LC-значення.'};
   ['a1','a2','a3','a4'].forEach(k=>{
     if(!DATA[k])return;
     DATA[k].qs.forEach(q=>{
-      if(UA[q.id]){q.ua_q=UA[q.id][0];q.ua_a=UA[q.id][1];}
       if(DE[q.id])q.de_a=DE[q.id];
+      if(UA[q.id])q.ua_a=UA[q.id];
     });
   });
 })();
 
-// ============================================================
-// CORE STATE
-// ============================================================
-const KEY = 'ihk_v3';
-const QUESTIONS_PER_DAY = 5;
-const REPS_PER_QUESTION = 10; // 10 разів на питання
-const TOTAL_FLASH = QUESTIONS_PER_DAY * REPS_PER_QUESTION; // 50
-const TOTAL_VOICE = QUESTIONS_PER_DAY * REPS_PER_QUESTION; // 50
+let mode='flash',day=0,qIdx=0,flipped=false,lang='ua',dialogCtx=null;
 
-let state = {
-  mode: 'flash',      // 'flash' | 'voice'
-  day: 0,
-  qIdx: 0,            // поточне питання (0-4)
-  flipped: false,
-  dialogCtx: null,
-  sessionStart: null, // Date.now() коли почали сесію
-  flashLang: 'ua',    // 'de' | 'ua'
-};
+function getAllQs(){const a=[];['a1','a2','a3','a4'].forEach(k=>{if(DATA[k])DATA[k].qs.forEach(q=>a.push(q));});return a;}
+function getDayQs(d){return getAllQs().slice(d*5,(d+1)*5);}
+function totalDays(){return Math.ceil(getAllQs().length/5);}
 
-// ============================================================
-// STORAGE
-// ============================================================
-function loadDB() {
-  try { return JSON.parse(localStorage.getItem(KEY) || 'null') || makeDB(); }
-  catch(e) { return makeDB(); }
+function renderDays(){
+  let h='';
+  for(let i=0;i<totalDays();i++)
+    h+=`<button class="day-btn ${i===day?'on':''}" onclick="goDay(${i})">Tag ${i+1}</button>`;
+  document.getElementById('dayScroll').innerHTML=h;
 }
-function makeDB() {
-  return { currentDay: 0, days: {} };
+function goDay(d){day=d;qIdx=0;flipped=false;renderDays();renderMain();}
+function setMode(m){
+  mode=m;
+  document.getElementById('mFlash').className='mode-btn'+(m==='flash'?' on':'');
+  document.getElementById('mVoice').className='mode-btn'+(m==='voice'?' on':'');
+  qIdx=0;flipped=false;renderMain();
 }
-function saveDB(db) {
-  localStorage.setItem(KEY, JSON.stringify(db));
+function renderMain(){mode==='flash'?renderFlash():renderVoice();}
+function dots(){
+  return getDayQs(day).map((_,i)=>
+    `<div class="dot ${i===qIdx?'on':''}" onclick="goQ(${i})">${i+1}</div>`).join('');
 }
-function getDayRecord(db, day) {
-  if (!db.days[day]) {
-    db.days[day] = {
-      // flash[qIdx] = кількість виконаних карток (0-10)
-      flash: [0, 0, 0, 0, 0],
-      // voice[qIdx] = кількість голосових відповідей (0-10)
-      voice: [0, 0, 0, 0, 0],
-      // time: масив { date: ISO, minutes: N }
-      time: [],
-      // активна сесія (для time tracking)
-      sessionStartISO: null,
-    };
-  }
-  return db.days[day];
-}
+function goQ(i){qIdx=i;flipped=false;renderMain();}
+function nextQ(){qIdx=(qIdx+1)%getDayQs(day).length;flipped=false;renderMain();}
 
-// ============================================================
-// ПИТАННЯ
-// ============================================================
-function getAllQs() {
-  const all = [];
-  ['a1','a2','a3','a4'].forEach(k => {
-    if (DATA[k]) DATA[k].qs.forEach(q => all.push(q));
-  });
-  return all;
-}
-function getDayQs(day) {
-  const all = getAllQs();
-  const start = day * QUESTIONS_PER_DAY;
-  return all.slice(start, start + QUESTIONS_PER_DAY);
-}
-function totalDays() {
-  return Math.ceil(getAllQs().length / QUESTIONS_PER_DAY);
-}
-
-// ============================================================
-// ПРОГРЕС
-// ============================================================
-function flashDone(rec) {
-  // скільки карток виконано сьогодні
-  return rec.flash.reduce((s, v) => s + Math.min(v, REPS_PER_QUESTION), 0);
-}
-function voiceDone(rec) {
-  return rec.voice.reduce((s, v) => s + Math.min(v, REPS_PER_QUESTION), 0);
-}
-function totalDone(rec) {
-  return flashDone(rec) + voiceDone(rec);
-}
-function isDayComplete(rec) {
-  return flashDone(rec) >= TOTAL_FLASH && voiceDone(rec) >= TOTAL_VOICE;
-}
-function isFlashComplete(rec) {
-  return flashDone(rec) >= TOTAL_FLASH;
-}
-function isVoiceComplete(rec) {
-  return voiceDone(rec) >= TOTAL_VOICE;
-}
-
-// Знаходимо наступне питання в поточному раунді
-// Раунд = один прохід всіх 5 питань
-function nextQIdx(rec, mode) {
-  const arr = mode === 'flash' ? rec.flash : rec.voice;
-  for (let i = 0; i < QUESTIONS_PER_DAY; i++) {
-    if (arr[i] < REPS_PER_QUESTION) return i;
-  }
-  return -1; // всі виконані
-}
-
-// Поточний раунд = мінімальна кількість повторень серед всіх питань
-function currentRound(rec, mode) {
-  const arr = mode === 'flash' ? rec.flash : rec.voice;
-  return Math.min(...arr);
-}
-
-// Наступне питання в раунді: питання з кількістю = поточний раунд
-function nextQInRound(rec, mode) {
-  const arr = mode === 'flash' ? rec.flash : rec.voice;
-  const round = currentRound(rec, mode);
-  if (round >= REPS_PER_QUESTION) return -1; // всі виконані
-  // Шукаємо перше питання яке ще не пройшло цей раунд
-  for (let i = 0; i < QUESTIONS_PER_DAY; i++) {
-    if (arr[i] === round) return i;
-  }
-  return -1;
-}
-
-// ============================================================
-// TIME TRACKING
-// ============================================================
-function startSession(db, day) {
-  const rec = getDayRecord(db, day);
-  rec.sessionStartISO = new Date().toISOString();
-  state.sessionStart = Date.now();
-  saveDB(db);
-}
-
-function endSession(db, day) {
-  const rec = getDayRecord(db, day);
-  if (!rec.sessionStartISO) return;
-  const minutes = Math.round((Date.now() - new Date(rec.sessionStartISO).getTime()) / 60000);
-  if (minutes > 0) {
-    rec.time.push({
-      date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
-      minutes,
-    });
-  }
-  rec.sessionStartISO = null;
-  state.sessionStart = null;
-  saveDB(db);
-}
-
-function getTodayMinutes(rec) {
-  const today = new Date().toISOString().slice(0, 10);
-  const saved = rec.time
-    .filter(t => t.date === today)
-    .reduce((s, t) => s + t.minutes, 0);
-  // + поточна активна сесія
-  const live = state.sessionStart
-    ? Math.round((Date.now() - state.sessionStart) / 60000)
-    : 0;
-  return saved + live;
-}
-
-function getTimeHistory(rec) {
-  // групуємо по даті
-  const map = {};
-  rec.time.forEach(t => {
-    map[t.date] = (map[t.date] || 0) + t.minutes;
-  });
-  const today = new Date().toISOString().slice(0, 10);
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-  return Object.entries(map)
-    .sort((a, b) => b[0].localeCompare(a[0]))
-    .map(([date, min]) => {
-      const label = date === today ? 'Сьогодні'
-        : date === yesterday ? 'Вчора'
-        : date;
-      return { label, minutes: min };
-    });
-}
-
-// ============================================================
-// ACTIONS
-// ============================================================
-
-// Записуємо що картку пройдено для qIdx
-function recordFlash(db, day, qIdx) {
-  const rec = getDayRecord(db, day);
-  if (rec.flash[qIdx] < REPS_PER_QUESTION) {
-    rec.flash[qIdx]++;
-  }
-  saveDB(db);
-  return rec;
-}
-
-// Записуємо голосову відповідь
-function recordVoice(db, day, qIdx) {
-  const rec = getDayRecord(db, day);
-  if (rec.voice[qIdx] < REPS_PER_QUESTION) {
-    rec.voice[qIdx]++;
-  }
-  saveDB(db);
-  return rec;
-}
-
-// ============================================================
-// RENDER HELPERS (тільки логіка, HTML генерується тут)
-// ============================================================
-function renderProgressBar(rec, mode) {
-  const done = mode === 'flash' ? flashDone(rec) : voiceDone(rec);
-  const total = mode === 'flash' ? TOTAL_FLASH : TOTAL_VOICE;
-  const pct = Math.round(done / total * 100);
-  return { done, total, pct };
-}
-
-function renderQCounters(rec) {
-  // повертає масив { qId, flashDone, voiceDone, reps }
-  return [0,1,2,3,4].map(i => ({
-    idx: i,
-    flashDone: rec.flash[i],
-    voiceDone: rec.voice[i],
-    reps: REPS_PER_QUESTION,
-  }));
-}
-
-// ============================================================
-// MAIN STATE MACHINE
-// ============================================================
-function setMode(m) {
-  const db = loadDB();
-  const rec = getDayRecord(db, state.day);
-
-  // Якщо вже є активна сесія — зберігаємо час
-  if (state.sessionStart) endSession(db, state.day);
-
-  state.mode = m;
-  state.flipped = false;
-
-  // Знаходимо перше питання в поточному раунді
-  const idx = nextQInRound(rec, m);
-  state.qIdx = idx >= 0 ? idx : 0;
-
-  startSession(db, state.day);
-  renderAll();
-}
-
-function setDay(day) {
-  const db = loadDB();
-  if (state.sessionStart) endSession(db, state.day);
-
-  state.day = day;
-  state.qIdx = 0;
-  state.flipped = false;
-
-  const rec = getDayRecord(db, day);
-  db.currentDay = day;
-  startSession(db, day);
-  saveDB(db);
-  renderAll();
-}
-
-function goNextQ() {
-  const db = loadDB();
-  const rec = getDayRecord(db, state.day);
-  const idx = nextQIdx(rec, state.mode);
-  if (idx >= 0) {
-    state.qIdx = idx;
-    state.flipped = false;
-  }
-  renderAll();
-}
-
-// ============================================================
-// RENDER
-// ============================================================
-function renderAll() {
-  renderDayTabs();
-  renderPlanBar();
-  renderContent();
-}
-
-function renderDayTabs() {
-  const db = loadDB();
-  const tot = totalDays();
-  let h = '';
-  for (let i = 0; i < tot; i++) {
-    const rec = db.days[i];
-    let cls = 'day-btn' + (i === state.day ? ' on' : '');
-    let suffix = '';
-    if (rec && isDayComplete(rec)) { cls += ' done'; suffix = ' ✓'; }
-    else if (rec && totalDone(rec) > 0) { cls += ' partial'; suffix = ' ●'; }
-    h += `<button class="${cls}" onclick="setDay(${i})">Tag ${i+1}${suffix}</button>`;
-  }
-  const el = document.getElementById('dayScroll');
-  if (el) el.innerHTML = h;
-}
-
-function renderPlanBar() {
-  const db = loadDB();
-  const rec = getDayRecord(db, state.day);
-  const fd = flashDone(rec), vd = voiceDone(rec);
-  const fPct = Math.round(fd / TOTAL_FLASH * 100);
-  const vPct = Math.round(vd / TOTAL_VOICE * 100);
-  const todayMin = getTodayMinutes(rec);
-  const history = getTimeHistory(rec);
-
-  const modeLabel = state.mode === 'flash' ? 'картки' : 'голос';
-  const modeDone = state.mode === 'flash' ? fd : vd;
-  const modeTotal = state.mode === 'flash' ? TOTAL_FLASH : TOTAL_VOICE;
-
-  const el = document.getElementById('planBar');
-  if (!el) return;
-
-  const totalAll = TOTAL_FLASH + TOTAL_VOICE;
-  const doneAll = fd + vd;
-  const pctAll = Math.round(doneAll / totalAll * 100);
-
-  el.innerHTML = `
-    <div class="plan-top">
-      <div class="plan-stats">
-        <span class="stat-item">📚 <strong>${fd}/${TOTAL_FLASH}</strong></span>
-        <span class="stat-sep">·</span>
-        <span class="stat-item">🎤 <strong>${vd}/${TOTAL_VOICE}</strong></span>
-        <span class="stat-sep">·</span>
-        <span class="stat-item ${pctAll>=100?'done':''}"><strong>${pctAll}%</strong></span>
-      </div>
-      <div class="plan-time">⏱ ${todayMin} хв</div>
+function renderFlash(){
+  const q=getDayQs(day)[qIdx];
+  const ua=lang==='ua';
+  const qt=ua&&q.ua_q?q.ua_q:q.text;
+  const at=ua&&q.ua_a?q.ua_a:(q.de_a||q.ans||'');
+  document.getElementById('main').innerHTML=`
+    <div class="q-info">Питання ${qIdx+1} / ${getDayQs(day).length}</div>
+    <div class="lang-row">
+      <button class="lang-btn ${lang==='de'?'on':''}" onclick="lang='de';renderMain()">DE</button>
+      <button class="lang-btn ${lang==='ua'?'on':''}" onclick="lang='ua';renderMain()">UA</button>
     </div>
-    <div class="plan-bar-wrap">
-      <div class="plan-bar-fill" style="width:${pctAll}%"></div>
-    </div>`;
-}
-
-function renderContent() {
-  const db = loadDB();
-  const rec = getDayRecord(db, state.day);
-
-  if (state.mode === 'flash' && isFlashComplete(rec)) {
-    renderModeComplete('flash', rec);
-    return;
-  }
-  if (state.mode === 'voice' && isVoiceComplete(rec)) {
-    renderModeComplete('voice', rec);
-    return;
-  }
-
-  const qs = getDayQs(state.day);
-  const q = qs[state.qIdx];
-  if (!q) return;
-
-  if (state.mode === 'flash') renderFlashCard(q, rec);
-  else renderVoiceCard(q, rec);
-}
-
-// ============================================================
-// FLASHCARD
-// ============================================================
-function renderFlashCard(q, rec) {
-  const el = document.getElementById('main');
-  const done = rec.flash[state.qIdx];
-  const round = currentRound(rec, 'flash'); // поточний раунд (0-9)
-  const remaining = REPS_PER_QUESTION - round;
-
-  // DE/UA мова — перемикач
-  const showUA = state.flashLang === 'ua';
-  const qText = showUA && q.ua_q ? q.ua_q : q.text;
-  const aText = showUA ? (q.ua_a || q.ans || '') : (q.de_a || q.ans || '');
-
-  el.innerHTML = `
-    <div class="rep-counter">
-      Раунд ${round+1}/${REPS_PER_QUESTION} · Питання ${state.qIdx+1}/5
-    </div>
-    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:8px">
-      <button onclick="state.flashLang='de';renderContent()"
-        style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:${!showUA?'var(--acc)':'var(--s2)'};color:${!showUA?'#fff':'var(--muted)'};font-size:11px;cursor:pointer;font-family:Inter,sans-serif">DE</button>
-      <button onclick="state.flashLang='ua';renderContent()"
-        style="padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:${showUA?'var(--acc)':'var(--s2)'};color:${showUA?'#fff':'var(--muted)'};font-size:11px;cursor:pointer;font-family:Inter,sans-serif">UA</button>
-    </div>
-    <div class="dots">${getDots(rec, 'flash')}</div>
-
+    <div class="dots">${dots()}</div>
     <div class="flashcard">
-      <div class="fc-inner ${state.flipped?'flipped':''}" id="fcInner" onclick="fcFlip()">
+      <div class="fc-inner ${flipped?'flipped':''}" onclick="flipCard()">
         <div class="fc-face fc-front">
           <div class="fc-lbl">❓ Aufgabe ${q.id}</div>
           <div class="fc-id">⭐ ${q.pts} Punkte</div>
-          <div class="fc-q">${qText}</div>
+          <div class="fc-q">${qt}</div>
           <div class="fc-hint">👆 Натисни щоб побачити відповідь</div>
         </div>
         <div class="fc-face fc-back">
           <div class="fc-lbl">✅ Відповідь</div>
-          <div class="fc-a">${aText}</div>
+          <div class="fc-a">${at}</div>
         </div>
       </div>
     </div>
-
-    <div id="fcBtns">
-      ${state.flipped
-        ? `<div class="fc-action-row">
-            <button class="fc-btn fc-btn-back" onclick="fcFlip()">← Питання</button>
-            <button class="fc-btn fc-btn-no" onclick="fcMark(false)">✗ Не знав</button>
-            <button class="fc-btn fc-btn-ok" onclick="fcMark(true)">✓ Знав</button>
-           </div>`
-        : `<button class="fc-show-btn" onclick="fcFlip()">Показати відповідь</button>`
-      }
-    </div>`;
+    <div id="fcBtns">${flipped
+      ?`<div class="btn-row"><button class="btn btn-back" onclick="flipCard()">← Питання</button><button class="btn btn-next" onclick="nextQ()">Далі →</button></div>`
+      :`<button class="btn-show" onclick="flipCard()">Показати відповідь</button>`
+    }</div>`;
 }
+function flipCard(){flipped=!flipped;renderMain();}
 
-function fcFlip() {
-  state.flipped = !state.flipped;
-  renderContent();
-}
-
-function fcMark(ok) {
-  const db = loadDB();
-  recordFlash(db, state.day, state.qIdx);
-  state.flipped = false;
-  const rec = getDayRecord(db, state.day);
-  // Переходимо до наступного питання в РАУНДІ
-  const next = nextQInRound(rec, 'flash');
-  if (next >= 0) {
-    state.qIdx = next;
-  }
-  renderAll();
-}
-
-function getDots(rec, mode) {
-  const arr = mode === 'flash' ? rec.flash : rec.voice;
-  const round = currentRound(rec, mode); // поточний раунд 0-9
-
-  // 10 кіл — прогрес раундів
-  const circles = Array.from({length: REPS_PER_QUESTION}, (_, i) => {
-    const done = round > i; // раунд пройдено
-    const cur = round === i; // поточний раунд
-    return `<div class="round-dot ${done?'done':cur?'cur':''}">${i+1}</div>`;
-  }).join('');
-
-  return `<div class="round-dots">${circles}</div>`;
-}
-
-function jumpToQ(i) {
-  state.qIdx = i;
-  state.flipped = false;
-  renderContent();
-}
-
-// ============================================================
-// VOICE CARD
-// ============================================================
-function renderVoiceCard(q, rec) {
-  const el = document.getElementById('main');
-  const done = rec.voice[state.qIdx];
-  const remaining = REPS_PER_QUESTION - done;
-
-  el.innerHTML = `
-    <div class="rep-counter">
-      Питання ${state.qIdx+1}/5 · Відповідь ${done+1}/${REPS_PER_QUESTION}
-      · Залишилось: ${remaining}
-    </div>
-    <div class="dots">${getDots(rec, 'voice')}</div>
-
-    <div class="vcard" id="vCard">
+function renderVoice(){
+  const q=getDayQs(day)[qIdx];
+  document.getElementById('main').innerHTML=`
+    <div class="q-info">Питання ${qIdx+1} / ${getDayQs(day).length}</div>
+    <div class="dots">${dots()}</div>
+    <div class="vcard">
       <div class="vcard-lbl">❓ Aufgabe ${q.id}</div>
-      <div class="vcard-pts">⭐ ${q.pts} Punkte</div>
+      <div class="vcard-id">⭐ ${q.pts} Punkte</div>
       <div class="vcard-q">${q.text}</div>
-
-      <textarea id="vInput"
-        placeholder="🎤 Говори через Samsung клавіатуру або пиши тут..."
-        oninput="onVInput(this.value)"
-        rows="4"></textarea>
-
-      <button class="v-check-btn" id="vCheckBtn" onclick="vCheck()" disabled>
-        🤖 AI перевіряє відповідь
-      </button>
-
-      <div class="ai-res" id="vAiRes"></div>
-      <div class="ans-box" id="vAnsBox">${(q.ans||'').replace(/\n/g,'<br>')}</div>
-
-      <div class="dialog-area" id="vDialog">
-        <div class="dialog-lbl">💬 Запитай AI далі:</div>
-        <div class="quick-btns">
-          <button class="quick-btn" onclick="vAskQuick('Як правильно відповісти?')">Як правильно?</button>
-          <button class="quick-btn" onclick="vAskQuick('Що я пропустив?')">Що пропустив?</button>
-          <button class="quick-btn" onclick="vAskQuick('Наведи ідеальну відповідь')">Ідеальна відповідь</button>
+      <textarea id="vInp" placeholder="🎤 Говори через Samsung клавіатуру або пиши тут..." oninput="onVI(this.value)" rows="4"></textarea>
+      <button class="v-check" id="vBtn" onclick="vCheck()" disabled>🤖 AI перевіряє</button>
+      <div class="ai-res" id="vAi"></div>
+      <div class="ans-box" id="vAns">${(q.de_a||q.ans||'').replace(/
+/g,'<br>')}</div>
+      <div class="dialog-area" id="vDlg">
+        <div class="dlbl">💬 Запитай AI далі:</div>
+        <div class="qbtns">
+          <button class="qbtn" onclick="askQ('Як правильно відповісти?')">Як правильно?</button>
+          <button class="qbtn" onclick="askQ('Що я пропустив?')">Що пропустив?</button>
+          <button class="qbtn" onclick="askQ('Ідеальна відповідь')">Ідеальна відповідь</button>
         </div>
-        <div class="dialog-row">
-          <input class="dialog-inp" id="vDialogInp" placeholder="Своє питання...">
-          <button class="dialog-send" onclick="vSendDialog()">→</button>
+        <div class="drow">
+          <input class="dinp" id="dInp" placeholder="Своє питання...">
+          <button class="dsend" onclick="sendDlg()">→</button>
         </div>
-        <div class="dialog-resp" id="vDialogResp"></div>
+        <div class="dresp" id="dResp"></div>
       </div>
-
-      <div class="v-action-row" id="vActions">
-        <button class="v-btn-ans" onclick="vToggleAns()">📖 Відповідь</button>
-        <button class="v-btn-no" onclick="vMark(false)">✗ Не знав</button>
-        <button class="v-btn-ok" onclick="vMark(true)">✓ Знав</button>
+      <div class="v-btns">
+        <button class="v-btn-ans" onclick="document.getElementById('vAns').classList.toggle('show')">📖 Відповідь</button>
+        <button class="v-btn-next" onclick="nextQ()">Далі →</button>
       </div>
     </div>`;
 }
-
-function onVInput(val) {
-  const btn = document.getElementById('vCheckBtn');
-  if (btn) { btn.disabled = !val.trim(); btn.style.opacity = val.trim() ? '1' : '0.4'; }
-}
-
-async function vCheck() {
-  const inp = document.getElementById('vInput');
-  const aiRes = document.getElementById('vAiRes');
-  const actions = document.getElementById('vActions');
-  const dialog = document.getElementById('vDialog');
-  if (!inp || !inp.value.trim()) return;
-
-  const q = getDayQs(state.day)[state.qIdx];
-  const userAns = inp.value.trim();
-
-  aiRes.className = 'ai-res loading';
-  aiRes.textContent = '⏳ AI перевіряє...';
-
-  const prompt = `Du bist ein verständnisvoller IHK-Prüfer für Lagerlogistik.
-Der Lernende antwortet mündlich/umgangssprachlich — das ist normal und erlaubt.
-Bewerte den INHALT, nicht die genaue Formulierung.
-
+function onVI(v){const b=document.getElementById('vBtn');if(b){b.disabled=!v.trim();b.style.opacity=v.trim()?'1':'0.4';}}
+async function vCheck(){
+  const inp=document.getElementById('vInp'),ai=document.getElementById('vAi'),dlg=document.getElementById('vDlg');
+  if(!inp||!inp.value.trim())return;
+  const q=getDayQs(day)[qIdx],ans=inp.value.trim();
+  ai.className='ai-res loading';ai.textContent='⏳ AI перевіряє...';
+  try{
+    const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:`Du bist ein verständnisvoller IHK-Prüfer. Bewerte den INHALT, nicht die Formulierung.
 Frage: ${q.text}
-Musterlösung (Inhaltspunkte): ${q.ans||''}
-Antwort des Lernenden: ${userAns}
-
-Bewertungsregeln:
-- Wenn der Kerninhalt stimmt → ✅ Richtig! (auch wenn die Formulierung umgangssprachlich ist)
-- Wenn wichtige Punkte fehlen → ❌ Nicht vollständig.
-- Sei kurz: 1-2 Sätze auf Ukrainisch.
-- Beispiel für gute Antwort: "Ich schreibe das Datum und unterschreibe" → das ist korrekt für Aufgabe 1.2
-- Erkläre konkret was noch fehlte (falls etwas fehlt), aber lobe was richtig war.`;
-
-  try {
-    const r = await fetch('/api/gemini', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    });
-    const d = await r.json();
-    const t = d.candidates?.[0]?.content?.parts?.[0]?.text || d.text || d.result || '';
-    if (!t) throw new Error('empty');
-    const correct = t.includes('✅');
-    aiRes.className = 'ai-res ' + (correct ? 'correct' : 'wrong');
-    aiRes.innerHTML = t;
-    state.dialogCtx = { q: q.text, correct: q.ans||'', user: userAns, ai: t };
-    if (dialog) dialog.className = 'dialog-area show';
-  } catch(e) {
-    aiRes.className = 'ai-res wrong';
-    aiRes.textContent = 'Помилка AI. Перевір відповідь через кнопку нижче.';
-  }
-  if (actions) actions.className = 'v-action-row show';
+Musterlösung: ${q.de_a||q.ans||''}
+Antwort: ${ans}
+Kerninhalt stimmt → ✅ Richtig! Punkte fehlen → ❌ Nicht vollständig. 1-2 Sätze Ukrainisch.`})});
+    const d=await r.json();
+    const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
+    ai.className='ai-res '+(t.includes('✅')?'ok':'no');ai.innerHTML=t;
+    dialogCtx={q:q.text,ans:q.de_a||q.ans||'',user:ans,ai:t};
+    if(dlg)dlg.className='dialog-area show';
+  }catch(e){ai.className='ai-res no';ai.textContent='Помилка AI.';}
+}
+async function askQ(t){const i=document.getElementById('dInp');if(i)i.value=t;sendDlg();}
+async function sendDlg(){
+  const inp=document.getElementById('dInp'),resp=document.getElementById('dResp');
+  if(!inp||!resp||!inp.value.trim())return;
+  const c=dialogCtx||{};resp.textContent='⏳...';
+  try{
+    const r=await fetch('/api/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:`IHK Lagerlogistik. Питання: ${c.q}. Відповідь: ${c.ans}. Учень: ${c.user}. Запит: ${inp.value.trim()}. Коротко українською.`})});
+    const d=await r.json();
+    resp.textContent=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
+    inp.value='';
+  }catch(e){resp.textContent='Помилка.';}
 }
 
-function vToggleAns() {
-  document.getElementById('vAnsBox')?.classList.toggle('show');
-}
-
-async function vAskQuick(text) {
-  const inp = document.getElementById('vDialogInp');
-  if (inp) inp.value = text;
-  vSendDialog();
-}
-
-async function vSendDialog() {
-  const inp = document.getElementById('vDialogInp');
-  const resp = document.getElementById('vDialogResp');
-  if (!inp || !resp || !inp.value.trim()) return;
-  const ctx = state.dialogCtx || {};
-  resp.textContent = '⏳...';
-  const prompt = `Контекст: підготовка до IHK Lagerlogistik.
-Учень відповідає розмовно — це нормально.
-Питання екзамену: ${ctx.q}
-Правильна відповідь (зміст): ${ctx.correct}
-Відповідь учня: ${ctx.user}
-Попередня оцінка: ${ctx.ai}
-Запит учня: ${inp.value.trim()}
-
-Відповідай коротко (2-3 речення) українською. 
-Якщо питають "як правильно" або "ідеальна відповідь" — дай відповідь розмовною мовою як говорив би сам учень, не як список.`;
-  try {
-    const r = await fetch('/api/gemini', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt}) });
-    const d = await r.json();
-    resp.textContent = d.candidates?.[0]?.content?.parts?.[0]?.text || d.text || d.result || '';
-    inp.value = '';
-  } catch(e) { resp.textContent = 'Помилка.'; }
-}
-
-function vMark(ok) {
-  const db = loadDB();
-  recordVoice(db, state.day, state.qIdx);
-  const rec = getDayRecord(db, state.day);
-  // Переходимо до наступного питання в РАУНДІ
-  const next = nextQInRound(rec, 'voice');
-  if (next >= 0) {
-    state.qIdx = next;
-  }
-  renderAll();
-}
-
-// ============================================================
-// MODE COMPLETE
-// ============================================================
-function renderModeComplete(mode, rec) {
-  const db = loadDB();
-  const history = getTimeHistory(rec);
-  const todayMin = getTodayMinutes(rec);
-  const historyHtml = history.slice(0,5).map(h =>
-    `<div class="time-row"><span>${h.label}</span><strong>${h.minutes} хв</strong></div>`
-  ).join('');
-
-  const otherMode = mode === 'flash' ? 'voice' : 'flash';
-  const otherDone = mode === 'flash' ? isVoiceComplete(rec) : isFlashComplete(rec);
-  const dayDone = isDayComplete(rec);
-
-  document.getElementById('main').innerHTML = `
-    <div class="done-screen">
-      <div class="done-emoji">${dayDone ? '🏆' : '✅'}</div>
-      <div class="done-title">
-        ${mode==='flash'?'📚 Картки':'🎤 Голос'} — виконано!
-      </div>
-      <div class="done-sub">50/${mode==='flash'?TOTAL_FLASH:TOTAL_VOICE} ${mode==='flash'?'карток':'відповідей'} за день</div>
-
-      <div class="done-stats">
-        <div>📚 Картки: ${flashDone(rec)}/${TOTAL_FLASH}</div>
-        <div>🎤 Голос: ${voiceDone(rec)}/${TOTAL_VOICE}</div>
-        <div>⏱ Сьогодні: ${todayMin} хв</div>
-      </div>
-
-      ${historyHtml ? `<div class="time-history">${historyHtml}</div>` : ''}
-
-      <div class="done-btns">
-        ${!otherDone
-          ? `<button class="btn-primary" onclick="setMode('${otherMode}')">
-              ${otherMode==='flash'?'📚 Почати картки':'🎤 Почати голос'}
-             </button>`
-          : `<button class="btn-primary" style="background:var(--gold);color:#111">
-               🏆 День ${state.day+1} повністю виконано!
-             </button>`
-        }
-        ${state.day < totalDays()-1
-          ? `<button class="btn-secondary" onclick="setDay(${state.day+1})">День ${state.day+2} →</button>`
-          : ''
-        }
-      </div>
-    </div>`;
-}
-
-// ============================================================
-// AUTO-SAVE TIME on page hide
-// ============================================================
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden && state.sessionStart) {
-    const db = loadDB();
-    endSession(db, state.day);
-    startSession(db, state.day); // одразу новий відлік
-  }
-});
-
-// Оновлюємо таймер кожну хвилину
-setInterval(() => {
-  renderPlanBar();
-}, 60000);
-
-// ============================================================
-// INIT
-// ============================================================
-// Скидаємо startDate якщо потрібно
-window.resetStartDate = function(){
-  const db = JSON.parse(localStorage.getItem('ihk_trainer_v1')||'{}');
-  db.startDate = new Date().toISOString().slice(0,10);
-  localStorage.setItem('ihk_trainer_v1', JSON.stringify(db));
-  location.reload();
-};
-
-(function init() {
-  const db = loadDB();
-  // Скидаємо startDate на сьогодні
-  db.startDate = new Date().toISOString().slice(0,10);
-  saveDB(db);
-  state.day = db.currentDay || 0;
-  state.qIdx = 0;
-  const rec = getDayRecord(db, state.day);
-  const idx = nextQInRound(rec, state.mode);
-  state.qIdx = idx >= 0 ? idx : 0;
-  startSession(db, state.day);
-  renderAll();
-})();
-
+renderDays();
+renderMain();
 </script>
 </body>
 </html>
