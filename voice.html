@@ -175,8 +175,8 @@ textarea::placeholder{color:var(--muted);font-size:13px}
 <div class="hdr">
   <div class="hdr-title">📦 IHK Тренажер — Lagerlogistik</div>
   <div style="display:flex;gap:6px;align-items:center">
-  <button onclick="if(confirm('Скинути дату початку на сьогодні?'))resetStartDate()"
-    style="background:none;border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">↺ Скинути</button>
+  <button onclick="if(confirm('Очистити весь прогрес і почати з сьогодні?')){localStorage.removeItem('ihk_trainer_v1');location.reload();}"
+    style="background:none;border:1px solid var(--red);color:var(--red);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🗑 Скинути</button>
   <a class="hdr-back" href="/">← Назад</a>
 </div>
 </div>
