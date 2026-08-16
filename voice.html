@@ -1027,6 +1027,7 @@ function renderFlash(){
 }
 function flipCard(){flipped=!flipped;renderMain();}
 
+function getAns(q){return (q.de_a||q.ans||'').split('\n').join('<br>');}
 function renderVoice(){
   const q=getDayQs(day)[qIdx];
   document.getElementById('main').innerHTML=`
