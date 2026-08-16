@@ -1884,6 +1884,12 @@ window.resetStartDate = function(){
 };
 
 (function init() {
+  // Скидаємо прогрес — починаємо з 17 серпня
+  const db = {};
+  db.startDate = '2026-08-17';
+  db.currentDay = 0;
+  db.days = {};
+  localStorage.setItem('ihk_trainer_v1', JSON.stringify(db));
   const db = loadDB();
   // Скидаємо startDate на сьогодні
   db.startDate = new Date().toISOString().slice(0,10);
