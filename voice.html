@@ -956,6 +956,979 @@ a6:{
 }
 };
 (function(){
+  const DE={
+    '1.1':'Vor der Entladung prüfe ich zuerst den Empfänger — Name und Adresse, um sicherzustellen, dass die Lieferung wirklich für uns, die Eltron GmbH, bestimmt ist. Außerdem prüfe ich das Lieferdatum, um zu kontrollieren ob pünktlich geliefert wurde.\n\nWeitere mögliche Angaben: Absender · Kennzeichen des Fahrzeugs · Bestellnummer\n\nWichtig: VOR der Entladung prüfe ich nur die Dokumente — die Ware wird nicht berührt!',
+    '1.2':'Da ich während der Entladung keine Transportschäden festgestellt habe, trage ich das Datum der Anlieferung ein — 28.04.2026 — und setze meine Unterschrift im Feld "Ware erhalten". Damit bestätige ich dem Fahrer, dass die Lieferung vollständig und ohne sichtbare Schäden angekommen ist.\n\nHätte ich Schäden festgestellt, würde ich einen Vorbehalt eintragen, z.B. "2 Kartons eingedrückt", und den Fahrer ebenfalls unterschreiben lassen — denn ohne Vorbehalt verliere ich das Recht auf Reklamation beim Transporteur!',
+    '1.3':'Ich kann die Europalette nicht tauschen, wenn folgende Mängel vorliegen:\n\n1. Gebrochene oder fehlende Bodenbretter — die Palette trägt das Gewicht nicht mehr sicher, es besteht Einsturzgefahr.\n2. Fehlende oder beschädigte Klötze — der Stapler kann nicht mehr sicher einfahren, es besteht Unfallgefahr.\n3. Fehlendes oder unlesbares EPAL-Brandzeichen — ohne dieses Zeichen ist die Zertifizierung nicht nachweisbar, ein offizieller Tausch ist nicht möglich.\n\nWeitere Mängel: herausstehende Nägel · Fäulnis · gebrochene Seitenbretter',
+    '1.4':'Bei der Warenannahme unterscheide ich vier Mangelarten:\n\n1. Identitätsmangel — es wurde ein falsches Produkt geliefert, z.B. eine kurze schwarze Hose statt der bestellten langen grauen Sporthose.\n2. Quantitätsmangel — es wurde eine falsche Menge geliefert, z.B. 1.400 Stück statt 1.500 Stück — es fehlen 100 Stück.\n3. Qualitätsmangel — die richtige Ware wurde geliefert, weist aber Verarbeitungsfehler auf, z.B. fehlerhafte Nähte oder Löcher im Material.\n4. Beschaffenheitsmangel — Material oder Ausführung stimmt nicht, z.B. Baumwolle statt Polyester oder falsche Größe (L statt M).\n\nBei allen Mängeln gilt: zuerst Nacherfüllung verlangen! (§ 437 BGB)',
+    '1.5':'Ich berechne die QS-Menge wie folgt:\n\n1.500 Stück × 15 ÷ 100 = 225 Stück\n\nErgebnis: 225 Stück gehen zur Qualitätssicherungsabteilung. Die restlichen 1.275 Stück kommen auf die Sperrfläche S 20, bis das QS-Ergebnis vorliegt.\n\nRechenweg immer vollständig angeben — ohne Rechenweg = 0 Punkte!',
+    '1.6':'Die Ware wird auf die Sperrfläche gebracht, weil sie noch nicht vollständig qualitätsgeprüft wurde und somit noch nicht für den Verkauf oder die Auslieferung freigegeben ist.\n\nAuf der Sperrfläche wird verhindert, dass nicht geprüfte Ware versehentlich eingelagert, kommissioniert oder an Kunden ausgeliefert wird. Erst nach der QS-Freigabe darf die Ware die Sperrfläche verlassen!',
+    '1.7':'Ich fülle den Internen Transportbeleg wie folgt aus:\n\nHinlieferung:\n  An Lagerzone:     C\n  Artikelnummer:    240150\n  An Abteilung:     Qualitätssicherung\n  Menge in Stück:   225\n  Lieferschein-Nr.: 55016-20\n\nRücksendung:\n  Zurück an Lagerzone C · Sperrfläche S 20',
+    '1.8':'Eltron GmbH kann vorrangig Nachbesserung verlangen — der Verkäufer soll die mangelhaften Nähte reparieren und die Ware in einwandfreien Zustand versetzen.\n\nAlternativ: Ersatzlieferung — Lieferung neuer, mangelfreier Sporthosen.\n\nReihenfolge § 437 BGB:\n1. Nacherfüllung (Nachbesserung ODER Ersatzlieferung) — vorrangig!\n2. Rücktritt oder Minderung\n3. Schadensersatz',
+    '1.9.1':'Ich berechne die zusätzlichen Lagerkosten:\n\n12 Europaletten × 6 Monate × 20,00 € = 1.440,00 €\n\nErgebnis: Die zusätzlichen Lagerkosten betragen 1.440,00 €.',
+    '1.9.2':'Ich berechne die tatsächliche Einsparung:\n\n7.800,00 € − 1.440,00 € = 6.360,00 €\n\nErgebnis: Die tatsächliche Einsparung beträgt 6.360,00 €.',
+    '1.10.1':'Ich berechne die Stückzahl je Farbe:\n\nSumme der Anteile: 5 + 4 + 3 + 3 = 15\nWert einer Anteilseinheit: 120 ÷ 15 = 8 Stück\n\nRot:  5 × 8 = 40 Stück\nGelb: 4 × 8 = 32 Stück\nBlau: 3 × 8 = 24 Stück\nGrün: 3 × 8 = 24 Stück\n\nProbe: 40 + 32 + 24 + 24 = 120 ✓',
+    '1.10.2':'Eltron GmbH übernimmt die Sortimentsfunktion — auch Zusammenstellungsfunktion genannt. Das bedeutet, das Lager stellt aus einzelnen Artikeln verschiedener Farben kundenspezifische Sets zusammen.',
+    '1.10.3':'Um die unterste Lage der Sets vor Verschmutzung und Beschädigung durch die Europalette zu schützen, lege ich zwischen die Palette und die unterste Lage eine Zwischenlage aus Wellpappe oder Folie. Diese schützt vor Verschmutzung durch das Holz und vor Beschädigung durch herausstehende Nägel oder raue Stellen.'
+  };
+OCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>IHK Тренажер</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{--bg:#0b0d13;--s1:#13161f;--s2:#1a1e2b;--border:#252a3a;--acc:#4f7fff;--green:#22c55e;--red:#ef4444;--text:#e2e8f0;--muted:#64748b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#0c1428,#17233d);border-bottom:2px solid var(--acc);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.hdr-title{font-size:14px;font-weight:700;color:#fff}
+.hdr-back{color:var(--acc);font-size:13px;font-weight:600;text-decoration:none;padding:6px 12px;border:1px solid var(--acc);border-radius:7px}
+.mode-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--border)}
+.mode-btn{flex:1;padding:11px;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;transition:all .2s}
+.mode-btn.on{color:var(--acc);border-bottom-color:var(--acc);background:var(--s2)}
+.day-scroll{display:flex;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.day-scroll::-webkit-scrollbar{display:none}
+.day-btn{padding:9px 14px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s;flex-shrink:0}
+.day-btn.on{color:var(--acc);border-bottom-color:var(--acc)}
+main{max-width:640px;margin:0 auto;padding:16px 16px 40px}
+.q-info{text-align:center;font-size:12px;color:var(--muted);margin-bottom:14px;font-family:'JetBrains Mono',monospace}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.dot{width:32px;height:32px;border-radius:50%;background:var(--s2);border:2px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.dot.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.lang-row{display:flex;justify-content:center;gap:8px;margin-bottom:12px}
+.lang-btn{padding:5px 14px;border-radius:6px;border:1px solid var(--border);background:var(--s2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.lang-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.flashcard{perspective:1200px;margin-bottom:14px}
+.fc-inner{position:relative;width:100%;min-height:280px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:22px 20px;display:flex;flex-direction:column}
+.fc-front{background:var(--s1);border:1px solid var(--border)}
+.fc-back{background:#091708;border:1px solid #1a4a2a;transform:rotateY(180deg)}
+.fc-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.fc-front .fc-lbl{color:var(--acc)}.fc-back .fc-lbl{color:var(--green)}
+.fc-id{font-size:11px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.fc-q{font-size:15px;line-height:1.7;color:var(--text);flex:1}
+.fc-a{font-size:13px;line-height:1.75;color:#86efac;flex:1;overflow-y:auto;white-space:pre-wrap}
+.fc-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:12px}
+.btn-show{width:100%;padding:13px;border-radius:10px;border:2px solid var(--acc);background:#0d1829;color:#93c5fd;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:8px}
+.btn-row{display:flex;gap:8px}
+.btn{flex:1;padding:12px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-back{background:var(--s2);border:1px solid var(--border);color:var(--muted)}
+.btn-next{background:var(--acc);border:none;color:#fff}
+.vcard{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px}
+.vcard-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px}
+.vcard-id{font-size:11px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+.vcard-q{font-size:15px;line-height:1.7;color:var(--text);margin-bottom:16px}
+textarea{width:100%;background:var(--s2);border:2px solid var(--acc);border-radius:10px;color:var(--text);padding:12px;font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;resize:none;margin-bottom:10px;min-height:90px}
+textarea::placeholder{color:var(--muted);font-size:13px}
+.v-check{width:100%;padding:13px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:10px;transition:opacity .2s}
+.v-check:disabled{opacity:.4;cursor:not-allowed}
+.ai-res{padding:14px;border-radius:10px;font-size:13px;line-height:1.7;display:none;margin-bottom:10px}
+.ai-res.loading{background:var(--s2);border:1px solid var(--border);color:var(--muted);display:block}
+.ai-res.ok{background:#0a1a10;border:1px solid var(--green);color:#86efac;display:block}
+.ai-res.no{background:#1a0808;border:1px solid var(--red);color:#fca5a5;display:block}
+.ans-box{background:#091708;border:1px solid #1a4a2a;border-radius:10px;padding:14px;font-size:13px;color:#86efac;white-space:pre-wrap;line-height:1.75;display:none;margin-bottom:10px}
+.ans-box.show{display:block}
+.dialog-area{border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-top:4px;display:none}
+.dialog-area.show{display:block}
+.dlbl{font-size:11px;color:var(--muted);margin-bottom:8px}
+.qbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.qbtn{background:var(--s2);border:1px solid var(--border);color:#94a3b8;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif}
+.drow{display:flex;gap:6px}
+.dinp{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif}
+.dsend{background:var(--acc);border:none;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600}
+.dresp{margin-top:10px;font-size:13px;line-height:1.75;color:#86efac;white-space:pre-wrap}
+.v-btns{display:flex;gap:8px;margin-top:10px}
+.v-btn-ans{flex:1;padding:11px;border-radius:9px;background:#0d1829;border:2px solid var(--acc);color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.v-btn-next{flex:1;padding:11px;border-radius:9px;background:var(--acc);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-title">📦 IHK Тренажер — Lagerlogistik</div>
+  <a class="hdr-back" href="/">← Назад</a>
+</div>
+<div class="mode-tabs">
+  <button class="mode-btn on" id="mFlash" onclick="setMode('flash')">📚 Картки</button>
+  <button class="mode-btn" id="mVoice" onclick="setMode('voice')">🎤 Голос + AI</button>
+</div>
+<div class="day-scroll" id="dayScroll"></div>
+<main id="main"></main>
+<script>
+const DATA = {
+a1:{
+  label:'Aufgabe 1 — Wareneingang (30 Punkte, ~45 Min)',
+  sit:`<p>Die <strong>Eltron GmbH</strong> erbringt am Standort Nürnberg logistische Dienstleistungen. Sie erhalten heute, am 28.04.2026, eine Lieferung Sportbekleidung. Sie führen die Warenannahme und Warenprüfung durch. Ein Teil der angelieferten Bekleidung wird zur Qualitätskontrolle weitergeleitet. Im Anschluss bereiten Sie die Einlagerung vor. Für einen Sportartikelvertrieb werden zusätzlich Sets zusammengestellt. Sie sind im Wareneingang zuständig und bekommen den Lieferschein vom Fahrer.</p>
+  <table><tr><th>Lieferschein-Nr.</th><td>55016-20</td><th>Bestellnr.</th><td>13200</td></tr>
+  <tr><th>Absender</th><td>Sommer GmbH, Neue Straße 17, 10326 Solberg</td><th>Bestelldatum</th><td>11.04.2026</td></tr>
+  <tr><th>Empfänger</th><td>Eltron GmbH, Luisenstraße 36, 90312 Nürnberg</td><th>Lieferdatum</th><td>28.04.2026</td></tr>
+  <tr><th>Frachtführer</th><td>Spurt-Logistik GmbH</td><th>Fahrer / Kennz.</th><td>Hr. Müller / NG SL 258</td></tr></table>
+  <table style="margin-top:10px"><tr><th>Pos.</th><th>Artikel</th><th>Art.-Nr.</th><th>Menge</th></tr>
+  <tr><td>1</td><td>Sporthose, lang, rot</td><td>240125</td><td>1.600</td></tr>
+  <tr><td>2</td><td>Sporthose, lang, grau</td><td>240150</td><td>1.500</td></tr>
+  <tr><td>3</td><td>Sporthose, kurz, blau</td><td>220140</td><td>1.600</td></tr>
+  <tr><td>4</td><td>Sporthose, kurz, grün</td><td>220135</td><td>1.500</td></tr>
+  <tr><td>5</td><td>T-Shirt, weiß</td><td>300120</td><td>1.600</td></tr>
+  <tr><td>6</td><td>T-Shirt, grün</td><td>300135</td><td>1.000</td></tr>
+  <tr><td>7</td><td>T-Shirt, blau</td><td>300140</td><td>750</td></tr>
+  <tr><td>8</td><td>Kappe, grün</td><td>450135</td><td>750</td></tr>
+  <tr><td>9</td><td>Kappe, beige</td><td>450160</td><td>300</td></tr></table>`,
+  qs:[
+    {id:'1.1',pts:2,text:'Nennen Sie <strong>2 Angaben</strong> auf dem Lieferschein, die Sie <strong>vor der Entladung</strong> prüfen!',
+     exp:'🇺🇦 Питання: назви 2 речі на накладній, які перевіряєш ДО того як починаєш розвантажувати. Ти ще не торкнувся товару — що перевіряєш на папері?',
+     hint:'💡 Хто одержувач? Правильна адреса? Хто везе? Коли мала бути доставка?',
+     ans:'1. Empfänger: Eltron GmbH, Luisenstraße 36, 90312 Nürnberg\n2. Lieferdatum: 28.04.2026\n(Weitere mögliche Angaben: Absender, Kennzeichen des Fahrzeugs, Bestellnummer)'},
+    {id:'1.2',pts:2,text:'Während der Entladung stellen Sie <strong>keine Transportschäden</strong> fest. Bestätigen Sie dem Fahrer die ordnungsgemäße Anlieferung. Vervollständigen Sie den Lieferschein!',
+     exp:'🇺🇦 Пошкоджень немає — що робиш з накладною щоб підтвердити водієві приймання? Де і що заповнюєш?',
+     hint:'💡 Дивись на накладну — є рядки "Datum:" та "Ware erhalten:". Що туди вписати?',
+     ans:'Datum: 28.04.2026\nWare erhalten: [Unterschrift]'},
+    {id:'1.3',pts:3,text:'Nennen Sie <strong>3 Mängel</strong> an Europaletten, die dazu führen, dass Sie diese <strong>nicht tauschen</strong> können!',
+     exp:'🇺🇦 Europaletten можна обмінювати тільки якщо вони справні та сертифіковані (EPAL). Назви 3 причини, через які палету відмовлять у тавші.',
+     hint:'💡 Думай: що на палеті може бути зламано, відсутнє або пошкоджено? Дошки, кубики, маркування...',
+     ans:'1. Gebrochene oder fehlende Bodenbretter\n2. Fehlende oder beschädigte Klötze\n3. Fehlendes oder unlesbares EPAL-Brandzeichen\n(Weitere: herausstehende Nägel, Fäulnis, gebrochene Seitenbretter)'},
+    {id:'1.4',pts:4,text:'Erläutern Sie die folgenden <strong>4 Mangelarten</strong> am Beispiel "Sporthose, lang, grau" (Art.-Nr. 240150, 1.500 Stück):<br>• Identität &nbsp;• Quantität &nbsp;• Qualität &nbsp;• Beschaffenheit',
+     exp:'🇺🇦 При прийманні товару перевіряють 4 види відповідності. Для кожного дай конкретний приклад — що саме могло піти не так з цими штанями.',
+     hint:'💡 Identität=не той товар; Quantität=не та кількість; Qualität=погане виконання; Beschaffenheit=не той матеріал/розмір.',
+     ans:'Identität: Es wurde ein anderes Produkt geliefert (z.B. andere Farbe oder Modell statt Sporthose lang grau, Art.-Nr. 240150).\nQuantität: Die gelieferte Menge weicht von der bestellten Menge ab (z.B. 1.400 statt 1.500 Stück).\nQualität: Die Ware weist Mängel in der Verarbeitung auf (z.B. fehlerhafte Nähte, Löcher).\nBeschaffenheit: Das Material oder die Ausführung entspricht nicht der Bestellung (z.B. falsches Material oder falsche Größe).'},
+    {id:'1.5',pts:2,text:'Die Eltron GmbH prüft <strong>15 %</strong> der angelieferten Menge des Artikels 240150 in der Qualitätssicherungsabteilung.<br>Berechnen Sie die Menge, die zur QS-Abteilung gebracht werden muss!',
+     exp:'🇺🇦 Простий розрахунок: від 1.500 штук знайди 15%. ВАЖЛИВО: завжди пиши хід обчислення — без нього можеш втратити бали!',
+     hint:'💡 1.500 × 15 ÷ 100 = ?',
+     ans:'1.500 Stück × 15 / 100 = 225 Stück'},
+    {id:'1.6',pts:2,text:'Der Teil der angelieferten Menge des Artikels 240150, der nicht zur Qualitätssicherung geschickt wird, wird von Ihnen nicht zur Einlagerung transportiert, sondern zur Sperrfläche (S 20) in der Lagerzone C. Bis zum Abschluss der Qualitätssicherung wird der Artikel auf der Sperrfläche gelagert.<br><strong>Erläutern Sie, warum Sie diese Menge auf die Sperrfläche bringen!</strong>',
+     exp:'🇺🇦 Чому товар іде на Sperrfläche (заблоковану зону), а не одразу в основний склад? Що означає "gesperrt" в логістиці?',
+     hint:'💡 Sperrfläche = заблокована зона. Товар ще не перевірений — не можна продавати чи відвантажувати.',
+     ans:'Die Ware wurde noch nicht qualitätsgeprüft. Auf der Sperrfläche werden Artikel gelagert, die für den Verkauf oder die Auslieferung noch nicht freigegeben sind. So wird verhindert, dass nicht geprüfte Ware versehentlich eingelagert oder ausgeliefert wird.'},
+    {id:'1.7',pts:4,text:`Für den innerbetrieblichen Transport des Artikels 240150 zur QS-Abteilung und zurück zur Sperrfläche S20 muss ein <strong>Interner Transportbeleg</strong> ausgefüllt werden. Nehmen Sie alle Eintragungen vor!
+<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:14px">
+  <div style="text-align:center;font-weight:700;font-size:14px;color:#fff;margin-bottom:12px;letter-spacing:1px">Interner Transportbeleg</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8;width:50%">an Lagerzone:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;width:50%;color:#fff;outline:none;background:#0d1a30;min-height:20px" placeholder="..."></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Artikelnummer:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">an Abteilung:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Menge in Stück:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Anzahl Europaletten:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lieferschein-Nr.:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border:1px solid #2d3a5a;padding:8px 10px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lagerzone:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Sperrfläche:</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:9px 10px;color:#fff;outline:none;background:#0d1a30;min-height:20px"></td>
+    </tr>
+  </table>
+</div>`,
+     exp:'🇺🇦 Заповни внутрішній транспортний документ. Всі дані вже відомі з попередніх питань та накладної.',
+     hint:'💡 Menge=225 Stück (з 1.5). Lieferschein-Nr.=55016-20. Рух: Lagerzone C → QS → назад Lagerzone C, Sperrfläche S20.',
+     ans:`<div style="background:#0a1020;border:2px solid #22c55e;border-radius:10px;padding:14px">
+  <div style="text-align:center;font-weight:700;font-size:14px;color:#22c55e;margin-bottom:12px;letter-spacing:1px">Interner Transportbeleg ✓</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8;width:50%">an Lagerzone:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700;width:50%">C</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Artikelnummer:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">240150</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">an Abteilung:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">Qualitätssicherung</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Menge in Stück:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">225</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Anzahl Europaletten:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">laut Anlage</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lieferschein-Nr.:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">55016-20</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border:1px solid #2d3a5a;padding:8px 10px;background:#0d1829;font-weight:700;color:#60a5fa">Rücksendung an...</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Lagerzone:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">C</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:9px 10px;color:#94a3b8">Sperrfläche:</td>
+      <td style="border:1px solid #22c55e;padding:9px 10px;color:#fff;font-weight:700">S 20</td>
+    </tr>
+  </table>
+</div>`},
+    {id:'1.8',pts:1,text:'Die QS stellt fest: Nähte der Sporthosen sind <strong>mangelhaft vernäht</strong>. Die Ware ist nicht verkaufsfähig.<br>Nennen Sie <strong>eine</strong> Möglichkeit der Nacherfüllung, die Eltron GmbH vorrangig geltend machen kann!',
+     exp:'🇺🇦 Товар бракований. За законом (BGB) є право на Nacherfüllung. Яке право "vorrangig" (першочергово) — ремонт чи заміна?',
+     hint:'💡 Nacherfüllung = або Nachbesserung (усунення дефекту) або Ersatzlieferung (нова партія). Яке логічніше при поганих швах?',
+     ans:'Nachbesserung: Der Verkäufer bessert die mangelhaften Nähte nach.\n(gleichwertig: Ersatzlieferung)'},
+    {id:'1.9.1',pts:2,text:'Sportjacke: Produzent kündigt Preiserhöhung an. Angebot: 6.000 Stück jetzt zum alten Preis. Mögliche Einsparung: <strong>7.800,00 €</strong>.<br>Die Ware muss auf <strong>12 Europaletten für 6 Monate</strong> zwischengelagert werden. Lagerkosten: <strong>20,00 € je Europalette je Monat</strong>.<br>Berechnen Sie die Summe der zusätzlichen Lagerkosten!',
+     exp:'🇺🇦 Якщо купуємо зараз — треба зберігати. Скільки коштує зберігання 12 палет протягом 6 місяців по 20€ за палету за місяць?',
+     hint:'💡 12 × 6 × 20 = ?',
+     ans:'12 Europaletten × 6 Monate × 20,00 €/Europalette = 1.440,00 €'},
+    {id:'1.9.2',pts:2,text:'Berechnen Sie die <strong>tatsächliche Einsparung</strong> unter Berücksichtigung der Lagerkosten aus 1.9.1!<br>(Mögliche Einsparung: 7.800,00 €)',
+     exp:'🇺🇦 Можна зекономити 7.800€ на ціні, але треба заплатити 1.440€ за зберігання. Яка реальна економія?',
+     hint:'💡 7.800 € − 1.440 € = ?',
+     ans:'7.800,00 € − 1.440,00 € = 6.360,00 €'},
+    {id:'1.10.1',pts:3,text:`Farbige Wurfbälle werden zu Sets verpackt. Ein Set besteht aus <strong>120 Bällen</strong>. Diese sollen farblich nach Anteilen gemischt werden. Berechnen Sie die Anteile je Farbe in Stück und geben Sie den Rechenweg an!
+<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:16px">
+  <div style="text-align:center;font-weight:700;font-size:14px;color:#fff;margin-bottom:12px">Set Wurfbälle</div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Anteile</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Farbe</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Stück</th>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">5</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Rot</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30;min-width:60px"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">4</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Gelb</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">3</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Blau</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30"></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center;font-weight:600">3</td>
+      <td style="border:1px solid #2d3a5a;padding:10px 12px;text-align:center">Grün</td>
+      <td contenteditable="true" style="border:1px solid #4f7fff;padding:10px 12px;text-align:center;color:#fff;outline:none;background:#0d1a30"></td>
+    </tr>
+  </table>
+</div>`,
+     exp:'🇺🇦 120 м\'ячів ділимо пропорційно 5:4:3:3. Спочатку знаходимо суму всіх часток, потім ділимо 120 на цю суму і множимо на кожну частку.',
+     hint:'💡 Сума: 5+4+3+3=15. Rot: 120÷15×5=? Gelb: 120÷15×4=? Blau=Grün=?',
+     ans:'Summe der Anteile: 5 + 4 + 3 + 3 = 15\nRot:  120 : 15 × 5 = 40 Stück\nGelb: 120 : 15 × 4 = 32 Stück\nBlau: 120 : 15 × 3 = 24 Stück\nGrün: 120 : 15 × 3 = 24 Stück\nProbe: 40 + 32 + 24 + 24 = 120 Stück ✓'},
+    {id:'1.10.2',pts:1,text:'Benennen Sie die <strong>Funktion der Lagerhaltung</strong>, die Eltron GmbH mit der Erstellung der Sets übernimmt!',
+     exp:'🇺🇦 Склад не тільки зберігає — він ще й виконує різні функції. Яку функцію виконує склад, коли збирає м\'ячі різних кольорів в один сет?',
+     hint:'💡 Склад "перетворює" окремі товари в готові набори для клієнтів — це яка функція?',
+     ans:'Sortimentsfunktion (Zusammenstellungsfunktion)'},
+    {id:'1.10.3',pts:2,text:'Erläutern Sie, wie Sie die <strong>unterste Lage der Sets</strong> vor Verschmutzung oder Beschädigung durch die Europalette schützen können!',
+     exp:'🇺🇦 Sets лежать прямо на дерев\'яній палеті — дерево може пошкодити або забруднити нижній шар. Як захистити?',
+     hint:'💡 Що кладуть між палетою і товаром? Картон? Плівка? Полістирол?',
+     ans:'Zwischen die Europalette und die unterste Lage der Sets eine Zwischenlage aus Karton (Wellpappe) oder Folie legen.'}
+  ]
+},
+
+a2:{
+  label:'Aufgabe 2 — Kommissionierung (33 Punkte, ~45 Min)',
+  sit:`<p>Als Mitarbeiter der <strong>Eltron GmbH</strong> werden Sie in verschiedenen Lagerzonen eingesetzt und sind für Lager- und Kommissioniertätigkeiten zuständig. Sie sind auch für die Organisation und Optimierung der Prozesse sowie für die Bereitstellung von Arbeits- und Hilfsmitteln verantwortlich.</p>`,
+  qs:[
+    {id:'2.1.1',pts:2,text:'Sie entnehmen Sportartikel in Schachteln aus einem <strong>Fachbodenregal</strong>.<br>Erläutern Sie diese Art der Bereitstellung!',
+     exp:'🇺🇦 Fachbodenregal — полочний стелаж. "Bereitstellung" = спосіб надання товару для комісіонування. Що відбувається — хто до кого рухається: людина до товару чи товар до людини?',
+     hint:'💡 "Statische Bereitstellung" = товар стоїть нерухомо, комісіонер іде до нього. Це принцип "Mann-zur-Ware".',
+     ans:'Statische Bereitstellung: Die Ware steht an einem festen Lagerplatz im Fachbodenregal. Der Kommissionierer bewegt sich zur Ware (Prinzip: Mann-zur-Ware) und entnimmt die Artikel selbst.'},
+    {id:'2.1.2',pts:2,text:'Erläutern Sie <strong>einen Vorteil</strong> der statischen gegenüber der <strong>dynamischen Bereitstellung</strong>!',
+     exp:'🇺🇦 Динамічна = товар сам їде до людини (конвеєр, карусель, автоматика). Статична = людина йде до товару. В чому перевага статичної (простішої) системи?',
+     hint:'💡 Динамічна потребує дороге обладнання. Статична — ні. Що ще? Гнучкість, простота змін...',
+     ans:'Geringere Investitionskosten: Es wird keine aufwendige technische Anlage (z.B. Förderanlage) benötigt.'},
+    {id:'2.2.2',pts:3,text:'Fachbodenregale: aktuell 4 Ebenen, werden um <strong>4 weitere Ebenen</strong> erweitert = 8 Ebenen gesamt.<br>Abstand Fachboden zur Oberkante nächster Ebene: <strong>40 cm</strong>. Unterste Ebene: <strong>10 cm</strong> vom Boden.<br>Berechnen Sie den Abstand vom Boden bis zur Oberseite der obersten Ebene nach der Erweiterung in Metern!',
+     exp:'🇺🇦 Зараз 4 полки + ще 4 = 8 полок. Перша полка починається на 10 см від підлоги. Кожна полка займає 40 см висоти. Знайди висоту верхнього краю 8-ї полки.',
+     hint:'💡 Формула: 10 cm (до першої) + 8 × 40 cm (8 полок по 40 см) = ? см → перевести в метри.',
+     ans:'10 cm + 8 × 40 cm = 10 cm + 320 cm = 330 cm = 3,30 m'},
+    {id:'2.2.3',pts:3,text:`Aufgrund der neuen Kommissionierhöhe müssen neue Kommissioniergeräte angeschafft werden. Anforderungen: <strong>Hubhöhe mindestens 3,00 m</strong> und <strong>2 Personen im Fahrerstand</strong>.
+<div style="margin-top:14px;background:#0a1020;border:2px solid #2d3a5a;border-radius:10px;padding:16px">
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff">Kommissioniergerät</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Max. Personen im Fahrerstand</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Tragfähigkeit in kg</th>
+      <th style="border:1px solid #2d3a5a;padding:8px 12px;background:#162035;color:#4f7fff;text-align:center">Hubhöhe in cm</th>
+    </tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">KG 200/R</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">2</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1.200</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">250</td></tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">KommFlex CR</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">2.000</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">290</td></tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">Bulder 1308</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">2</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1.800</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">300</td></tr>
+    <tr><td style="border:1px solid #2d3a5a;padding:8px 12px">HubKo 500</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">1.500</td><td style="border:1px solid #2d3a5a;padding:8px 12px;text-align:center">300</td></tr>
+  </table>
+</div>
+Wählen Sie das geeignete Gerät aus der Tabelle aus und begründen Sie Ihre Entscheidung!`,
+     exp:'🇺🇦 Два обов\'язкові критерії: 2 особи у кабіні І висота підйому ≥ 300 см. Знайди в таблиці те що відповідає ОБОМ умовам.',
+     hint:'💡 KG200/R: 2 особи ✓ але 250 см ✗. KommFlex: 290 см ✗. Bulder: 2 особи ✓ і 300 см ✓. HubKo: 1 особа ✗.',
+     ans:'Bulder 1308\nBegründung: Das Gerät erfüllt beide Anforderungen:\n– 2 Personen im Fahrerstand ✓\n– Hubhöhe 300 cm (≥ 3,00 m) ✓'},
+    {id:'2.3',pts:2,text:'Kommissionierung im <strong>Pick-Pack-Verfahren</strong>.<br>Beschreiben Sie das Pick-Pack-Verfahren!',
+     exp:'🇺🇦 Pick-Pack — один із методів комісіонування. Поясни принцип: що відбувається при кожному "pick"? Чи є окремий крок пакування?',
+     hint:'💡 Pick = взяти товар. Pack = одразу покласти в упаковку для відправки. Два кроки → один!',
+     ans:'Beim Pick-Pack-Verfahren wird der Artikel beim Entnehmen (Picken) direkt in den Versandbehälter (Karton) gelegt und verpackt. Kommissionierung und Verpackung erfolgen in einem Arbeitsgang.'},
+    {id:'2.4.1',pts:2,text:'Luftpolsterfolie wird im <strong>Bestellpunktverfahren</strong> verwaltet.<br>Erläutern Sie die Aufgabe des Meldebestands!',
+     exp:'🇺🇦 Meldebestand (сигнальний запас/рівень сигналу) — ключове поняття у Bestellpunktverfahren. Що це таке і яка його функція?',
+     hint:'💡 Meldebestand = той рівень запасу, при досягненні якого автоматично запускається нове замовлення. Він враховує час доставки.',
+     ans:'Der Meldebestand ist die Lagermenge, bei deren Unterschreitung eine neue Bestellung ausgelöst wird. Er stellt sicher, dass während der Lieferzeit kein Fehlbestand entsteht.'},
+    {id:'2.4.2',pts:2,text:'Berechnen Sie den <strong>Meldebestand</strong> in m für die Luftpolsterfolie!<br>Tagesverbrauch: <strong>100 m</strong> | Lieferzeit: <strong>5 Tage</strong> | Mindestbestand: <strong>300 m</strong>',
+     exp:'🇺🇦 Формула Meldebestand: (Tagesverbrauch × Lieferzeit) + Mindestbestand. Підставляй значення!',
+     hint:'💡 100 × 5 + 300 = ?',
+     ans:'Meldebestand = Tagesverbrauch × Lieferzeit + Mindestbestand\n= 100 m × 5 Tage + 300 m\n= 500 m + 300 m\n= 800 m'},
+    {id:'2.5.1',pts:3,text:'Auftrag Schmidt AG: <strong>70 Positionen</strong>, Gewicht <strong>79 kg</strong>, Volumen <strong>400 l</strong>.<br>Grundzeit: 1,5 Min/Position. Basis+Verteilzeit: 5 Min. Zuschlag (61-80 kg, 351-500 l) aus Tabelle = <strong>25 Min</strong>.<br>Berechnen Sie die Gesamtzeit in Minuten!',
+     exp:'🇺🇦 Загальний час = (кількість позицій × час на позицію) + Basiszeit + Zuschlag з таблиці. Zuschlag береш з перетину рядка ваги та стовпця обʼєму.',
+     hint:'💡 70 × 1,5 = 105 хв основний час. + 5 хв Basiszeit. + 25 хв Zuschlag (79 кг → рядок 61-80 кг, 400 л → стовпець 351-500 л).',
+     ans:'Grundzeit:    70 Positionen × 1,5 Min =  105 Min\nBasiszeit:                               +    5 Min\nZuschlag (61–80 kg / 351–500 l):         +   25 Min\nGesamtzeit:                              = 135 Min'},
+    {id:'2.5.2',pts:2,text:'Erläutern Sie den Begriff <strong>Basiszeit</strong>!',
+     exp:'🇺🇦 У комісіонуванні час ділиться на кілька типів. Що таке Basiszeit (базовий час)? Коли він виникає і що включає?',
+     hint:'💡 Basiszeit = час на початку і в кінці кожного замовлення. Не під час збору позицій.',
+     ans:'Die Basiszeit ist die Zeit, die am Anfang und am Ende eines Auftrags anfällt (z.B. Auftragsübernahme, Abgabe der Ware). Sie fällt einmalig je Auftrag an, unabhängig von der Anzahl der Positionen.'},
+    {id:'2.5.3',pts:1,text:'Nennen Sie <strong>ein Beispiel</strong> für eine Tätigkeit der <strong>Totzeit</strong>!',
+     exp:'🇺🇦 Totzeit (мертвий час) = час коли комісіонер нічого корисного не робить — не рухається, не збирає товар. Зазвичай це час очікування.',
+     hint:'💡 Що може змусити комісіонера стояти і чекати?',
+     ans:'Warten auf den Aufzug'},
+    {id:'2.6.1',pts:5,text:'Lagerzone G: Gefahrgutklasse 2 (Gase).<br><em>Regel: Gefahrstoffe dürfen im Warenausgang bereitgestellt werden, wenn die Verladung innerhalb von 24 Stunden nach Bereitstellung oder am folgenden Werktag erfolgt. Ist dieser Werktag ein Samstag, endet die Frist mit Ablauf des nächsten Werktages.</em><br><table class="qt"><tr><th>Kunde</th><th>Ende Kommissionierung</th><th>Bereitstellung WA</th><th>Abholung Spedition</th></tr><tr><td>Meier GmbH</td><td>Mi, 14:00</td><td>Mi, 14:30</td><td>Fr, 07:00</td></tr><tr><td>Müller KG</td><td>Sa, 10:00</td><td>Sa, 11:00</td><td>Mo, 06:30</td></tr></table>Darf die Ware bereitgestellt werden?',
+     exp:'🇺🇦 Перевір для кожного клієнта — чи допустимо виставити товар у зону відвантаження? Є два критерії: або 24 години, або наступний робочий день (якщо Samstag — то до кінця наступного робочого дня).',
+     hint:'💡 Meier: Bereitstellung Mi 14:30 + 24h = Do 14:30. Abholung Fr 07:00 — чи є Do 14:30 чи раніше? Müller: Bereitstellung Sa → наступний Werktag=Mo. Abholung Mo 06:30.',
+     ans:'Meier GmbH: NEIN\nBereitstellung: Mittwoch 14:30 Uhr\nFrist: innerhalb 24 Stunden → bis Donnerstag 14:30 Uhr\nAbholung: Freitag 07:00 Uhr → Frist überschritten → nicht zulässig\n\nMüller KG: JA\nBereitstellung: Samstag 11:00 Uhr\nNächster Werktag nach Samstag = Montag\nAbholung: Montag 06:30 Uhr → innerhalb des nächsten Werktages → zulässig'},
+    {id:'2.7.1',pts:2,text:'Es müssen jährlich <strong>2.000 Europaletten</strong> neu gekauft werden. Einkaufspreis: <strong>12,50 €/Stück</strong>.<br>Berechnen Sie die jährlichen Einkaufskosten!',
+     exp:'🇺🇦 Простий розрахунок: 2000 штук помножити на ціну. Завжди показуй формулу!',
+     hint:'💡 2.000 × 12,50 € = ?',
+     ans:'2.000 Europaletten × 12,50 € = 25.000,00 €'},
+    {id:'2.7.2.1',pts:2,text:'Überlegung: statt Europaletten <strong>Kunststoffpaletten (120 × 80 cm)</strong> einzusetzen.<br>Nennen Sie je <strong>einen Vorteil und einen Nachteil</strong>!',
+     exp:'🇺🇦 Порівняй дерев\'яні Europaletten і пластикові Kunststoffpaletten. Один плюс і один мінус пластику.',
+     hint:'💡 Vorteil пластику: довговічніші, не гниють, можна мити, рівна поверхня. Nachteil: дорожчі, немає EPAL-тавш-системи.',
+     ans:'Vorteil: Längere Lebensdauer, hygienischer (leicht zu reinigen), keine Fäulnis.\nNachteil: Höhere Anschaffungskosten; kein EPAL-Tauschsystem möglich.'},
+    {id:'2.7.2.2',pts:2,text:'Berechnen Sie die <strong>Amortisationszeit</strong> für Kunststoffpaletten!<br>Einmalige Gesamtkosten: <strong>78.000,00 €</strong>. Jährliche Einsparung gegenüber Europaletten: <strong>26.000,00 €/Jahr</strong>.',
+     exp:'🇺🇦 Amortisation = за скільки років окупиться інвестиція? Формула: Investitionskosten ÷ jährliche Einsparung = Amortisationszeit.',
+     hint:'💡 78.000 € ÷ 26.000 €/Jahr = ? Jahre',
+     ans:'78.000,00 € : 26.000,00 €/Jahr = 3 Jahre'}
+  ]
+},
+
+a3:{
+  label:'Aufgabe 3 — Arbeitssicherheit (7 Punkte, ~10 Min)',
+  sit:`<p>Im Bereich der automatischen <strong>Fördertechnik</strong> kommt es öfter zu gefährlichen Situationen, weil eingesetzte <strong>Europaletten Störungen</strong> verursachen und Lagermitarbeiter den Bereich betreten, um kleine Störungen zu beheben. Allerdings dürfen diese Bereiche nur von Mitarbeitern des Entstörungsdienstes betreten werden. Nach einem Arbeitsunfall wird eine <strong>Projektgruppe zur Minimierung der Unfallgefahren</strong> gebildet. Sie sind Mitglied dieser Projektgruppe.</p>`,
+  qs:[
+    {id:'3.1',pts:2,text:'Erläutern Sie <strong>2 Gründe</strong> für eine Begehung eines Arbeitsplatzes nach einem Unfall!',
+     exp:'🇺🇦 "Begehung" = офіційний огляд місця роботи після нещасного випадку. Для чого це потрібно? Назви 2 конкретні причини.',
+     hint:'💡 Думай: що потрібно з\'ясувати після нещасного випадку? Причини? Документація? Запобігання?',
+     ans:'1. Ursachen des Unfalls feststellen, um zukünftige Unfälle zu verhindern.\n2. Gefährdungen am Arbeitsplatz erkennen und dokumentieren.'},
+    {id:'3.2',pts:2,text:'Nennen Sie <strong>2 Personen</strong>, die an der Begehung eines Arbeitsplatzes nach einem Unfall teilnehmen sollten!',
+     exp:'🇺🇦 При офіційному огляді після нещасного випадку хто повинен бути присутній? Хто відповідає за безпеку на підприємстві?',
+     hint:'💡 Думай: Arbeitgeber чи його представник, Sicherheitsbeauftragter, Betriebsarzt, Betriebsrat...',
+     ans:'1. Sicherheitsbeauftragter\n2. Vorgesetzter / Arbeitgeber\n(weitere: Betriebsarzt, Betriebsrat)'},
+    {id:'3.3',pts:1,text:'Benennen Sie das abgebildete Sicherheitszeichen!<br><br>📛 <em>[Rundes Verbotszeichen: Schwarze Hand mit Verbotskreis — "Berühren verboten" / "Nicht berühren"]</em>',
+     exp:'🇺🇦 На малюнку — кругле червоне знак-заборона з рукою всередині. Як називається цей знак безпеки офіційно?',
+     hint:'💡 Червоний круг з перекресленням = Verbotszeichen (знак заборони). Рука = не чіпати.',
+     ans:'Berühren verboten (Verbotszeichen)'},
+    {id:'3.4',pts:2,text:'Nennen Sie <strong>2 mögliche Maßnahmen</strong> zur Reduzierung der Störanfälligkeit der automatischen Fördertechnik!',
+     exp:'🇺🇦 Автоматична конвеєрна система часто виходить з ладу через палети. Які конкретні заходи можна вжити щоб зменшити кількість збоїв?',
+     hint:'💡 Що викликає збої? Погані палети, неправильно укладений товар, брак обслуговування... Що можна покращити?',
+     ans:'1. Regelmäßige Inspektion und Wartung der Fördertechnik\n2. Nur einwandfreie Europaletten einsetzen (Qualitätskontrolle vor dem Einsatz)'}
+  ]
+},
+
+a4:{
+  label:'Aufgabe 4 — Versand & Transport (30 Punkte, ~50 Min)',
+  sit:`<p>Sie sind im Warenausgang für <strong>Tourenplanung</strong>, Kennzeichnung von Versandeinheiten, Erstellung von Frachtpapieren und die <strong>Verladung</strong> zuständig. Für einen Kunden in <strong>Kanada</strong> sind 600 Schachteln zu verpacken und der Transport von Nürnberg bis zur Verladung auf das Seeschiff im Hafen <strong>Rotterdam</strong> zu organisieren. Für den Nahverkehr führen Sie die Tourenplanung für die <strong>Auslieferungstour 17</strong> durch. Die Tour beginnt und endet bei der Eltron GmbH in Nürnberg.</p>`,
+  qs:[
+    {id:'4.1.1',pts:2,text:'Container (40\'): Länge 12,00 m, Breite 2,33 m, Höhe 2,35 m.<br>Schachteln: Länge 75 cm, Breite 40 cm, Höhe 50 cm. Bruttogewicht: 13,59 kg.<br>An den Schachteln befindet sich das Symbol ↑↑ (zwei Pfeile nach oben).<br><strong>Was müssen Sie bei der Verladung aufgrund dieses Symbols beachten?</strong>',
+     exp:'🇺🇦 Символ ↑↑ (дві стрілки вгору) на упаковці — що він означає? Що потрібно враховувати при завантаженні контейнера?',
+     hint:'💡 Дві стрілки вгору = "Diese Seite oben" — ящик можна ставити тільки в одному напрямку.',
+     ans:'Die Schachteln müssen aufrecht gestapelt werden (Pfeile zeigen nach oben = "Diese Seite oben"). Ein Kippen oder Seitwärtslegen ist nicht zulässig.'},
+    {id:'4.1.2',pts:3,text:'Berechnen Sie die <strong>Anzahl der Lagen</strong> an Schachteln, die maximal in den Container geladen werden können!<br>Container-Innenhöhe: 2,35 m | Schachtelhöhe: 50 cm',
+     exp:'🇺🇦 Скільки шарів ящиків вмістить контейнер по висоті? Ділимо висоту контейнера на висоту ящика і заокруглюємо ВНИЗ (цілі шари).',
+     hint:'💡 2,35 m = 235 cm ÷ 50 cm = ? Завжди заокруглюй вниз — неповний шар не рахується!',
+     ans:'235 cm : 50 cm = 4,7 → 4 Lagen (abrunden)'},
+    {id:'4.1.3',pts:4,text:'Bei einer Nachkontrolle: Schachtelhöhe ist nur <strong>30 cm</strong> → maximal <strong>7 Lagen</strong> möglich.<br>Berechnen Sie die Anzahl der Schachteln, die maximal in den Container geladen werden könnten!<br>Container: L 12,00 m, B 2,33 m | Schachtel: L 75 cm, B 40 cm',
+     exp:'🇺🇦 Тепер висота 30 см → 7 шарів. Порахуй скільки ящиків вміщується в одному шарі (довжина × ширина) і помнож на кількість шарів.',
+     hint:'💡 По довжині: 1200 cm ÷ 75 cm = ? По ширині: 233 cm ÷ 40 cm = ? Шари: 7. Загальна кількість = ? × ? × 7',
+     ans:'Länge: 1.200 cm : 75 cm = 16 Schachteln\nBreite:    233 cm : 40 cm = 5,8 → 5 Schachteln\nPro Lage: 16 × 5 = 80 Schachteln\nGesamt: 80 × 7 Lagen = 560 Schachteln'},
+    {id:'4.1.4',pts:3,text:'Das Bruttogewicht der Sendung soll in <strong>Pound (lb)</strong> angegeben werden.<br>Berechnen Sie das Gewicht der Sendung in Pound!<br>600 Schachteln × 13,59 kg/Schachtel | 1 Pound = 0,453 kg',
+     exp:'🇺🇦 Два кроки: спочатку знайди загальну вагу в кг, потім перевади в фунти. Формула: кг ÷ 0,453 = фунти.',
+     hint:'💡 Крок 1: 600 × 13,59 = ? кг. Крок 2: ? кг ÷ 0,453 = ? lb',
+     ans:'600 Schachteln × 13,59 kg = 8.154,00 kg\n8.154,00 kg : 0,453 kg/lb = 18.000,00 lb'},
+    {id:'4.1.5',pts:2,text:'Nennen Sie <strong>2 Kriterien</strong>, die Sie beim <strong>Container-Check</strong> vor der Beladung prüfen!',
+     exp:'🇺🇦 Перед тим як починати завантажувати контейнер — що потрібно перевірити? Яким має бути контейнер?',
+     hint:'💡 Думай про безпеку та стан контейнера: дах, підлога, двері, запах, вологість, шкідники...',
+     ans:'1. Unversehrtheit: Wände, Boden, Dach und Türen auf Beschädigungen prüfen.\n2. Sauberkeit und Trockenheit: kein Schmutz, keine Feuchtigkeit, kein Fremdgeruch.'},
+    {id:'4.1.6.1',pts:2,text:'Der Container wird von Nürnberg zum Hafen Rotterdam (696 km) gebracht.<br>Erläutern Sie, warum für diesen Transport ein <strong>CMR-Frachtbrief</strong> vorgeschrieben ist!',
+     exp:'🇺🇦 CMR-Frachtbrief — міжнародна вантажна накладна для автомобільного транспорту. Чому вона потрібна для цього маршруту?',
+     hint:'💡 Nürnberg (Німеччина) → Rotterdam (Нідерланди). Це якийсь особливий вид перевезення?',
+     ans:'Der Transport verläuft grenzüberschreitend von Deutschland (Nürnberg) in die Niederlande (Rotterdam). Bei grenzüberschreitenden Straßengütertransporten ist der CMR-Frachtbrief gemäß CMR-Übereinkommen vorgeschrieben.'},
+    {id:'4.1.6.2',pts:2,text:'Fahrzeit berechnen: Strecke <strong>696 km + 19 km</strong> Verlängerung durch Stau. Durchschnittsgeschwindigkeit: <strong>65 km/h</strong>.<br>Berechnen Sie die reine Fahrzeit in Stunden!',
+     exp:'🇺🇦 Формула: Zeit = Strecke ÷ Geschwindigkeit. Спочатку знайди загальну відстань, потім ділиш на швидкість.',
+     hint:'💡 Gesamtstrecke: 696 + 19 = 715 km. Zeit: 715 ÷ 65 = ? Stunden',
+     ans:'696 km + 19 km = 715 km\n715 km : 65 km/h = 11 Stunden'},
+    {id:'4.1.7',pts:2,text:'Erläutern Sie, worum es sich bei den im Außenhandelsverkehr genutzten <strong>Incoterms</strong> handelt!',
+     exp:'🇺🇦 Incoterms — що це таке? Для чого вони використовуються в міжнародній торгівлі?',
+     hint:'💡 Incoterms = International Commercial Terms. Вони визначають хто несе відповідальність і витрати на якому етапі перевезення.',
+     ans:'Incoterms (International Commercial Terms) sind international einheitliche Handelsklauseln, die regeln, wer die Transportkosten trägt, wann das Risiko übergeht und wer Versicherung sowie Zollabwicklung organisiert.'},
+    {id:'4.1.8',pts:2,text:'Vereinbarter Incoterm: <strong>CIF Halifax</strong> (Incoterms® 2020).<br>Geben Sie an, wofür "CIF Halifax" steht!',
+     exp:'🇺🇦 CIF = один з Incoterms. Що означає кожна літера? І що означає "Halifax" в цьому контексті?',
+     hint:'💡 C=Cost, I=Insurance, F=Freight. Halifax = місто призначення (порт).',
+     ans:'CIF = Cost, Insurance, Freight\nHalifax = Bestimmungshafen\nDer Verkäufer trägt Kosten und Risiko (einschließlich Versicherung) bis zur Ankunft im Hafen Halifax.'},
+    {id:'4.2.1',pts:3,text:'Tour 17 (neu): Müller GmbH → Lauf (20 km), Moritz & Winter OHG → Amberg (49 km), Sellbacher KG → Neumarkt (42 km).<br>Danach: Erwin Sommer e.K. wird VOR Windröder GmbH beliefert.<br>Vervollständigen Sie die Tourenplanung mit Hilfe der Entfernungstabelle (aus der Anlage)!',
+     exp:'🇺🇦 Потрібно скласти повний маршрут Tour 17 з усіма зупинками по порядку і вказати відстані між ними. Перші 3 зупинки вже дані. Додай Erwin Sommer e.K. та Windröder GmbH.',
+     hint:'💡 Маршрут: Nürnberg → Lauf → Amberg → Neumarkt → Erwin Sommer → Windröder → Nürnberg. Відстані з Anlage (таблиця відстаней).',
+     ans:'1. Müller GmbH, Lauf (20 km)\n2. Moritz & Winter OHG, Amberg (49 km)\n3. Sellbacher KG, Neumarkt (42 km)\n4. Erwin Sommer e.K. (laut Entfernungstabelle)\n5. Windröder GmbH (laut Entfernungstabelle)\n6. Rückfahrt Nürnberg'},
+    {id:'4.2.2',pts:3,text:'Europalette: Bruttogewicht 650 kg. Lkw-Boden: Holz, trocken, sauber.<br>Beschreiben Sie, wie sich die <strong>Massenkraft (Trägheitskraft)</strong> beim Bremsvorgang auf das Ladegut auswirkt!',
+     exp:'🇺🇦 Що відбувається з вантажем при різкому гальмуванні вантажівки? Яка фізична сила діє і в якому напрямку?',
+     hint:'💡 При гальмуванні вантажівка уповільнюється, але вантаж "хоче" продовжувати рухатись вперед — це інерція (Trägheit).',
+     ans:'Beim Bremsvorgang wirkt die Trägheitskraft auf das Ladegut in Fahrtrichtung nach vorne. Das Ladegut versucht, seine Bewegung beizubehalten, und schiebt sich in Richtung Fahrerhaus. Es besteht die Gefahr des Verrutschens oder Kippens.'},
+    {id:'4.2.3',pts:2,text:'Erklären Sie den Begriff <strong>Reibungskraft</strong> im Zusammenhang mit der Ladungssicherung!',
+     exp:'🇺🇦 Reibungskraft (сила тертя) — ключове поняття в закріпленні вантажу. Що це таке і як вона допомагає утримати вантаж?',
+     hint:'💡 Тертя виникає між двома поверхнями. Чим більше тертя між палетою і підлогою кузова — тим важче вантажу зсунутися.',
+     ans:'Die Reibungskraft ist die Kraft, die zwischen zwei Oberflächen entsteht und einer Bewegung entgegenwirkt. Sie hält das Ladegut auf der Ladefläche in Position. Je höher der Reibungskoeffizient (μ), desto größer die Haltekraft.'},
+    {id:'4.2.4',pts:2,text:'Ermitteln Sie den niedrigsten <strong>Gleitreibbeiwert (μ)</strong> für eine Europalette auf dem Lkw!<br>Lkw-Boden: Holz, trocken, sauber.<br><table class="qt"><tr><th>Materialpaarung</th><th>trocken</th><th>nass</th><th>fettig</th></tr><tr><td>Holz/Holz</td><td>0,20 – 0,50</td><td>0,20 – 0,25</td><td>0,05 – 0,15</td></tr><tr><td>Metall/Holz</td><td>0,20 – 0,50</td><td>0,20 – 0,25</td><td>0,02 – 0,10</td></tr><tr><td>Metall/Metall</td><td>0,10 – 0,25</td><td>0,10 – 0,20</td><td>0,01 – 0,10</td></tr><tr><td>Beton/Holz</td><td>0,30 – 0,60</td><td>0,30 – 0,50</td><td>0,10 – 0,20</td></tr></table>',
+     exp:'🇺🇦 Europalette = Holz. Lkw-Boden = Holz. Умова: trocken und sauber. Знайди правильний рядок і стовпець у таблиці. Для розрахунку береш НАЙМЕНШЕ значення з діапазону.',
+     hint:'💡 Materialpaarung = Holz/Holz. Zustand = trocken. З таблиці: 0,20 – 0,50 → найменше = ?',
+     ans:'Materialpaarung: Holz / Holz, trocken\nNiedrigster Gleitreibbeiwert: μ = 0,20'},
+    {id:'4.2.5',pts:3,text:'Nach Komplettierung: Bruttogewicht <strong>700 kg</strong>. Niedrigster Gleitreibbeiwert μ = 0,20.<br>Berechnen Sie die Reibungskraft in <strong>Deka-Newton (daN)</strong>!<br>Formel: F_R = μ × F_G | F_G = m × g | g = 10 m/s² | 1 daN = 10 N',
+     exp:'🇺🇦 Розрахунок сили тертя. Спочатку знайди силу тяжіння (Gewichtskraft) в Ньютонах, потім помножи на коефіцієнт тертя, потім перевади в daN.',
+     hint:'💡 F_G = 700 kg × 10 m/s² = 7.000 N. F_R = 0,20 × 7.000 N = ? N → ? daN',
+     ans:'F_G = 700 kg × 10 m/s² = 7.000 N\nF_R = 0,20 × 7.000 N = 1.400 N\n1.400 N : 10 = 140 daN'},
+    {id:'4.3',pts:2,text:'Zur Ladungssicherung werden <strong>Zurrgurte</strong> eingesetzt.<br>Nennen Sie <strong>2 Kriterien</strong>, die Sie vor der Verwendung der Zurrgurte prüfen!',
+     exp:'🇺🇦 Zurrgurte (стяжні ремені) — засіб кріплення вантажу. Перед використанням потрібно перевірити їх стан. Що саме перевіряють?',
+     hint:'💡ремені можуть бути пошкоджені, застарілі або занадто слабкі. Що конкретно перевіряєш?',
+     ans:'1. Zustand: keine Risse, Scheuerstellen oder Beschädigungen am Gurt\n2. LC-Wert (Lashing Capacity): ausreichende Zurrkraft für das Ladegut'}
+  ]
+},
+
+a5:{
+  label: 'Aufgabe 3 — Rationeller und qualitätssichernder Güterumschlag (36 Aufgaben, 90 Min, Multiple-Choice)',
+  isMC: true,
+  sit: `<p>Diese Aufgabe besteht aus <strong>36 Einzelaufgaben</strong> im Multiple-Choice-, Zuordnungs- und Reihenfolge-Format. Bei Multiple-Choice wählen Sie die EINE richtige Antwort. Bei Zuordnungsaufgaben ordnen Sie Begriffe zu. Bei Reihenfolgeaufgaben bringen Sie Schritte in die richtige Ordnung.</p>`,
+  qs: [
+    {id:'MC-1',pts:3,type:'mc',
+     text:'Im betrieblichen Materialfluss unterscheidet man stetige und unstetige Fördermittel. Ordnen Sie zu:<br><br><strong>Hebebühne</strong> — <strong>Kettenförderer</strong> — <strong>Rollenbahn</strong> — <strong>Lastenaufzug</strong> — <strong>Regalbediengerät</strong>',
+     options:['1. Stetige Fördermittel','2. Unstetige Fördermittel'],
+     correctMulti:{'Hebebühne':'2','Kettenförderer':'1','Rollenbahn':'1','Lastenaufzug':'2','Regalbediengerät':'1'},
+     exp:'🇺🇦 Stetige Fördermittel = безперервний рух (конвеєр, стрічка). Unstetige = окремі цикли підйому/опускання (ліфт, підйомник).',
+     hint:'💡 Kettenförderer, Rollenbahn, Regalbediengerät рухаються безперервно. Hebebühne і Lastenaufzug роблять окремі підйоми.',
+     ans:'Hebebühne → 2 (unstetig)\nKettenförderer → 1 (stetig)\nRollenbahn → 1 (stetig)\nLastenaufzug → 2 (unstetig)\nRegalbediengerät → 1 (stetig)'},
+
+    {id:'MC-2',pts:3,type:'mc',
+     text:'Im Einheitenlager sollen die Höhen der Lagereinheiten (50 cm bis 1,80 m) erfasst werden. Welches Messwerkzeug ist geeignet (so klein wie möglich)?',
+     options:['1. Lineal','2. Laser-Entfernungsmesser','3. Messschieber','4. Gliedermaßstab/Zollstock','5. Ultraschallentfernungsmesser'],
+     correct:'4',
+     exp:'🇺🇦 Потрібен компактний інструмент для висот до 1,80 м, який можна носити з собою.',
+     hint:'💡 Lineal закороткий. Messschieber для дрібних деталей. Лазер/ультразвук завеликі і дорогі для цього. Що складається і легко носити?',
+     ans:'4. Gliedermaßstab/Zollstock'},
+
+    {id:'MC-3',pts:3,type:'open',
+     text:'Auf Schachteln sehen Sie die Längenangabe <strong>25 Inch</strong>. Berechnen Sie die Längenangabe in Zentimeter! (1 Inch = 2,54 cm)',
+     exp:'🇺🇦 Просте переведення одиниць — дюйми в сантиметри.',
+     hint:'💡 25 × 2,54 = ?',
+     ans:'25 × 2,54 cm = 63,50 cm'},
+
+    {id:'MC-4',pts:3,type:'mc',
+     text:'Welche technischen Anforderungen werden an das Förderband (für die Schachtel-Kommissionierung) aus ökologischen und wirtschaftlichen Gesichtspunkten gestellt?',
+     options:['1. Das Förderband läuft die ganze Zeit durch, außer man betätigt den Notausschalter.','2. Bei Leerlauf des Förderbands schaltet es sich ab und kann erst wieder eingeschaltet werden, wenn man die Anlage neu startet.','3. Bei Leerlauf des Förderbands schaltet sich dieses automatisch ab und schaltet sich erst bei erneutem Förderbedarf ein.','4. Das Abschalten des Förderbands erfolgt automatisch in einem festen Takt.','5. Das Förderband darf nur eingeschaltet werden, wenn kein Unstetigförderer verfügbar ist.'],
+     correct:'3',
+     exp:'🇺🇦 З економічної та екологічної точки зору — конвеєр не повинен працювати марно (Leerlauf = холостий хід). Який варіант економить енергію без втрати функціональності?',
+     hint:'💡 Автоматичне вимкнення при простої та автоматичне ввімкнення при появі роботи — найекономічніше та найзручніше рішення.',
+     ans:'3. Bei Leerlauf des Förderbands schaltet sich dieses automatisch ab und schaltet sich erst bei erneutem Förderbedarf ein.'},
+
+    {id:'MC-5',pts:3,type:'mc',
+     text:'Bei den Förderbändern stellen Sie während des Betriebs am Motor schleifende Geräusche fest. Wie verhalten Sie sich richtig?',
+     options:['1. Sie schalten das Förderband sofort ab und informieren einen Techniker.','2. Sie schalten das Förderband nicht ab und informieren sofort einen Techniker.','3. Sie schalten das Förderband ab und sofort wieder ein, damit man das Geräusch nicht hört.','4. Sie schalten das Förderband ab und reparieren den Motor umgehend.','5. Sie schalten das Förderband nicht ab, sondern sprühen nur Öl auf den Motor.'],
+     correct:'1',
+     exp:'🇺🇦 Дивний шум у моторі = можлива поломка, небезпека. Правильна реакція працівника без технічної кваліфікації?',
+     hint:'💡 Безпека перш за все: зупинити техніку + покликати фахівця. Самому ремонтувати не можна (немає кваліфікації)!',
+     ans:'1. Sie schalten das Förderband sofort ab und informieren einen Techniker.'},
+
+    {id:'MC-6',pts:3,type:'mc',
+     text:'Durch die neue Kommissionierstraße soll die Kommissionierung eines Auftrags in verschiedenen Etagen und Hallen gleichzeitig durchgeführt werden und auf der Warenausgangsfläche wieder zusammengeführt werden. Benennen Sie diese Kommissioniermethode!',
+     options:['1. Auftragsorientierte, serielle Kommissionierung','2. Serienorientierte, parallele Kommissionierung','3. Auftragsorientierte, manuelle Kommissionierung','4. Auftragsorientierte, parallele Kommissionierung','5. Auftragsorientierte, zentrale Kommissionierung'],
+     correct:'4',
+     exp:'🇺🇦 Одне замовлення (Auftrag) комплектується ОДНОЧАСНО (gleichzeitig) в різних місцях — це паралельна обробка одного замовлення.',
+     hint:'💡 "gleichzeitig in verschiedenen Hallen" = паралельно (parallel), і це стосується одного Auftrags (замовлення-орієнтована).',
+     ans:'4. Auftragsorientierte, parallele Kommissionierung'},
+
+    {id:'MC-7',pts:3,type:'mc',
+     text:'In der automatischen Packstraße werden 2-wellige Faltschachteln verwendet. Was versteht man unter 2-welligem Verpackungsmaterial?',
+     options:['1. 2-welliges Verpackungsmaterial wird durch das Verkleben von Kunststoff und Wellpappe zu einer Verpackungseinheit.','2. 2-welliges Verpackungsmaterial ist das Verbinden von Kunststoff und Wellpappe auf der Europalette.','3. 2-welliges Verpackungsmaterial bedeutet eine maximal 2-fache Stapelung auf der Europalette.','4. 2-welliges Verpackungsmaterial bedeutet eine 2-fache Belastung des Raumvolumens je Kartonage in cm³.','5. 2-welliges Verpackungsmaterial wird durch das Verkleben von 3 glatten und 2 welligen Pappen erreicht.'],
+     correct:'5',
+     exp:'🇺🇦 "2-wellig" стосується структури самого картону (скільки шарів гофри), а не упаковки чи палети.',
+     hint:'💡 Структура картону: glatte Pappe (гладкий) + wellige Pappe (гофрований). 2-wellig = 2 шари гофри між гладкими шарами.',
+     ans:'5. 2-welliges Verpackungsmaterial wird durch das Verkleben von 3 glatten und 2 welligen Pappen erreicht.'},
+
+    {id:'MC-8',pts:3,type:'mc',
+     text:'Eltron GmbH beliefert Einzelhändler mit Damenbekleidung. Schachteln haben Bruttogewicht 8-18 kg. Für den Versand muss das Bruttogewicht jeder Schachtel ermittelt werden. Welche Waage wählen Sie?',
+     options:['1. Tischwaage (0 kg bis 15 kg)','2. Tischwaage (5 kg bis 30 kg)','3. Palettenwaage (20 kg bis 250 kg)','4. Plattformwaage (10 kg bis 50 kg)','5. Palettenwaage (15 kg bis 400 kg)'],
+     correct:'2',
+     exp:'🇺🇦 Вага коробок: 8-18 кг. Потрібні ваги, що ПОВНІСТЮ покривають цей діапазон і не завеликі для звичайних коробок (не палетна вага).',
+     hint:'💡 Палетні ваги для важких вантажів на палетах. Для коробок 8-18 кг потрібна Tischwaage з підходящим діапазоном.',
+     ans:'2. Tischwaage (Wiegebereich: 5 kg bis 30 kg)'},
+
+    {id:'MC-9',pts:5,type:'open',
+     text:'Verpackungsstation muss monatlich gereinigt und halbjährlich gewartet werden. Berechnen Sie die Gesamtarbeitszeit für Reinigung und Wartung in den nächsten 6 Monaten in Stunden!<br><br><table class="qt"><tr><th></th><th>Reinigung Zeit</th><th>Intervall</th><th>Wartung Zeit</th><th>Intervall</th></tr><tr><td>Umreifer 1</td><td>10 Min</td><td>monatlich</td><td>15 Min</td><td>halbjährlich</td></tr><tr><td>Umreifer 2</td><td>10 Min</td><td>monatlich</td><td>15 Min</td><td>halbjährlich</td></tr><tr><td>Rollenbahnen</td><td>30 Min</td><td>monatlich</td><td>30 Min</td><td>halbjährlich</td></tr></table>',
+     exp:'🇺🇦 За 6 місяців: Reinigung (monatlich) відбувається 6 разів, Wartung (halbjährlich) відбувається 1 раз. Підсумуй всі хвилини окремо для кожної машини, потім за 6 місяців.',
+     hint:'💡 Reinigung за місяць: 10+10+30=50 Min × 6 Monate = ? Wartung (1 раз за 6 міс): 15+15+30 = ? Сума всього в хвилинах → переведи в години.',
+     ans:'Reinigung pro Monat: 10+10+30 = 50 Min × 6 Monate = 300 Min\nWartung (halbjährlich, 1×): 15+15+30 = 60 Min\nGesamt: 300 + 60 = 360 Min : 60 = 6 Stunden'},
+
+    {id:'MC-10',pts:5,type:'mc',
+     text:'An einem Umreifungsautomaten ist das Umreifungsband aufgebraucht. Bringen Sie die Tätigkeiten in die richtige Reihenfolge:<br><br><strong>Strom einschalten</strong> — <strong>Test durchführen, ob der Automat wieder korrekt gurtet</strong> — <strong>Neue Rolle einlegen</strong> — <strong>Anlage stromlos schalten</strong> — <strong>Leere Rolle entfernen</strong>',
+     options:['1','2','3','4','5'],
+     correctMulti:{'Anlage stromlos schalten':'1','Leere Rolle entfernen':'2','Neue Rolle einlegen':'3','Strom einschalten':'4','Test durchführen, ob der Automat wieder korrekt gurtet':'5'},
+     exp:'🇺🇦 Безпека перш за все: спочатку вимкнути живлення, потім фізична заміна, потім ввімкнути і перевірити.',
+     hint:'💡 Логічний порядок: вимкнути струм → прибрати стару рулону → вставити нову → ввімкнути струм → протестувати.',
+     ans:'1. Anlage stromlos schalten\n2. Leere Rolle entfernen\n3. Neue Rolle einlegen\n4. Strom einschalten\n5. Test durchführen, ob der Automat wieder korrekt gurtet'},
+
+    {id:'MC-11',pts:3,type:'mc',
+     text:'Durch die unternehmerische Tätigkeit der Eltron GmbH wird auch die Umwelt belastet. Nennen Sie die Maßnahme, die die Umweltbelastung verringern kann!',
+     options:['1. Als Dienstwagen werden nur noch Dieselfahrzeuge gekauft.','2. Es werden mehr Bestellungen mit geringerer Bestellmenge ausgeführt.','3. Wegeoptimierte Tourenplanung, um die Treibstoffmenge zu reduzieren','4. Höhere Einkaufsmenge von Strom aus fossilen Energieträgern','5. Versandeinheiten werden nicht mehr gebändert, sondern 3-fach mit Folie umwickelt.'],
+     correct:'3',
+     exp:'🇺🇦 Лише один варіант реально зменшує екологічне навантаження — всі інші або нейтральні, або шкідливі.',
+     hint:'💡 Diesel, fossile Energie, більше плівки — все погіршує екологію. Що реально економить паливо?',
+     ans:'3. Wegeoptimierte Tourenplanung, um die Treibstoffmenge zu reduzieren'},
+
+    {id:'MC-12',pts:3,type:'mc',
+     text:'Sie erklären einem neuen Mitarbeiter, warum Unternehmen laut Gewerbeabfallverordnung Abfälle getrennt sammeln und entsorgen müssen. Welche Begründung wählen Sie?',
+     options:['1. So soll erreicht werden, dass alle Abfälle zur richtigen Deponie gebracht werden.','2. So soll vermieden werden, dass Abfälle im Unternehmen anfallen.','3. So soll die Recyclingmenge reduziert werden.','4. So soll eine stoffliche und energetische Verwertung der Abfälle ermöglicht werden.','5. So soll die Abfallmenge reduziert werden.'],
+     correct:'4',
+     exp:'🇺🇦 Gewerbeabfallverordnung вимагає роздільний збір сміття саме для того, щоб ЦЕ сміття можна було переробити (Verwertung).',
+     hint:'💡 Мета роздільного збору — не зменшення кількості сміття, а можливість його ПЕРЕРОБИТИ.',
+     ans:'4. So soll eine stoffliche und energetische Verwertung der Abfälle ermöglicht werden.'},
+
+    {id:'MC-13',pts:4,type:'open',
+     text:'Der Lagervorrat für "Federbein Y31A" reicht bei einem täglichen Verbrauch von 180 Stück für 25 Tage. Berechnen Sie, wie viele Tage der Vorrat reicht, wenn der tägliche Verbrauch um 25% steigt!',
+     exp:'🇺🇦 Спочатку знайди загальний запас (Vorrat), потім новий денний розхід (+25%), потім скільки днів вистачить нового розходу.',
+     hint:'💡 Vorrat = 180 × 25 = ? Stück. Neuer Verbrauch = 180 × 1,25 = ? Stück/Tag. Neue Tage = Vorrat / neuer Verbrauch.',
+     ans:'Vorrat: 180 Stück × 25 Tage = 4.500 Stück\nNeuer Verbrauch: 180 × 1,25 = 225 Stück/Tag\nNeue Reichweite: 4.500 : 225 = 20 Tage'},
+
+    {id:'MC-14',pts:3,type:'mc',
+     text:'Gelagerte Güter sind bestimmten Lagerbedingungen ausgesetzt. Geben Sie an, was man unter Lagerbedingungen versteht!',
+     options:['1. Haltbarkeit, Materialart, Belüftung','2. Menge, Entnahmehäufigkeit, Temperatur','3. Temperatur, Belüftung, Feuchtigkeit','4. Volumen, Feuchtigkeit, Wert','5. Gewicht, Volumen, Temperatur'],
+     correct:'3',
+     exp:'🇺🇦 Lagerbedingungen — це фізичні умови зберігання в приміщенні складу (клімат), а не властивості самого товару чи логістичні показники.',
+     hint:'💡 Шукай варіант де всі три параметри — це УМОВИ ПРИМІЩЕННЯ (клімат), а не характеристики товару.',
+     ans:'3. Temperatur, Belüftung, Feuchtigkeit'},
+
+    {id:'MC-15',pts:3,type:'mc',
+     text:'Im Lager fallen täglich 25 t Pappe an, die zu Ballen gepresst wird. Die Pappe soll in den Wertstoffkreislauf zurückgeführt werden. Welche Maßnahme ist geeignet?',
+     options:['1. Entsorgen über zugelassene Deponie','2. Abgabe an bundesweit zugelassenen Recycling-Betrieb','3. Verbrennen der Papp-Ballen','4. Entsorgen über Bio-Müll','5. Zuführen zum Restmüll'],
+     correct:'2',
+     exp:'🇺🇦 "In den Wertstoffkreislauf zurückführen" = переробка, а не утилізація. Лише один варіант означає переробку.',
+     hint:'💡 Deponie, verbrennen, Bio-Müll, Restmüll — все це НЕ переробка. Що залишається?',
+     ans:'2. Abgabe an bundesweit zugelassenen Recycling-Betrieb'},
+
+    {id:'MC-16',pts:4,type:'open',
+     text:'Täglich fallen 25 t Pappe an, gepresst zu Ballen à 200 kg. Ermitteln Sie anhand der Tabelle, wie viele ganze Ballen Sie maximal auf dem Fahrzeug mit der größten Gesamtladefläche verladen können!<br><br><table class="qt"><tr><th>Fahrzeug</th><th>Ladefläche m²</th><th>Volumen m³</th><th>Nutzlast kg</th></tr><tr><td>Nr.1 3-achs-Sattelauflieger</td><td>33,45</td><td>85,31</td><td>24.000</td></tr><tr><td>Nr.2 Motorwagen</td><td>14,64</td><td>36,60</td><td>9.000</td></tr><tr><td>Nr.3 Motorwagen/Anhänger</td><td>17,08+19,52</td><td>42,70+48,80</td><td>9.000+16.000</td></tr><tr><td>Nr.4 Mega-Trailer</td><td>33,73</td><td>101,18</td><td>24.000</td></tr><tr><td>Nr.5 Jumbo-Hängerzug</td><td>19,00</td><td>57,00</td><td>6.000</td></tr></table>',
+     exp:'🇺🇦 Спочатку знайди транспорт з найбільшою ЗАГАЛЬНОЮ площею завантаження (Ladefläche), потім врахуй обмеження по вантажопідйомності (Nutzlast).',
+     hint:'💡 Найбільша Ladefläche = Nr.4 Mega-Trailer (33,73 m²). Але перевір чи не обмежує Nutzlast: 24.000 kg ÷ 200 kg = скільки балів?',
+     ans:'Größte Gesamtladefläche: Nr. 4 Mega-Trailer (33,73 m²)\nNutzlast-Grenze: 24.000 kg : 200 kg/Ballen = 120 Ballen\n(Ladefläche/Volumen reichen aus → Nutzlast ist die Grenze)\nAntwort: 120 Ballen'},
+
+    {id:'MC-17',pts:3,type:'mc',
+     text:'Der Empfänger fordert ein Beförderungspapier für den Transport der Pappballen per LKW. Welches Beförderungspapier?',
+     options:['1. CIM-Frachtbrief','2. TIR-Carnet','3. Air Waybill','4. Sicherheitsdatenblatt','5. CMR-Frachtbrief'],
+     correct:'5',
+     exp:'🇺🇦 CIM = залізниця. TIR = міжнародні авто перевезення поза ЄС (карнет, не основний документ). Air Waybill = авіа. Який документ для звичайного автоперевезення?',
+     hint:'💡 Стандартний документ для перевезення вантажу вантажівкою (LKW) в Європі.',
+     ans:'5. CMR-Frachtbrief'},
+
+    {id:'MC-18',pts:3,type:'mc',
+     text:'Logistische Tätigkeiten: Planen, Durchführen, Kontrollieren. Ordnen Sie zu:<br><br><strong>Lieferschein mit Ware vergleichen</strong> — <strong>Lagerstruktur festlegen</strong> — <strong>Güter einlagern</strong>',
+     options:['1. Planung','2. Durchführung','3. Kontrolle'],
+     correctMulti:{'Lieferschein mit Ware vergleichen':'3','Lagerstruktur festlegen':'1','Güter einlagern':'2'},
+     exp:'🇺🇦 Planung = заздалегідь продумати. Durchführung = виконати дію. Kontrolle = перевірити результат.',
+     hint:'💡 Порівняння накладної з товаром — це перевірка. Структура складу — заздалегідь спланована. Einlagern — фізична дія.',
+     ans:'Lieferschein mit Ware vergleichen → 3 (Kontrolle)\nLagerstruktur festlegen → 1 (Planung)\nGüter einlagern → 2 (Durchführung)'},
+
+    {id:'MC-19',pts:3,type:'mc',
+     text:'Bei der jährlichen Inventur werden häufig Bestandsdifferenzen festgestellt. Welche Maßnahme reduziert Inventurdifferenzen?',
+     options:['1. Reduzierung der Kunden','2. Kommissionierung auf Europaletten','3. Beschriftung der fertigen Versandeinheiten','4. Schulung der Mitarbeiter','5. Reduzierung der Artikel je Kunde'],
+     correct:'4',
+     exp:'🇺🇦 Inventurdifferenzen виникають через помилки людей (неправильний підрахунок, переплутані артикули). Що найкраще зменшує людські помилки?',
+     hint:'💡 Думай: причина різниць — людський фактор. Що допомагає зменшити помилки персоналу?',
+     ans:'4. Schulung der Mitarbeiter'},
+
+    {id:'MC-20',pts:3,type:'mc',
+     text:'ABC-Analyse: 10% der Menge = 60% des Warenwerts, 40% der Menge = 30% des Warenwerts, 50% der Menge = 10% des Warenwerts. Welches Diagramm (1-5) gibt die Werte korrekt wieder?',
+     options:['1','2','3','4','5'],
+     correct:'1',
+     exp:'🇺🇦 Класична Lorenzkurve ABC-аналізу: А-товари (мало штук, багато вартості) спочатку круто йдуть вгору, потім крива стає пологішою для B і C.',
+     hint:'💡 Кумулятивно: 10% Menge → 60% Wert; 10+40=50% Menge → 60+30=90% Wert; 50+50=100% Menge → 90+10=100% Wert. Шукай графік з точками (10,60), (50,90), (100,100).',
+     ans:'Diagramm 1 — zeigt die typische ABC-Lorenzkurve mit den Punkten (10%/60%), (50%/90%), (100%/100%)'},
+
+    {id:'MC-21',pts:3,type:'mc',
+     text:'Güter wurden seit 8 Monaten nicht entnommen. Sie werden nicht mehr produziert und durch Neuentwicklungen ersetzt. Die Geschäftsleitung entscheidet, die Güter zu entsorgen. Worum handelt es sich?',
+     options:['1. Um eine Sortimentsbereinigung','2. Um eine Sortimentsüberprüfung','3. Um eine Sortimentsauswahl','4. Um eine Sortimentsanalyse','5. Um eine Sortimentserweiterung'],
+     correct:'1',
+     exp:'🇺🇦 Видалення застарілих, непотрібних товарів з асортименту — як це називається?',
+     hint:'💡 "Bereinigung" = очищення/прибирання. Товари прибирають з асортименту.',
+     ans:'1. Um eine Sortimentsbereinigung'},
+
+    {id:'MC-22',pts:4,type:'open',
+     text:'Meldebestand = 600 Stück, Mindestbestand = 180 Stück. Heute (29.04.2026) zu Arbeitsbeginn: 340 Stück im Lagerfach. Täglich werden 60 Stück entnommen. Heute zusätzlich 40 Stück entnommen.<br><br>Ermitteln Sie das Datum (TT.MM.JJJJ), an dem der Mindestbestand bei Arbeitsende erreicht wird!',
+     exp:'🇺🇦 Складна задача з датами! Спочатку врахуй сьогоднішнє додаткове вилучення 40 шт, потім рахуй скільки днів треба щоб дійти до 180 шт при щоденному споживанні 60 шт.',
+     hint:'💡 Сьогодні кінець дня: 340 - 40 (додаткове) - 60 (звичайне) = 240 Stück. Потім: (240-180)/60 = скільки ще днів?',
+     ans:'Bestand heute Arbeitsende: 340 - 40 - 60 = 240 Stück\nNoch zu verbrauchen bis Mindestbestand: 240 - 180 = 60 Stück\nTage bis dahin: 60 : 60 = 1 Tag\nDatum: 30.04.2026'},
+
+    {id:'MC-23',pts:3,type:'mc',
+     text:'Sie sollen angelieferte giftige Güter einlagern. Welches Lager ist geeignet?',
+     options:['1. Verschlusslager','2. Kühllager','3. Freilager','4. Gefahrstofflager','5. Kleinteilelager'],
+     correct:'4',
+     exp:'🇺🇦 Отруйні (giftige) речовини — це Gefahrstoff (небезпечна речовина). Яке сховище призначене саме для цього?',
+     hint:'💡 Думай напряму: для небезпечних речовин існує спеціальне сховище з відповідною назвою.',
+     ans:'4. Gefahrstofflager'},
+
+    {id:'MC-24',pts:3,type:'mc',
+     text:'Welche Güter eignen sich besonders für eine Lagerung im Blocklager (Bodenlagerung)?',
+     options:['1. Güter, die das MHD erreicht haben','2. Güter, die nach dem Lifo-Prinzip gelagert werden','3. Güter, die nur in Kleinmengen umgeschlagen werden','4. Güter, die nach dem Fifo-Prinzip gelagert werden','5. Güter mit hoher Diebstahlgefährdung'],
+     correct:'2',
+     exp:'🇺🇦 Blocklager = штабелювання рядами одне на одному. Через структуру штабелів неможливо легко дістати товар знизу — тому підходить тільки для певного принципу обігу.',
+     hint:'💡 У штабелі (Block) можна брати тільки зверху — це означає останній покладений йде першим. Який принцип це?',
+     ans:'2. Güter, die nach dem Lifo-Prinzip gelagert werden'},
+
+    {id:'MC-25',pts:3,type:'mc',
+     text:'Stellplatz 04 06 02 B. Lagerplan: Ziffer 1-2 = Lagerzone, 3-4 = Regal, 5-6 = Feld, 7 = Fach (A=unteres, B=mittleres, C=oberes). Wohin lagern Sie ein?',
+     options:['1. Lagerzone 4, Regal 2, Feld 6, oberes Fach','2. Lagerzone 1, Regal 6, Feld 3, mittleres Fach','3. Lagerzone 4, Regal 6, Feld 2, unteres Fach','4. Lagerzone 4, Regal 6, Feld 2, mittleres Fach','5. Lagerzone 2, Regal 4, Feld 6, oberes Fach'],
+     correct:'4',
+     exp:'🇺🇦 Розбери код по групах цифр: 04 | 06 | 02 | B. Перші дві цифри = зона, наступні дві = регал, наступні дві = поле, остання літера = полиця.',
+     hint:'💡 04=Lagerzone, 06=Regal, 02=Feld, B=mittleres Fach. Зіставляй з варіантами.',
+     ans:'4. Lagerzone 4, Regal 6, Feld 2, mittleres Fach'},
+
+    {id:'MC-26',pts:3,type:'mc',
+     text:'Eltron GmbH plant ein dezentrales Lager in der Nähe eines Kundenstandorts für zuverlässigen Materialnachschub. Welche Aussage ist zutreffend?',
+     options:['1. Die Anzahl der benötigten Flurförderzeuge reduziert sich.','2. Es wird weniger Personal benötigt.','3. Die Lieferzeiten zum Kunden verringern sich.','4. Es werden weniger Artikel ausgeliefert.','5. Die Lagerkosten reduzieren sich.'],
+     correct:'3',
+     exp:'🇺🇦 Dezentrales Lager = склад ближче до клієнта. Яка головна перевага близькості до клієнта?',
+     hint:'💡 Менша відстань = менший час доставки. Логічний прямий наслідок.',
+     ans:'3. Die Lieferzeiten zum Kunden verringern sich.'},
+
+    {id:'MC-27',pts:3,type:'mc',
+     text:'Eltron GmbH wird in betriebliche Abteilungen aufgeteilt (Organigramm). Ordnen Sie zu:<br><br><strong>Zusammenbau von Maschinenteilen</strong> — <strong>Einkauf von Maschinenkomponenten</strong> — <strong>Darstellung des Unternehmens auf der Website</strong> — <strong>Ein- und Auslagerung von Maschinenteilen</strong> — <strong>Weiterentwicklung von Maschinensystemen</strong>',
+     options:['1. Logistik','2. Montage','3. Forschung und Entwicklung','4. Beschaffung','5. Marketing'],
+     correctMulti:{'Zusammenbau von Maschinenteilen':'2','Einkauf von Maschinenkomponenten':'4','Darstellung des Unternehmens auf der Website':'5','Ein- und Auslagerung von Maschinenteilen':'1','Weiterentwicklung von Maschinensystemen':'3'},
+     exp:'🇺🇦 Кожна дія належить конкретному відділу підприємства. Логічно зіставляй дію з назвою відділу.',
+     hint:'💡 Zusammenbau=складання=Montage. Einkauf=закупівля=Beschaffung. Website=Marketing. Ein-/Auslagerung=Logistik. Weiterentwicklung=Forschung.',
+     ans:'Zusammenbau → 2 (Montage)\nEinkauf → 4 (Beschaffung)\nWebsite → 5 (Marketing)\nEin-/Auslagerung → 1 (Logistik)\nWeiterentwicklung → 3 (Forschung und Entwicklung)'},
+
+    {id:'MC-28',pts:3,type:'mc',
+     text:'Der Lagerleiter möchte Logistikprozesse für jeden Mitarbeiter verständlich beschreiben. Welcher Dokumententyp ist geeignet?',
+     options:['1. Lieferanweisung','2. Betriebsvereinbarung','3. Tarifvereinbarung','4. Kundenanweisung','5. Arbeitsanweisung'],
+     correct:'5',
+     exp:'🇺🇦 Документ, що описує КОНКРЕТНИЙ робочий процес для співробітників — як це називається?',
+     hint:'💡 "Arbeit" = робота. Документ описує як виконувати роботу.',
+     ans:'5. Arbeitsanweisung, um die Prozesse darzustellen und zu beschreiben'},
+
+    {id:'MC-29',pts:3,type:'mc',
+     text:'Eltron GmbH plant Kommissionierroboter. Informationsfluss soll voll automatisiert werden. Für welche Möglichkeit entscheiden Sie sich?',
+     options:['1. Mitarbeiter gibt Auftragsdaten in Lagerverwaltungsrechner ein, der diese beleglos an Roboter übermittelt.','2. Mitarbeiter erhält Auftragsdaten als Barcode und gibt sie per Scanner ein.','3. Mitarbeiter holt Auftragsdaten ab und gibt sie per Tastatur ein.','4. Mitarbeiter ruft Auftragsdaten ab und gibt sie per Sprache ein.','5. Mitarbeiter erhält Auftragsdaten über Headset und gibt sie per Tastatur ein.'],
+     correct:'1',
+     exp:'🇺🇦 "Voll automatisiert" (повністю автоматизовано) і "beleglos" (без паперу) — який варіант НЕ потребує жодної ручної дії людини в передачі даних роботу?',
+     hint:'💡 Всі інші варіанти мають крок де людина щось вручну вводить/сканує/говорить. Шукай варіант БЕЗ ручного втручання.',
+     ans:'1. Ein Mitarbeiter im Auftragseingang gibt die Auftragsdaten in den Lagerverwaltungsrechner ein, der diese an den Kommissionierroboter beleglos übermittelt.'},
+
+    {id:'MC-30',pts:3,type:'open',
+     text:'Manueller Mitarbeiter: 120 Sekunden pro Position. Kommissionierroboter: 60 Positionen pro Stunde. Berechnen Sie, wie viele Positionen ein Roboter an einem Arbeitstag (8 Stunden) MEHR entnehmen kann als ein Mitarbeiter!',
+     exp:'🇺🇦 Спочатку знайди продуктивність людини за годину, потім за 8 годин для обох, потім різницю.',
+     hint:'💡 Mitarbeiter: 3600 Sek / 120 Sek = позицій/год. × 8 год. Roboter: 60 × 8 = позицій. Знайди різницю.',
+     ans:'Mitarbeiter: 3.600 Sek : 120 Sek = 30 Positionen/Stunde × 8 Std = 240 Positionen/Tag\nRoboter: 60 Positionen/Stunde × 8 Std = 480 Positionen/Tag\nDifferenz: 480 - 240 = 240 Positionen mehr'},
+
+    {id:'MC-31',pts:3,type:'open',
+     text:'Berechnen Sie, um wie viel Prozent sich durch den Einsatz des Kommissionierroboters die Kommissionierleistung erhöht! (Mitarbeiter: 30 Pos./Std, Roboter: 60 Pos./Std)',
+     exp:'🇺🇦 Розрахунок процентного зростання. Формула: (новий - старий) / старий × 100%',
+     hint:'💡 (60 - 30) / 30 × 100 = ?',
+     ans:'(60 - 30) : 30 × 100 = 100% Steigerung'},
+
+    {id:'MC-32',pts:3,type:'open',
+     text:'Kommissionierkosten manuell: 150,00 €/Stunde. Beim Roboter sind die Kosten um 40% höher. Berechnen Sie die Kommissionierkosten beim Roboter pro Stunde!',
+     exp:'🇺🇦 Розрахунок збільшення на відсоток.',
+     hint:'💡 150 € × 1,40 = ? або 150 + (150 × 0,40)',
+     ans:'150,00 € × 1,40 = 210,00 €/Stunde'},
+
+    {id:'MC-33',pts:5,type:'mc',
+     text:'Eltron GmbH plant Folienschrumpfmethode. Gefährdungsbeurteilung zur Anschaffung von Schrumpfpistole und Propangasflaschen. Bringen Sie die Schritte in die richtige Reihenfolge (beginnen mit "Arbeitsbereiche und Tätigkeiten erfassen"):<br><br><strong>Maßnahmen durchführen</strong> — <strong>Gefährdungen ermitteln</strong> — <strong>Wirksamkeit überprüfen</strong> — <strong>Gefährdungen beurteilen</strong> — <strong>Schutzmaßnahmen festlegen</strong>',
+     options:['1','2','3','4','5','6'],
+     correctMulti:{'Arbeitsbereiche und Tätigkeiten erfassen':'1','Gefährdungen ermitteln':'2','Gefährdungen beurteilen':'3','Schutzmaßnahmen festlegen':'4','Maßnahmen durchführen':'5','Wirksamkeit überprüfen':'6'},
+     exp:'🇺🇦 Стандартний процес Gefährdungsbeurteilung (оцінки ризиків) за німецьким законодавством — завжди в одному порядку.',
+     hint:'💡 Логіка: спочатку зрозуміти ЩО роблять (Arbeitsbereiche), потім знайти небезпеки (ermitteln), оцінити їх (beurteilen), вирішити що робити (festlegen), зробити (durchführen), перевірити чи спрацювало (überprüfen).',
+     ans:'1. Arbeitsbereiche und Tätigkeiten erfassen\n2. Gefährdungen ermitteln\n3. Gefährdungen beurteilen\n4. Schutzmaßnahmen festlegen\n5. Maßnahmen durchführen\n6. Wirksamkeit überprüfen'},
+
+    {id:'MC-34',pts:3,type:'mc',
+     text:'Sie erklären einem Azubi die Bedienung einer Verpackungsmaschine inkl. Gefahren und Schutzmaßnahmen. Welche Grundlage verwenden Sie?',
+     options:['1. Sicherheitsdatenblatt der Verpackungsmaschine','2. Betriebsanweisung der Verpackungsmaschine','3. Werbeprospekt der Verpackungsmaschine','4. Konformitätserklärung der Verpackungsmaschine','5. Konnossement der Verpackungsmaschine'],
+     correct:'2',
+     exp:'🇺🇦 Документ з правилами безпечної роботи на КОНКРЕТНІЙ машині — як називається?',
+     hint:'💡 Sicherheitsdatenblatt — для хімічних речовин. Konnossement — морський транспорт. Що залишається для безпеки роботи з машиною?',
+     ans:'2. Betriebsanweisung der Verpackungsmaschine'},
+
+    {id:'MC-35',pts:3,type:'mc',
+     text:'Verpackung in Faltschachteln aus Wellpappe. Aus ökonomischen/ökologischen Gründen sollen Packhilfsmittel eingespart werden. Welche Maßnahme spart Packhilfsmittel?',
+     options:['1. Größtmögliche Faltschachtel nutzen','2. Mehrere Kundenbestellungen zusammen in eine Faltschachtel verpacken','3. Grundsätzlich auf Packhilfsmittel verzichten','4. Mehrwegtransportbehälter zum Verpacken einsetzen','5. Kleinstmögliche Faltschachtel nutzen'],
+     correct:'5',
+     exp:'🇺🇦 Менша упаковка = менше матеріалу для заповнення пустот = економія Packhilfsmittel (наповнювач, плівка тощо).',
+     hint:'💡 Чим менша коробка точно під розмір товару, тим менше треба додаткового заповнювача.',
+     ans:'5. Sie nutzen zum Verpacken die kleinstmögliche Faltschachtel.'},
+
+    {id:'MC-36',pts:3,type:'mc',
+     text:'Sie legen in einer Datenbank eine Lieferantendatei an. Welche Information ist dafür notwendig?',
+     options:['1. Lagerbestand des Lieferanten','2. Bruttogehalt der Mitarbeiter des Lieferanten','3. Genaue Anschrift des Lieferanten','4. Übersicht der gezahlten Steuern des Lieferanten','5. Kundenstamm des Lieferanten'],
+     correct:'3',
+     exp:'🇺🇦 Lieferantendatei (картка постачальника) — яка інформація реально потрібна для зв\'язку та замовлень?',
+     hint:'💡 Зарплата співробітників, податки, клієнти постачальника — це не твоя справа і не потрібно для замовлень. Що потрібно щоб з ним зв\'язатись?',
+     ans:'3. Genaue Anschrift des Lieferanten'}
+  ]
+},
+
+a6:{
+  label: 'Wirtschafts- und Sozialkunde (WiSo) — 30 Aufgaben, 60 Min, 100 Punkte',
+  isMC: true,
+  sit: `<p>Diese Aufgabe besteht aus <strong>30 Einzelaufgaben</strong> im Multiple-Choice-, Zuordnungs- und Reihenfolge-Format. Die Aufgaben beziehen sich auf verschiedene Mitarbeiter und Auszubildende der Eltron GmbH.</p>`,
+  qs: [
+    {id:'WI-1',pts:3,type:'mc',
+     text:'Frau Sarah Hamer, volljährig, hat mit der Eltron GmbH einen Ausbildungsvertrag zur Ausbildung als Fachkraft für Lagerlogistik abgeschlossen. Frau Hamer erfährt, dass in Deutschland die Berufsausbildung grundsätzlich im Rahmen des dualen Systems durchgeführt wird. Erklären Sie, was unter dem dualen System der Berufsausbildung zu verstehen ist!',
+     options:['1. Die praktische Ausbildung erfolgt nur in der Schule, die theoretische Ausbildung nur im Ausbildungsbetrieb.','2. Auszubildende müssen an jedem Tag die Schule und den Betrieb besuchen.','3. Die Schule und der Ausbildungsbetrieb erstellen den Ausbildungsrahmenplan.','4. Während der Ausbildung müssen mindestens zwei Praktika in anderen Betrieben absolviert werden.','5. Die Berufsausbildung erfolgt an zwei Lernorten, der Schule und dem Ausbildungsbetrieb.'],
+     correct:'5',
+     exp:'🇺🇦 "Duales System" — подвійна система. Питання: де саме навчається учень? Скільки місць навчання задіяно?',
+     hint:'💡 "Dual" = подвійний = два місця. Школа (теорія) + підприємство (практика) = два Lernorte.',
+     ans:'5. Die Berufsausbildung erfolgt an zwei Lernorten, der Schule und dem Ausbildungsbetrieb.'},
+
+    {id:'WI-2',pts:3,type:'mc',
+     text:'Wer ist bei der Eltron GmbH zur Berufsausbildung berechtigt?',
+     options:['1. Nur Personen, die die Abschlussprüfung einer Fachoberschule bestanden haben','2. Nur Personen, die die Meisterprüfung bestanden haben','3. Nur Personen, die seit mindestens sechs Monaten bei der Eltron GmbH arbeiten','4. Nur Personen, die die persönliche und fachliche Eignung für die Berufsausbildung nachweisen','5. Nur studierte Berufspädagogen'],
+     correct:'4',
+     exp:'🇺🇦 За BBiG (Berufsbildungsgesetz) — хто має право навчати учнів на підприємстві? Які умови потрібні для Ausbilder/Ausbildungsbetrieb?',
+     hint:'💡 Закон вимагає 2 типи придатності: persönliche (особиста, напр. не засуджений) і fachliche (фахова кваліфікація).',
+     ans:'4. Nur Personen, die die persönliche und fachliche Eignung für die Berufsausbildung nachweisen'},
+
+    {id:'WI-3',pts:3,type:'mc',
+     text:'Frau Hamer übernimmt mit Abschluss des Ausbildungsvertrags eine Reihe verschiedener Verpflichtungen. Prüfen Sie, welche Verpflichtung sie insbesondere hat!',
+     options:['1. Die Pflicht, nach der Berufsausbildung für ein Jahr für die Eltron GmbH zu arbeiten','2. Die Pflicht, sich darum zu bemühen, die berufliche Handlungsfähigkeit zu erwerben','3. Die Pflicht, alle Schäden, die sie am Ausbildungsplatz verursacht, selbst zu bezahlen','4. Die Pflicht, zu jeder Zeit während der Ausbildung telefonisch erreichbar zu sein','5. Die Pflicht, im Urlaub an außerbetrieblichen Weiterbildungsmaßnahmen teilzunehmen'],
+     correct:'2',
+     exp:'🇺🇦 За BBiG § 13 — основні обов\'язки учня (Auszubildender). Яка з них є справжньою юридичною Pflicht (а не вигадкою)?',
+     hint:'💡 Учень зобов\'язаний СТАРАТИСЯ навчитися (Bemühenspflicht), а не нести фінансову чи телефонну відповідальність.',
+     ans:'2. Die Pflicht, sich darum zu bemühen, die berufliche Handlungsfähigkeit zu erwerben'},
+
+    {id:'WI-4',pts:3,type:'mc',
+     text:'Stellen Sie fest, welche Rechtsgrundlage beim Ausfüllen des Berufsausbildungsvertrags für Frau Hamer von zentraler Bedeutung ist!',
+     options:['1. Betriebsverfassungsgesetz','2. Handelsgesetzbuch','3. Berufsbildungsgesetz','4. Jugendarbeitsschutzgesetz','5. Mutterschutzgesetz'],
+     correct:'3',
+     exp:'🇺🇦 Який закон РЕГУЛЮЄ зміст Berufsausbildungsvertrag (договір про навчання)?',
+     hint:'💡 Назва закону прямо містить "Berufsbildung" (професійне навчання) — це найочевидніша підказка.',
+     ans:'3. Berufsbildungsgesetz (BBiG)'},
+
+    {id:'WI-5',pts:2,type:'open',
+     text:'Wie viele Monate Probezeit durften im Berufsausbildungsvertrag von Frau Hamer maximal vereinbart werden? Tragen Sie die Anzahl der Monate ein!',
+     exp:'🇺🇦 За BBiG є чітко визначений максимальний термін Probezeit (випробувального терміну) для учнівського договору.',
+     hint:'💡 За законом максимум — від 1 до 4 місяців.',
+     ans:'4 Monate (gemäß § 20 BBiG: Probezeit mindestens 1 Monat, höchstens 4 Monate)'},
+
+    {id:'WI-6',pts:3,type:'mc',
+     text:'Für Frau Hamer fallen Personalkosten an. Die Eltron GmbH zahlt als Arbeitgeber gesetzliche und freiwillige Sozialleistungen. Geben Sie die Position an, die zur Gruppe der gesetzlichen Sozialleistungen gehört!',
+     options:['1. Arbeitgeberanteil zur gesetzlichen Sozialversicherung','2. Urlaubsgeld','3. Arbeitgeberanteil zu vermögenswirksamen Leistungen','4. Leistungen für betriebliche Altersversorgung','5. Bezahlte Ausfallzeiten wegen Umzugs'],
+     correct:'1',
+     exp:'🇺🇦 Gesetzliche Sozialleistungen = обов\'язкові за законом. Freiwillige = добровільні бонуси роботодавця. Яка з 5 опцій ОБОВ\'ЯЗКОВА за законом?',
+     hint:'💡 Urlaubsgeld, vermögenswirksame Leistungen, Altersversorgung, Umzugskosten — все це ДОБРОВІЛЬНІ виплати. Що залишається обов\'язковим?',
+     ans:'1. Arbeitgeberanteil zur gesetzlichen Sozialversicherung'},
+
+    {id:'WI-7',pts:5,type:'mc',
+     text:'Frau Hamer ist gesetzlich sozialversichert und hat auch private Versicherungen abgeschlossen. Ordnen Sie zu, welche 2 der 5 Versicherungen zu den entsprechenden Leistungen passen:<br><br><strong>Übernahme der Kosten einer notwendigen Operation</strong> — <strong>Altersruhegeld</strong>',
+     options:['1. Gesetzliche Pflegeversicherung','2. Private Haftpflichtversicherung','3. Gesetzliche Rentenversicherung','4. Gesetzliche Krankenversicherung','5. Private Rechtsschutzversicherung'],
+     correctMulti:{'Übernahme der Kosten einer notwendigen Operation':'4','Altersruhegeld':'3'},
+     exp:'🇺🇦 Зіставлення страховок з виплатами. Операція = яка страховка покриває лікування? Altersruhegeld (пенсія по старості) = яка страховка?',
+     hint:'💡 Krankenversicherung = хвороба/лікування. Rentenversicherung = пенсія/старість.',
+     ans:'Übernahme der Kosten einer notwendigen Operation → 4 (Gesetzliche Krankenversicherung)\\nAltersruhegeld → 3 (Gesetzliche Rentenversicherung)'},
+
+    {id:'WI-8',pts:3,type:'mc',
+     text:'Frau Hamer hatte auf dem Gelände der Eltron GmbH einen Unfall mit dem Gabelstapler und wurde leicht verletzt. Prüfen Sie, wer in diesem Fall die anfallenden Kosten der ärztlichen Behandlung von Frau Hamer trägt!',
+     options:['1. Die zuständige Berufsgenossenschaft','2. Die private Haftpflichtversicherung der Auszubildenden','3. Die Krankenversicherung der Auszubildenden','4. Die Betriebshaftpflichtversicherung des Ausbildungsbetriebs','5. Die private Unfallversicherung der Auszubildenden alleine'],
+     correct:'1',
+     exp:'🇺🇦 Нещасний випадок СТАВСЯ НА РОБОТІ (Arbeitsunfall). Хто покриває витрати на лікування виробничих травм?',
+     hint:'💡 Berufsgenossenschaft = страховка від нещасних випадків на виробництві (Unfallversicherung), а не приватна чи звичайна медична страховка.',
+     ans:'1. Die zuständige Berufsgenossenschaft'},
+
+    {id:'WI-9',pts:3,type:'mc',
+     text:'Frau Hamer muss Tätigkeiten verrichten, die nach ihrer Meinung im betrieblichen Ausbildungsplan nicht vorgesehen sind. Sie möchte sich bei der Stelle, die für die Berufsausbildung zuständig ist, beschweren. An welche zuständige Stelle kann sich Frau Hamer in diesem Fall wenden?',
+     options:['1. An eine Anwaltskanzlei','2. An die zuständige Industrie- und Handelskammer','3. An die Gewerkschaft','4. An die Berufsschule','5. An die Agentur für Arbeit'],
+     correct:'2',
+     exp:'🇺🇦 Хто контролює дотримання Ausbildungsplan і вирішує спори про учнівство? Яка офіційна установа відповідає за Berufsausbildung?',
+     hint:'💡 IHK (Industrie- und Handelskammer) — офіційний наглядовий орган для всіх питань Ausbildung, включно зі спорами.',
+     ans:'2. An die zuständige Industrie- und Handelskammer'},
+
+    {id:'WI-10',pts:3,type:'mc',
+     text:'Stellen Sie fest, welches Ereignis für Frau Hamer zur unmittelbaren Beendigung des Ausbildungsverhältnisses führt!',
+     options:['1. Die Zulassung zur vorzeitigen Abschlussprüfung','2. Die Bekanntgabe des Bestehens der Abschlussprüfung','3. Der letzte Berufsschultag','4. Der Beginn der Sommerferien','5. Das Nicht-Bestehen der schriftlichen Abschlussprüfung im ersten Versuch'],
+     correct:'2',
+     exp:'🇺🇦 Коли ЮРИДИЧНО закінчується учнівський договір? Яка саме подія — миттєвий тригер закінчення?',
+     hint:'💡 За § 21 BBiG — учнівство закінчується в момент ОГОЛОШЕННЯ результату (Bekanntgabe), що іспит складено, а не в інший день.',
+     ans:'2. Die Bekanntgabe des Bestehens der Abschlussprüfung'},
+
+    {id:'WI-11',pts:4,type:'mc',
+     text:'Frau Lara Kösters hat bei der Müller GmbH ihre Ausbildung zur Fachkraft für Lagerlogistik erfolgreich beendet. Sie schließt zum 01.05.2026 mit der Eltron GmbH einen Arbeitsvertrag über ein unbefristetes Arbeitsverhältnis. Es gibt gesetzliche Regelungen, die nur für das Ausbildungsverhältnis gelten und Regelungen, die nur für das Arbeitsverhältnis gültig sind. Ordnen Sie zu:<br><br><strong>Die Probezeit beträgt maximal 6 Monate.</strong> — <strong>Die Höhe der Vergütung muss von Jahr zu Jahr steigen.</strong> — <strong>Eine ordentliche Kündigung nach der Probezeit von Seiten des Betriebs ist nicht möglich.</strong> — <strong>Es ist ein Ausbildungsnachweis zu führen.</strong>',
+     options:['1. Regelungen zum Ausbildungsverhältnis','2. Regelungen zum Arbeitsverhältnis'],
+     correctMulti:{'Die Probezeit beträgt maximal 6 Monate.':'2','Die Höhe der Vergütung muss von Jahr zu Jahr steigen.':'1','Eine ordentliche Kündigung nach der Probezeit von Seiten des Betriebs ist nicht möglich.':'1','Es ist ein Ausbildungsnachweis zu führen.':'1'},
+     exp:'🇺🇦 Порівняй правила Ausbildungsverhältnis (учнівство, BBiG) і Arbeitsverhältnis (звичайна робота, після навчання). Які правила належать до якого типу?',
+     hint:'💡 Probezeit 6 місяців = типово для звичайної РОБОТИ. Зростаюча зарплата щороку, заборона звільнення, Ausbildungsnachweis (звіт учня) — все це особливості УЧНІВСТВА.',
+     ans:'Probezeit max. 6 Monate → 2 (Arbeitsverhältnis)\\nVergütung steigt jährlich → 1 (Ausbildungsverhältnis)\\nKündigungsschutz nach Probezeit → 1 (Ausbildungsverhältnis)\\nAusbildungsnachweis führen → 1 (Ausbildungsverhältnis)'},
+
+    {id:'WI-12',pts:3,type:'mc',
+     text:'In dem mit der Eltron GmbH abgeschlossenen Arbeitsvertrag wurde unter anderem vereinbart: Monatsentgelt 2.700,00 € – das sind 200,00 € über dem Tariflohn, 18 Arbeitstage Jahresurlaub – bei 5 Arbeitstagen je Kalenderwoche. Beurteilen Sie die Rechtslage!',
+     options:['1. Der Vertrag ist in allen Punkten rechtsgültig.','2. Der Vertrag ist so lange vollständig rechtsgültig, bis er von einer Seite erfolgreich angefochten wird.','3. Nur der Urlaubsanspruch ist nichtig.','4. Nur das übertarifliche Entgelt ist nichtig, ansonsten ist der Vertrag rechtsgültig.','5. Der Vertrag ist komplett nichtig, da der gesetzliche Mindesturlaub unterschritten wird.'],
+     correct:'3',
+     exp:'🇺🇦 Gesetzlicher Mindesturlaub (Bundesurlaubsgesetz) при 5-денному тижні = 20 робочих днів мінімум. 18 днів менше за мінімум — що з цим пунктом договору?',
+     hint:'💡 Зарплата вища за тариф — це нормально (Günstigkeitsprinzip). Але відпустка нижча за законний мінімум — ця частина недійсна (nichtig), решта договору залишається чинною.',
+     ans:'3. Nur der Urlaubsanspruch ist nichtig. (Der gesetzliche Mindesturlaub bei 5-Tage-Woche beträgt 20 Arbeitstage — 18 Tage unterschreiten diesen Mindestanspruch und sind daher nichtig; der restliche Vertrag bleibt gültig.)'},
+
+    {id:'WI-13',pts:5,type:'open',
+     text:'Frau Kösters erhält ihre monatliche Entgeltabrechnung, die unter anderem folgende Angaben enthält: Bruttoentgelt 2.700,00 € | Lohnsteuer 233,50 € | Kirchensteuer 18,68 € | Arbeitnehmeranteil zur ges. Sozialversicherung insgesamt 21,1 %. Ermitteln Sie den Auszahlungsbetrag in €!',
+     exp:'🇺🇦 Розрахунок Netto з Brutto. Спочатку знайди суму соціального страхування у € (21,1% від брутто), потім відніми всі відрахування від брутто.',
+     hint:'💡 Sozialversicherung: 2.700 € × 21,1% = ? €. Auszahlung = Brutto − Lohnsteuer − Kirchensteuer − Sozialversicherung.',
+     ans:'Sozialversicherung: 2.700,00 € × 21,1% = 569,70 €\\nAuszahlungsbetrag = 2.700,00 − 233,50 − 18,68 − 569,70 = 1.878,12 €'},
+
+    {id:'WI-14',pts:3,type:'mc',
+     text:'Bei der Eltron GmbH finden im Juni 2026 Betriebsratswahlen statt. Prüfen Sie, ob sich Frau Kösters in den Betriebsrat wählen lassen darf!',
+     options:['1. Ja, weil sie volljährig ist.','2. Ja, weil sie eine abgeschlossene Berufsausbildung hat.','3. Nein, weil sie noch nicht lange genug bei der Eltron GmbH beschäftigt ist.','4. Nein, weil sie kein Gewerkschaftsmitglied ist.','5. Nein, weil sie sich zuerst für die Jugend- und Auszubildendenvertretung zur Wahl stellen muss.'],
+     correct:'3',
+     exp:'🇺🇦 За BetrVG (Betriebsverfassungsgesetz) — щоб БУТИ ОБРАНИМ у Betriebsrat, потрібен мінімальний стаж роботи на підприємстві. Frau Kösters щойно почала (01.05.2026).',
+     hint:'💡 Wahlrecht (право голосувати) ≠ Wählbarkeit (право бути обраним). Для обрання потрібно 6 місяців стажу на підприємстві (§ 8 BetrVG).',
+     ans:'3. Nein, weil sie noch nicht lange genug bei der Eltron GmbH beschäftigt ist. (Wählbar ist gem. § 8 BetrVG erst nach 6 Monaten Betriebszugehörigkeit.)'},
+
+    {id:'WI-15',pts:3,type:'mc',
+     text:'Frau Kösters möchte sich fortbilden. In einer Fachzeitschrift findet sie folgende Anzeige: "Mit der Fortbildung zum Geprüften Logistikmeister stehen in der Logistikbranche viele Türen offen... Für diese Fortbildung fallen Kosten von etwa 4.000,00 € an." Geben Sie an, welchen Vorteil Frau Kösters durch diese Fortbildung hätte!',
+     options:['1. Sie kann durch die Fortbildung sicher sein, dass sie ihren Arbeitsplatz bei der Eltron GmbH nie verliert.','2. Sie hat keinen Vorteil durch die Fortbildung, denn sie muss die 4.000,00 € selbst bezahlen.','3. Sie kann sich nur nach einer entsprechenden Fortbildung selbstständig machen.','4. Sie hat durch die Fortbildung das Recht, selbst Auszubildende bei der Eltron GmbH auszubilden.','5. Sie erreicht durch die Fortbildung eine höhere Qualifizierung und hat die Möglichkeit beruflich aufzusteigen.'],
+     correct:'5',
+     exp:'🇺🇦 Який РЕАЛЬНИЙ та загальний переваг має Fortbildung (підвищення кваліфікації) до рівня Meister?',
+     hint:'💡 Думай широко: Meistertitel дає вищу кваліфікацію, не лише одну конкретну можливість (як самозайнятість чи навчання учнів — це лише ПОБІЧНІ ефекти, не головна перевага).',
+     ans:'5. Sie erreicht durch die Fortbildung eine höhere Qualifizierung und hat die Möglichkeit beruflich aufzusteigen.'},
+
+    {id:'WI-16',pts:3,type:'mc',
+     text:'Mehrere Mitarbeiter der Eltron GmbH wollen Streitigkeiten vor Gericht klären lassen. Prüfen Sie, in welchem Fall das Sozialgericht zuständig ist!',
+     options:['1. Ein Mitarbeiter streitet mit der gesetzlichen Krankenkasse um die Übernahme von Kosten für Zahnersatz.','2. Ein Mitarbeiter hält seine Kündigung für ungerechtfertigt.','3. Ein Mitarbeiter streitet mit dem Arbeitgeber um die Überstundenvergütung.','4. Ein Mitarbeiter beschuldigt einen anderen Mitarbeiter, ihn während der Arbeit bestohlen zu haben.','5. Ein Mitarbeiter fühlt sich bei der Diensteinteilung ständig benachteiligt.'],
+     correct:'1',
+     exp:'🇺🇦 Sozialgericht — спеціалізований суд для спорів з касами соціального страхування (Krankenkasse, Rentenversicherung, тощо). Яка ситуація стосується саме цього?',
+     hint:'💡 Kündigung та Überstunden → Arbeitsgericht. Крадіжка → кримінальний суд. Krankenkasse спір → саме Sozialgericht.',
+     ans:'1. Ein Mitarbeiter streitet mit der gesetzlichen Krankenkasse um die Übernahme von Kosten für Zahnersatz.'},
+
+    {id:'WI-17',pts:4,type:'mc',
+     text:'Die 4 Säulen mit den Grundfreiheiten für Bürger und Unternehmen des Europäischen Binnenmarkts traten zum 01.01.1993 in Kraft. Ordnen Sie zu:<br><br><strong>Import und Export von Lebensmitteln</strong> — <strong>Wegfall von Grenzkontrollen für Urlauber</strong> — <strong>Öffnung der Telekommunikationsmärkte</strong> — <strong>Geldanlage in anderen EU-Ländern</strong>',
+     options:['1. Freier Personenverkehr','2. Freier Warenverkehr','3. Freier Dienstleistungsverkehr','4. Freier Kapitalverkehr'],
+     correctMulti:{'Import und Export von Lebensmitteln':'2','Wegfall von Grenzkontrollen für Urlauber':'1','Öffnung der Telekommunikationsmärkte':'3','Geldanlage in anderen EU-Ländern':'4'},
+     exp:'🇺🇦 4 основні свободи ЄС. Зіставляй приклад до правильної свободи: товари, люди, послуги, чи капітал/гроші?',
+     hint:'💡 Lebensmittel = товар (Ware). Grenzkontrollen für Urlauber = люди (Personen). Telekommunikationsmärkte = послуги (Dienstleistung). Geldanlage = капітал (Kapital).',
+     ans:'Import/Export von Lebensmitteln → 2 (Freier Warenverkehr)\\nWegfall von Grenzkontrollen → 1 (Freier Personenverkehr)\\nÖffnung Telekommunikationsmärkte → 3 (Freier Dienstleistungsverkehr)\\nGeldanlage in EU-Ländern → 4 (Freier Kapitalverkehr)'},
+
+    {id:'WI-18',pts:5,type:'mc',
+     text:'Nach einigen Jahren als Mitarbeiter bei der Eltron GmbH möchte Lenny Woll den Schritt in die Selbstständigkeit wagen. Er möchte einen kleinen Transport- und Logistikbetrieb gründen. Bringen Sie die folgenden Schritte bei einer Existenzgründung in die richtige Reihenfolge:<br><br><strong>Mit den geschätzten Zahlen zu Umsatzerlösen und Kosten die Finanzierung mit der Bank klären</strong> — <strong>Investition des Darlehens in einen Transporter</strong> — <strong>Entwicklung einer Geschäftsidee</strong> — <strong>Geschäftskonto eröffnen und dort das Darlehen der Bank gutschreiben lassen</strong> — <strong>Businessplan erstellen</strong>',
+     options:['1','2','3','4','5'],
+     correctMulti:{'Entwicklung einer Geschäftsidee':'1','Businessplan erstellen':'2','Mit den geschätzten Zahlen zu Umsatzerlösen und Kosten die Finanzierung mit der Bank klären':'3','Geschäftskonto eröffnen und dort das Darlehen der Bank gutschreiben lassen':'4','Investition des Darlehens in einen Transporter':'5'},
+     exp:'🇺🇦 Логічна послідовність заснування бізнесу: спочатку ідея, потім план, потім фінансування, потім рахунок, потім інвестиція.',
+     hint:'💡 Ідея → План (Businessplan включає цифри) → Переговори з банком → Відкриття рахунку → Витрата грошей на транспорт.',
+     ans:'1. Entwicklung einer Geschäftsidee\\n2. Businessplan erstellen\\n3. Mit den geschätzten Zahlen die Finanzierung mit der Bank klären\\n4. Geschäftskonto eröffnen und Darlehen gutschreiben lassen\\n5. Investition des Darlehens in einen Transporter'},
+
+    {id:'WI-19',pts:2,type:'multiselect',
+     text:'Während des Gründungsprozesses muss sich Herr Woll auch Gedanken über einen optimalen Standort machen. Bestimmen Sie 2 Faktoren, die bei der Standortwahl berücksichtigt werden müssen!',
+     options:['1. Kulturelles Freizeitangebot am Standort','2. Führungsstil im Unternehmen','3. Umsatzsteuersatz','4. Verkehrsanbindung','5. Social-Media-Auftritt des Unternehmens','6. Konkurrenz in der Umgebung'],
+     correctMulti:null,
+     exp:'🇺🇦 Standortfaktoren (фактори вибору місця) для логістичного бізнесу — що реально важливо при виборі локації?',
+     hint:'💡 Думай про логістику: транспортна доступність і конкуренти поблизу — це класичні Standortfaktoren. Інші опції не стосуються місця розташування.',
+     ans:'4. Verkehrsanbindung\\n6. Konkurrenz in der Umgebung'},
+
+    {id:'WI-20',pts:3,type:'mc',
+     text:'Neben der Eintragung ins Handelsregister bestehen Pflichten zur Anmeldung des neuen Unternehmens. Nennen Sie die Stelle, bei der das Unternehmen unter anderem angemeldet werden muss!',
+     options:['1. Arbeitsamt','2. Gewerbeamt','3. Polizeibehörde','4. Bauamt','5. Ordnungsamt'],
+     correct:'2',
+     exp:'🇺🇦 Кожен новий бізнес (Gewerbe) в Німеччині потрібно зареєструвати в одній конкретній установі.',
+     hint:'💡 Назва установи прямо містить слово "Gewerbe" (підприємницька діяльність).',
+     ans:'2. Gewerbeamt'},
+
+    {id:'WI-21',pts:3,type:'mc',
+     text:'Im abgelaufenen Geschäftsjahr hat die Eltron GmbH weniger Gewinn als erwartet erzielt. Stellen Sie fest, welche Ursache dafür infrage kommt!',
+     options:['1. Die Nachfrage nach Logistikdienstleistungen war größer als erwartet.','2. Die wirtschaftliche Entwicklung in der Branche entsprach der positiven Prognose.','3. Angestrebte Preiserhöhungen konnten nicht wie geplant umgesetzt werden.','4. Fällige Kredite wurden durch Kredite mit niedrigeren Zinsen ersetzt.','5. Rationalisierungsmaßnahmen führten in der gewerblichen Lagerhaltung zu Kostensenkungen.'],
+     correct:'3',
+     exp:'🇺🇦 Шукай ЄДИНУ опцію, яка пояснює МЕНШИЙ прибуток. Решта варіантів означають покращення чи нейтральність.',
+     hint:'💡 Більший попит, позитивний прогноз, нижчі відсотки, зниження витрат — все це ПОЗИТИВНО для прибутку. Що єдине негативне?',
+     ans:'3. Angestrebte Preiserhöhungen konnten nicht wie geplant umgesetzt werden.'},
+
+    {id:'WI-22',pts:3,type:'mc',
+     text:'Die Eltron GmbH prüft aus ökologischen Gründen geeignete Maßnahmen zur Reduzierung des Materialverbrauchs. Stellen Sie fest, welche Maßnahme der Eltron GmbH hierfür geeignet ist!',
+     options:['1. Die Parkplätze der Eltron GmbH werden zukünftig auch nachts voll beleuchtet.','2. Die Eltron GmbH wechselt zu einem günstigeren Stromanbieter.','3. In allen Abteilungen wird verpflichtend die Mülltrennung eingeführt.','4. Zur Reinigung der Sozialräume werden künftig zusätzlich biologisch abbaubare Reiniger genutzt.','5. Rundschreiben werden künftig nicht mehr ausgedruckt, sondern per E-Mail verschickt.'],
+     correct:'5',
+     exp:'🇺🇦 Питання саме про зменшення СПОЖИВАННЯ МАТЕРІАЛІВ (Materialverbrauch), а не енергії чи екології в цілому. Яка опція безпосередньо економить матеріал?',
+     hint:'💡 Освітлення, постачальник струму, миючі засоби — не про матеріал. Mülltrennung — про сортування, не зменшення. Що конкретно ЗМЕНШУЄ використання паперу?',
+     ans:'5. Rundschreiben werden künftig nicht mehr ausgedruckt, sondern per E-Mail verschickt.'},
+
+    {id:'WI-23',pts:3,type:'mc',
+     text:'Die Auszubildende Melissa Kamp kauft einen Kühlschrank "Eisbär XL" zum Aktionspreis 595,00 €. Beim Auspacken entdeckt Frau Kamp, dass der Kühlschrank an der rechten Außenseite einen 1,50 m langen, tiefen Kratzer hat. Stellen Sie fest, welcher Mangel hier vorliegt!',
+     options:['1. Ein Mangel in der Quantität','2. Ein Mangel in der Identität','3. Ein Mangel in der Zuverlässigkeit','4. Ein Mangel in der Beschaffenheit','5. Ein Mangel in der Qualität'],
+     correct:'4',
+     exp:'🇺🇦 Подряпина — це дефект ЯКОЇ категорії? Це не про кількість, не про "не той товар" — це про фізичний СТАН (Beschaffenheit) самого продукту.',
+     hint:'💡 Beschaffenheit = фізичні властивості/стан товару (зовнішній вигляд, цілісність поверхні).',
+     ans:'4. Ein Mangel in der Beschaffenheit'},
+
+    {id:'WI-24',pts:3,type:'mc',
+     text:'Frau Kamp ist sehr verärgert über den beschädigten Kühlschrank und möchte Rechte wegen dieser Schlechtleistung geltend machen. Bestimmen Sie das Recht, das Frau Kamp SOFORT geltend machen kann!',
+     options:['1. Den Kaufpreis zurückfordern','2. Das Recht auf Nacherfüllung','3. Schadenersatz wegen vorsätzlicher Beschädigung des Kühlschranks verlangen','4. Den Rücktritt vom Kaufvertrag vornehmen','5. Den Kaufvertrag widerrufen, da es sich um einen Fernabsatzvertrag handelt'],
+     correct:'2',
+     exp:'🇺🇦 При дефекті товару покупець спочатку має право на Nacherfüllung (усунення дефекту) — це ПЕРШИЙ крок за законом, перш ніж можна вимагати інше.',
+     hint:'💡 Rücktritt, Kaufpreis zurückfordern, Schadenersatz — всі ці права доступні лише ПІСЛЯ невдалої Nacherfüllung. Яке право можна вимагати одразу?',
+     ans:'2. Das Recht auf Nacherfüllung'},
+
+    {id:'WI-25',pts:4,type:'open',
+     text:'Frau Kamp und der Elektrohändler einigen sich auf eine Minderung des Kaufpreises um 20 %. Ermitteln Sie den neuen Bruttoverkaufspreis, den der Elektrohändler auf der neuen Rechnung für Frau Kamp ausweist! (Ursprünglicher Preis: 595,00 € inkl. Umsatzsteuer)',
+     exp:'🇺🇦 Простий розрахунок зниження ціни на 20%. Знайди новий брутто-ціну (з ПДВ).',
+     hint:'💡 595,00 € × (100% − 20%) = 595,00 € × 0,80 = ?',
+     ans:'595,00 € × 0,80 = 476,00 € (neuer Bruttoverkaufspreis)'},
+
+    {id:'WI-26',pts:3,type:'mc',
+     text:'Der Staat wirkt in einer sozialen Marktwirtschaft durch zahlreiche Eingriffe auf das Wirtschaftsgeschehen ein. Stellen Sie fest, bei welcher staatlichen Maßnahme ein gesetzlicher Verstoß vorliegt!',
+     options:['1. Der Staat erleichtert die steuerlichen Abschreibungsmöglichkeiten für Unternehmen.','2. Der Staat erhöht das Existenzminimum für die Einkommensbesteuerung.','3. Der Staat gewährt Unternehmen in strukturschwachen Regionen Subventionen.','4. Der Staat greift in die Tarifverhandlungen der Gewerkschaften und Arbeitgeber ein.','5. Der Staat vergibt öffentliche Aufträge.'],
+     correct:'4',
+     exp:'🇺🇦 У соціальній ринковій економіці є принцип Tarifautonomie (автономії переговорів про зарплату) — держава НЕ МАЄ ПРАВА втручатись у ці переговори.',
+     hint:'💡 Subventionen, Steuererleichterungen, öffentliche Aufträge — нормальні державні інструменти. Втручання в Tarifverhandlungen порушує конституційний принцип Tarifautonomie.',
+     ans:'4. Der Staat greift in die Tarifverhandlungen der Gewerkschaften und Arbeitgeber ein. (Verstößt gegen die grundgesetzlich geschützte Tarifautonomie.)'},
+
+    {id:'WI-27',pts:3,type:'mc',
+     text:'Private Haushalte erhalten Transferzahlungen vom Staat. Geben Sie ein Beispiel dafür an!',
+     options:['1. Das Land Hessen unterstützt anteilig den Bau einer öffentlichen Sportanlage.','2. Ein Rentner schenkt seinem Enkel 50,00 € zum Geburtstag.','3. Ein Mitarbeiter der Eltron GmbH zahlt für seinen privaten Pkw die Kraftfahrzeugsteuer.','4. Sie helfen drei Stunden pro Woche ehrenamtlich in einem Altersheim.','5. Eine Mitarbeiterin der Eltron GmbH erhält Kindergeld für ihre zwei Kinder.'],
+     correct:'5',
+     exp:'🇺🇦 Transferzahlung = виплата ВІД держави ДО приватної особи без зустрічної послуги (не зарплата за роботу). Яка з опцій — саме така виплата?',
+     hint:'💡 Sportanlage = державні витрати, не трансфер особі. Кfz-Steuer = податок (протилежний напрямок). Kindergeld — класичний приклад трансферу від держави сім\'ї.',
+     ans:'5. Eine Mitarbeiterin der Eltron GmbH erhält Kindergeld für ihre zwei Kinder.'},
+
+    {id:'WI-28',pts:3,type:'mc',
+     text:'Die nachstehende Abbildung informiert auszugsweise über die Phasen der Konjunktur (Aufschwung/Expansion → Hochkonjunktur → Rückschlag/Rezession → Tiefstand/Depression → Neuer Aufschwung). Welche Aussage können Sie der Abbildung entnehmen?',
+     options:['1. In der Expansionsphase sinken die Absätze.','2. In der Rezessionsphase nimmt die Produktion zu.','3. In der Hochkonjunktur sind Arbeitskräfte gesucht.','4. In der Rezessionsphase steigt die Kapazitätsauslastung.','5. In der Depressionsphase ist die Arbeitslosigkeit auf einem Tiefstand.'],
+     correct:'3',
+     exp:'🇺🇦 Конʼюнктурний цикл: Hochkonjunktur (пік) — характеризується високим попитом на робочу силу. Перевір логіку кожного твердження проти діаграми.',
+     hint:'💡 Expansionsphase: продажі РОСТУТЬ (не падають). Rezession: виробництво ЗМЕНШУЄТЬСЯ. Hochkonjunktur: "Arbeitskräfte gesucht" — прямо на діаграмі.',
+     ans:'3. In der Hochkonjunktur sind Arbeitskräfte gesucht.'},
+
+    {id:'WI-29',pts:3,type:'mc',
+     text:'Der Staat kann verschiedene konjunkturpolitische Maßnahmen durchführen. Prüfen Sie, in welchem Fall Maßnahme und Zielsetzung zueinander passen!',
+     options:['1. Durch Erhöhung öffentlicher Ausgaben wird beabsichtigt, die Konjunktur zu dämpfen.','2. Durch Erhöhung der Subventionen wird beabsichtigt, die Investitionstätigkeit der Unternehmen anzuregen.','3. Durch Erhöhung der Einkommensteuer wird beabsichtigt, die private Nachfrage zu fördern.','4. Durch Einsparungen in den öffentlichen Haushalten wird beabsichtigt, den Konjunkturaufschwung zu unterstützen.','5. Durch Erhöhung des Umsatzsteuerregelsatzes wird beabsichtigt, die Konjunktur zu beleben.'],
+     correct:'2',
+     exp:'🇺🇦 Конʼюнктурна політика: яка комбінація "захід → мета" логічно правильна (захід РЕАЛЬНО досягає заявленої мети)?',
+     hint:'💡 Вищі держвидатки СТИМУЛЮЮТЬ (не гальмують) кон\'юнктуру. Вищий податок ЗМЕНШУЄ попит (не сприяє). Субсидії дійсно стимулюють інвестиції — правильна пара.',
+     ans:'2. Durch Erhöhung der Subventionen wird beabsichtigt, die Investitionstätigkeit der Unternehmen anzuregen.'},
+
+    {id:'WI-30',pts:3,type:'mc',
+     text:'Die Geldmenge im Euroraum soll erhöht werden. Wer kann diese Maßnahme praktisch umsetzen?',
+     options:['1. Die Weltbank','2. Die Deutsche Bundesbank','3. Die Europäische Zentralbank','4. Die Finanzminister des Euroraums','5. Die Regierungschefs der Euro-Zone'],
+     correct:'3',
+     exp:'🇺🇦 Хто контролює грошову масу в зоні Євро? Яка інституція має повноваження для монетарної політики?',
+     hint:'💡 EZB (Europäische Zentralbank) — єдина установа з повноваженнями монетарної політики в Eurozone, не національні центробанки чи уряди.',
+     ans:'3. Die Europäische Zentralbank (EZB)'}
+  ]
+}
+};
+(function(){
   const DE={'1.1':'Vor der Entladung prüfe ich den Empfänger und das Lieferdatum.','1.2':'Ich trage das Datum 28.04.2026 ein und unterschreibe im Feld Ware erhalten.','1.3':'Tausch nicht möglich: gebrochene Bodenbretter, beschädigte Klötze, fehlendes EPAL-Zeichen.','1.4':'Identität — falsches Produkt. Quantität — falsche Menge. Qualität — fehlerhafte Verarbeitung. Beschaffenheit — falsches Material oder Größe.','1.5':'1500 mal 15 geteilt durch 100 = 225 Stück zur QS.','1.6':'Die Ware hat noch keine QS-Prüfung — Sperrfläche ist Zone für nicht freigegebene Ware.','1.7':'Zone C, Artikel 240150, Qualitätssicherung, 225 Stück, Lieferschein 55016-20. Rück: Zone C, S 20.','1.8':'Nachbesserung — Reparatur der Nähte. Oder Ersatzlieferung — neue mangelfreie Ware.','1.9.1':'12 × 6 × 20 = 1440 Euro Lagerkosten.','1.9.2':'7800 − 1440 = 6360 Euro tatsächliche Einsparung.','1.10.1':'Summe 15. Rot 40, Gelb 32, Blau 24, Grün 24. Probe 120.','1.10.2':'Sortimentsfunktion — Sets aus einzelnen Artikeln zusammenstellen.','1.10.3':'Zwischenlage aus Wellpappe zwischen Palette und unterster Lage.','2.1.1':'Statische Bereitstellung — Ware steht fest, ich gehe selbst zur Ware.','2.1.2':'Geringere Investitionskosten — keine teuren automatischen Anlagen.','2.2.2':'10 + 8×40 = 330 cm = 3,30 m.','2.2.3':'Bulder 1308 — 2 Personen und 300 cm Hubhöhe.','2.3':'Pick-Pack — Artikel direkt beim Entnehmen in Versandkarton legen.','2.4.1':'Meldebestand — Menge bei der ich sofort nachbestelle.','2.4.2':'100×5+300 = 800 Meter.','2.5.1':'70×1,5+5+25 = 135 Minuten.','2.5.2':'Basiszeit — Aufwand am Anfang und Ende jedes Auftrags.','2.5.3':'Warten auf den Aufzug — Totzeit.','2.6.1':'Meier — nein, Frist Donnerstag, Abholung Freitag. Müller — ja, Samstag bedeutet Montag.','2.7.1':'2000×12,50 = 25000 Euro.','2.7.2.1':'Vorteil: langlebiger. Nachteil: kein EPAL-Tausch.','2.7.2.2':'78000÷26000 = 3 Jahre.','3.1':'Unfallursache feststellen und Gefährdungen dokumentieren.','3.2':'Sicherheitsbeauftragter und Vorgesetzter.','3.3':'Berühren verboten.','3.4':'Regelmäßige Wartung und nur einwandfreie Paletten.','4.1.1':'Diese Seite oben — aufrecht stapeln.','4.1.2':'235÷50=4,7 → 4 Lagen.','4.1.3':'16×5×7 = 560 Schachteln.','4.1.4':'8154÷0,453 = 18000 Pound.','4.1.5':'Unversehrtheit und Sauberkeit prüfen.','4.1.6.1':'Grenzüberschreitend — CMR Pflicht.','4.1.6.2':'715÷65 = 11 Stunden.','4.1.7':'Transportkosten, Risiko, Versicherung regeln.','4.1.8':'Cost Insurance Freight bis Hafen Halifax.','4.2.1':'Müller, Moritz, Sellbacher, Erwin, Windröder, Nürnberg.','4.2.2':'Trägheitskraft — Palette schiebt sich Richtung Fahrerhaus.','4.2.3':'Reibungskraft hält Ladegut auf der Ladefläche.','4.2.4':'Niedrigster Wert: 0,20.','4.2.5':'700×10=7000 N × 0,20=1400 N ÷10=140 daN.','4.3':'Zustand und LC-Wert prüfen.'};
   const UA={'1.1':'Перевіряю одержувача і дату доставки.','1.2':'Вписую дату 28.04.2026 і підписую Ware erhalten.','1.3':'Зламані дошки, пошкоджені кубики, відсутній знак EPAL.','1.4':'Identität — не той товар. Quantität — не та кількість. Qualität — дефекти виготовлення. Beschaffenheit — неправильний матеріал або розмір.','1.5':'1500×15÷100 = 225 штук до QS.','1.6':'Товар без QS — не можна на склад. Sperrfläche для незвільненого товару.','1.7':'Зона C, арт.240150, Qualitätssicherung, 225 шт, накладна 55016-20. Повернути C, S 20.','1.8':'Nachbesserung — виправити шви. Або Ersatzlieferung — нову партію.','1.9.1':'12×6×20 = 1440 євро.','1.9.2':'7800−1440 = 6360 євро.','1.10.1':'Сума 15. Червоних 40, жовтих 32, синіх 24, зелених 24.','1.10.2':'Sortimentsfunktion — збираємо набори.','1.10.3':'Прокладка з картону між палетою і товаром.','2.1.1':'Statische Bereitstellung — товар нерухомий, іду до нього.','2.1.2':'Менші інвестиційні витрати.','2.2.2':'10+8×40=330 см=3,30 м.','2.2.3':'Bulder 1308 — 2 особи і 300 см.','2.3':'Pick-Pack — беру і одразу кладу в коробку.','2.4.1':'Meldebestand — кількість при якій замовляю знову.','2.4.2':'100×5+300=800 м.','2.5.1':'70×1,5+5+25=135 хв.','2.5.2':'Basiszeit — час на початку і кінці завдання.','2.5.3':'Чекаю ліфт — Totzeit.','2.6.1':'Meier — ні, термін четвер а пятниця. Müller — так, субота то понеділок.','2.7.1':'2000×12,50=25000 євро.','2.7.2.1':'Перевага: довговічніші. Недолік: немає EPAL.','2.7.2.2':'78000÷26000=3 роки.','3.1':'Зясувати причину і задокументувати небезпеки.','3.2':'Sicherheitsbeauftragter і Vorgesetzter.','3.3':'Berühren verboten — торкатися заборонено.','3.4':'Обслуговування і тільки справні палети.','4.1.1':'Цією стороною вгору — вертикально.','4.1.2':'235÷50=4,7→4 шари.','4.1.3':'16×5×7=560 коробок.','4.1.4':'8154÷0,453=18000 фунтів.','4.1.5':'Цілісність і чистота.','4.1.6.1':'Міжнародне — CMR обовязкова.','4.1.6.2':'715÷65=11 годин.','4.1.7':'Витрати ризик страховка митниця.','4.1.8':'Cost Insurance Freight до Halifax.','4.2.1':'Müller Moritz Sellbacher Erwin Windröder Нюрнберг.','4.2.2':'Вантаж зсувається до кабіни — небезпека.','4.2.3':'Сила тертя утримує вантаж.','4.2.4':'Найменше значення — 0,20.','4.2.5':'7000×0,20=1400 Н÷10=140 daN.','4.3':'Стан ременя і LC-значення.'};
   ['a1','a2','a3','a4'].forEach(k=>{
