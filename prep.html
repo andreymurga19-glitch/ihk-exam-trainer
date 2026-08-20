@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>📚 IHK Підготовка — Варіанти питань</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+:root{--bg:#0b0d13;--s1:#13161f;--s2:#1a1e2b;--border:#252a3a;--acc:#4f7fff;--gold:#f5c842;--green:#22c55e;--red:#ef4444;--text:#e2e8f0;--muted:#64748b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+
+.hdr{background:linear-gradient(135deg,#0c1428,#17233d);border-bottom:2px solid var(--acc);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hdr-left .title{font-size:14px;font-weight:700;color:#fff}
+.hdr-left .sub{font-size:11px;color:var(--muted);margin-top:2px}
+.hdr-right{display:flex;gap:6px;align-items:center}
+.lb{background:var(--s2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Inter',sans-serif}
+.lb.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.hdr-back{color:var(--acc);font-size:12px;font-weight:600;text-decoration:none;padding:5px 10px;border:1px solid var(--acc);border-radius:7px}
+
+.filter-bar{display:flex;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.filter-bar::-webkit-scrollbar{display:none}
+.fb{padding:9px 12px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif}
+.fb.on{color:var(--acc);border-bottom-color:var(--acc)}
+
+main{max-width:640px;margin:0 auto;padding:16px 16px 80px}
+
+.q-section{margin-bottom:24px}
+.q-label{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding:6px 10px;background:var(--s2);border-radius:6px;display:inline-block}
+
+.card-wrap{margin-bottom:10px}
+.flashcard{perspective:1200px}
+.fc-inner{position:relative;width:100%;min-height:200px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.fc-inner.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;padding:18px;display:flex;flex-direction:column}
+.fc-front{background:var(--s1);border:1px solid var(--border)}
+.fc-back{background:#091708;border:1px solid #1a4a2a;transform:rotateY(180deg)}
+.fc-front.correct{border-color:var(--green)}
+.fc-front.wrong{border-color:var(--red)}
+.fc-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:8px}
+.fc-q{font-size:14px;line-height:1.7;color:var(--text);flex:1}
+.fc-hint{font-size:11px;color:var(--muted);margin-top:10px}
+.fc-albl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:10px}
+.fc-a{font-size:13px;line-height:1.8;color:#86efac;flex:1;white-space:pre-wrap;overflow-y:auto}
+
+.btn-show{width:100%;padding:10px;border-radius:9px;border:2px solid var(--acc);background:#0d1829;color:#93c5fd;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:10px}
+.btn-row{display:flex;gap:8px;margin-top:12px}
+.btn{flex:1;padding:10px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.bback{background:var(--s2);border:1px solid var(--border);color:var(--muted)}
+.bno{background:#1a0808;border:2px solid var(--red);color:var(--red)}
+.bok{background:#0a1a10;border:2px solid var(--green);color:var(--green)}
+
+.score-bar{position:fixed;bottom:0;left:0;right:0;background:#0d0f17;border-top:1px solid var(--border);padding:10px 20px;display:flex;justify-content:center;gap:20px}
+.sc{font-size:13px;font-weight:600}
+.sc.ok{color:var(--green)}.sc.no{color:var(--red)}.sc.tot{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="title">📚 IHK — Варіанти питань</div>
+    <div class="sub">Різні формулювання · DE / UA · Картки</div>
+  </div>
+  <div class="hdr-right">
+    <button class="lb on" onclick="setLang('de',this)">DE</button>
+    <button class="lb" onclick="setLang('ua',this)">UA</button>
+    <a class="hdr-back" href="/">← Назад</a>
+  </div>
+</div>
+
+<div class="filter-bar" id="filterBar"></div>
+<main id="main"></main>
+
+<div class="score-bar">
+  <div class="sc ok">✓ <span id="sok">0</span></div>
+  <div class="sc no">✗ <span id="sno">0</span></div>
+  <div class="sc tot"><span id="stot">0</span>/<span id="smax">0</span> пройдено</div>
+</div>
+
+<script>
+const ALL = [{"tag": "1.1", "pts": "2", "de_q": "Nennen Sie 2 Angaben auf dem Lieferschein, die Sie vor der Entladung prüfen!", "ua_q": "Назвіть 2 дані з накладної, які перевіряєте перед розвантаженням!", "de_a": "Vor der Entladung prüfe ich den Empfänger — Name und Adresse — und das Lieferdatum, um sicherzustellen, dass die Lieferung für uns bestimmt ist und pünktlich geliefert wurde.", "ua_a": "Перед розвантаженням я перевіряю одержувача — ім'я та адресу — і дату доставки, щоб переконатись що поставка для нас і доставлена вчасно."}, {"tag": "1.1", "pts": "2", "de_q": "Was prüfen Sie auf dem Lieferschein, bevor Sie mit der Entladung beginnen? Nennen Sie 2 Angaben!", "ua_q": "Що ви перевіряєте в накладній перед початком розвантаження? Назвіть 2 дані!", "de_a": "Vor der Entladung prüfe ich den Empfänger — Name und Adresse — und das Lieferdatum, um sicherzustellen, dass die Lieferung für uns bestimmt ist und pünktlich geliefert wurde.", "ua_a": "Перед розвантаженням я перевіряю одержувача — ім'я та адресу — і дату доставки, щоб переконатись що поставка для нас і доставлена вчасно."}, {"tag": "1.1", "pts": "2", "de_q": "Welche 2 Angaben auf dem Lieferschein sind vor der Entladung besonders wichtig?", "ua_q": "Які 2 дані накладної особливо важливі перед розвантаженням?", "de_a": "Vor der Entladung prüfe ich den Empfänger — Name und Adresse — und das Lieferdatum, um sicherzustellen, dass die Lieferung für uns bestimmt ist und pünktlich geliefert wurde.", "ua_a": "Перед розвантаженням я перевіряю одержувача — ім'я та адресу — і дату доставки, щоб переконатись що поставка для нас і доставлена вчасно."}, {"tag": "1.2", "pts": "2", "de_q": "Während der Entladung stellen Sie keine Transportschäden fest. Vervollständigen Sie den Lieferschein!", "ua_q": "Під час розвантаження ви не виявляєте пошкоджень. Заповніть накладну!", "de_a": "Ich trage das Datum 28.04.2026 ein und unterschreibe im Feld „Ware erhalten\". Damit bestätige ich dem Fahrer die ordnungsgemäße Anlieferung. Bei Schäden würde ich einen Vorbehalt eintragen und den Fahrer ebenfalls unterschreiben lassen.", "ua_a": "Я вписую дату 28.04.2026 і підписую у полі „Ware erhalten\". Цим підтверджую водієві належну доставку. При пошкодженнях я б вніс застереження і водій теж мав би підписати."}, {"tag": "1.2", "pts": "2", "de_q": "Die Lieferung kommt ohne Schäden an. Was tragen Sie in den Lieferschein ein?", "ua_q": "Поставка прибуває без пошкоджень. Що ви вносите в накладну?", "de_a": "Ich trage das Datum 28.04.2026 ein und unterschreibe im Feld „Ware erhalten\". Damit bestätige ich dem Fahrer die ordnungsgemäße Anlieferung. Bei Schäden würde ich einen Vorbehalt eintragen und den Fahrer ebenfalls unterschreiben lassen.", "ua_a": "Я вписую дату 28.04.2026 і підписую у полі „Ware erhalten\". Цим підтверджую водієві належну доставку. При пошкодженнях я б вніс застереження і водій теж мав би підписати."}, {"tag": "1.2", "pts": "2", "de_q": "Sie stellen beim Ausladen 2 beschädigte Kartons fest. Wie gehen Sie vor?", "ua_q": "При розвантаженні ви виявляєте 2 пошкоджені ящики. Як ви дієте?", "de_a": "Ich trage das Datum 28.04.2026 ein und unterschreibe im Feld „Ware erhalten\". Damit bestätige ich dem Fahrer die ordnungsgemäße Anlieferung. Bei Schäden würde ich einen Vorbehalt eintragen und den Fahrer ebenfalls unterschreiben lassen.", "ua_a": "Я вписую дату 28.04.2026 і підписую у полі „Ware erhalten\". Цим підтверджую водієві належну доставку. При пошкодженнях я б вніс застереження і водій теж мав би підписати."}, {"tag": "1.3", "pts": "3", "de_q": "Nennen Sie 3 Mängel an Europaletten, die dazu führen, dass Sie diese nicht tauschen können!", "ua_q": "Назвіть 3 дефекти Euro-палет, через які їх не можна обміняти!", "de_a": "Ein Tausch ist nicht möglich bei: gebrochenen oder fehlenden Bodenbrettern, fehlenden oder beschädigten Klötzen, fehlendem oder unlesbarem EPAL-Brandzeichen.", "ua_a": "Обмін неможливий при: зламаних або відсутніх дошках настилу, відсутніх або пошкоджених кубиках-опорах, відсутньому або нечитабельному знаку EPAL."}, {"tag": "1.3", "pts": "3", "de_q": "Welche Mängel an einer Europalette verhindern den Tausch? Nennen Sie 3!", "ua_q": "Які дефекти Euro-палети перешкоджають обміну? Назвіть 3!", "de_a": "Ein Tausch ist nicht möglich bei: gebrochenen oder fehlenden Bodenbrettern, fehlenden oder beschädigten Klötzen, fehlendem oder unlesbarem EPAL-Brandzeichen.", "ua_a": "Обмін неможливий при: зламаних або відсутніх дошках настилу, відсутніх або пошкоджених кубиках-опорах, відсутньому або нечитабельному знаку EPAL."}, {"tag": "1.3", "pts": "3", "de_q": "Der Fahrer möchte die Europaletten tauschen. Bei welchen 3 Mängeln verweigern Sie den Tausch?", "ua_q": "Водій хоче обміняти Euro-палети. При яких 3 дефектах ви відмовляєте?", "de_a": "Ein Tausch ist nicht möglich bei: gebrochenen oder fehlenden Bodenbrettern, fehlenden oder beschädigten Klötzen, fehlendem oder unlesbarem EPAL-Brandzeichen.", "ua_a": "Обмін неможливий при: зламаних або відсутніх дошках настилу, відсутніх або пошкоджених кубиках-опорах, відсутньому або нечитабельному знаку EPAL."}, {"tag": "1.4", "pts": "4", "de_q": "Erläutern Sie die 4 Mangelarten am Beispiel „Sporthose, lang, grau\" (Art. 240150, 1.500 Stück)!", "ua_q": "Поясніть 4 види дефектів на прикладі „Спортивні штани, довгі, сірі\" (арт. 240150, 1.500 шт.)!", "de_a": "Es gibt vier Mangelarten: Identitätsmangel — falsches Produkt, z.B. kurze schwarze Hose statt langer grauer Sporthose. Quantitätsmangel — falsche Menge, z.B. 1.400 statt 1.500 Stück. Qualitätsmangel — fehlerhafte Verarbeitung, z.B. schlechte Nähte. Beschaffenheitsmangel — falsches Material, z.B. Baumwolle statt Polyester.", "ua_a": "Є чотири види дефектів: Identitätsmangel — не той товар, напр. короткі чорні замість довгих сірих. Quantitätsmangel — не та кількість, напр. 1.400 замість 1.500. Qualitätsmangel — дефекти виготовлення, напр. погані шви. Beschaffenheitsmangel — неправильний матеріал, напр. бавовна замість поліестеру."}, {"tag": "1.4", "pts": "4", "de_q": "Bei der Warenannahme werden Mängel festgestellt. Nennen und erläutern Sie die 4 Mangelarten!", "ua_q": "При прийманні товару виявлено дефекти. Назвіть і поясніть 4 види дефектів!", "de_a": "Es gibt vier Mangelarten: Identitätsmangel — falsches Produkt, z.B. kurze schwarze Hose statt langer grauer Sporthose. Quantitätsmangel — falsche Menge, z.B. 1.400 statt 1.500 Stück. Qualitätsmangel — fehlerhafte Verarbeitung, z.B. schlechte Nähte. Beschaffenheitsmangel — falsches Material, z.B. Baumwolle statt Polyester.", "ua_a": "Є чотири види дефектів: Identitätsmangel — не той товар, напр. короткі чорні замість довгих сірих. Quantitätsmangel — не та кількість, напр. 1.400 замість 1.500. Qualitätsmangel — дефекти виготовлення, напр. погані шви. Beschaffenheitsmangel — неправильний матеріал, напр. бавовна замість поліестеру."}, {"tag": "1.5", "pts": "2", "de_q": "Eltron GmbH prüft 15% der angelieferten Menge (1.500 Stück) in der QS. Berechnen Sie die Menge!", "ua_q": "Eltron GmbH перевіряє 15% від 1.500 шт. у QS. Розрахуйте кількість!", "de_a": "1.500 × 15 ÷ 100 = 225 Stück → QS-Abteilung. Restliche 1.275 Stück → Sperrfläche S 20.\n\nRechenweg immer vollständig angeben — ohne Rechenweg = 0 Punkte!", "ua_a": "Беру 1.500 штук, множу на 15, ділю на 100 — отримую 225 штук для QS. Решта 1.275 штук іде на S 20.\n\nХід розрахунку завжди писати повністю — без нього = 0 балів!"}, {"tag": "1.5", "pts": "2", "de_q": "Von 1.500 gelieferten Stück sollen 15% in der QS geprüft werden. Wie viele Stück sind das?", "ua_q": "З 1.500 доставлених штук 15% потрібно перевірити в QS. Скільки це штук?", "de_a": "1.500 × 15 ÷ 100 = 225 Stück → QS-Abteilung. Restliche 1.275 Stück → Sperrfläche S 20.\n\nRechenweg immer vollständig angeben — ohne Rechenweg = 0 Punkte!", "ua_a": "Беру 1.500 штук, множу на 15, ділю на 100 — отримую 225 штук для QS. Решта 1.275 штук іде на S 20.\n\nХід розрахунку завжди писати повністю — без нього = 0 балів!"}];
+
+let lang = 'de';
+let filter = 'all';
+let results = {};
+
+const TAGS = [...new Set(ALL.map(c => c.tag))];
+
+function init() {
+  // Filter bar
+  const fb = document.getElementById('filterBar');
+  fb.innerHTML = `<button class="fb on" onclick="setFilter('all',this)">Всі</button>` +
+    TAGS.map(t => `<button class="fb" onclick="setFilter('${t}',this)">${t}</button>`).join('');
+  document.getElementById('smax').textContent = ALL.length;
+  render();
+}
+
+function setLang(l, btn) {
+  lang = l;
+  document.querySelectorAll('.lb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.fb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+
+function render() {
+  const cards = filter === 'all' ? ALL : ALL.filter(c => c.tag === filter);
+  const grouped = {};
+  cards.forEach((c, gi) => {
+    const realIdx = ALL.indexOf(c);
+    if (!grouped[c.tag]) grouped[c.tag] = [];
+    grouped[c.tag].push({...c, idx: realIdx});
+  });
+
+  const el = document.getElementById('main');
+  el.innerHTML = Object.entries(grouped).map(([tag, cs]) => `
+    <div class="q-section">
+      <div class="q-label">Aufgabe ${tag}</div>
+      ${cs.map((c, vi) => renderCard(c, vi)).join('')}
+    </div>`).join('');
+}
+
+function renderCard(c, vi) {
+  const i = c.idx;
+  const flipped = results['f_'+i] || false;
+  const marked = results[i];
+  const qText = lang === 'de' ? c.de_q : c.ua_q;
+  const aText = lang === 'de' ? c.de_a : c.ua_a;
+  const frontCls = marked === true ? 'fc-front correct' : marked === false ? 'fc-front wrong' : 'fc-front';
+
+  return `<div class="card-wrap">
+    <div class="flashcard">
+      <div class="fc-inner ${flipped?'flipped':''}" id="fci_${i}">
+        <div class="fc-face ${frontCls}">
+          <div class="fc-meta">Variante ${vi+1} · ${c.pts} Punkte</div>
+          <div class="fc-q">${qText}</div>
+          <div class="fc-hint">👆 Натисни картку або кнопку</div>
+          <button class="btn-show" onclick="flip(${i},event)">Показати відповідь</button>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-albl">✅ Відповідь</div>
+          <div class="fc-a">${aText}</div>
+          <div class="btn-row">
+            <button class="btn bback" onclick="flip(${i},event)">← Питання</button>
+            <button class="btn bno" onclick="mark(${i},false,event)">✗ Не знав</button>
+            <button class="btn bok" onclick="mark(${i},true,event)">✓ Знав</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function flip(i, e) {
+  if(e) e.stopPropagation();
+  results['f_'+i] = !results['f_'+i];
+  render();
+}
+
+function mark(i, ok, e) {
+  if(e) e.stopPropagation();
+  results[i] = ok;
+  results['f_'+i] = false;
+  updateScore();
+  render();
+}
+
+function updateScore() {
+  const vals = Object.entries(results).filter(([k])=>!k.startsWith('f_')).map(([,v])=>v);
+  document.getElementById('sok').textContent = vals.filter(v=>v).length;
+  document.getElementById('sno').textContent = vals.filter(v=>!v).length;
+  document.getElementById('stot').textContent = vals.length;
+}
+
+init();
+</script>
+</body>
+</html>
