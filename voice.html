@@ -87,7 +87,10 @@ textarea::placeholder{color:var(--muted);font-size:13px}
 <div class="day-scroll" id="dayScroll"></div>
 <main id="main"></main>
 <script src="/data.de.js"></script>
+<script src="/data.ua.js"></script>
 <script>
+// картки показують німецький набір; український беремо з DATA_UA за id
+const DATA = DATA_DE;
 (function(){
   const DE={
     '1.1':'Vor der Entladung prüfe ich den Empfänger — Name und Adresse — und das Lieferdatum, um sicherzustellen, dass die Lieferung für uns bestimmt ist und pünktlich geliefert wurde.\n\nWeitere mögliche Angaben: Absender · Kennzeichen des Fahrzeugs · Bestellnummer',
@@ -140,6 +143,22 @@ textarea::placeholder{color:var(--muted);font-size:13px}
       if(UA[q.id])q.ua_a=UA[q.id];
     });
   });
+})();
+
+// Український ТЕКСТ ПИТАННЯ беремо з data.ua.js за id — переклад уже є
+// для всіх 112 питань, тож режим UA більше не показує німецьке питання.
+//
+// Відповіді (ans) навмисно НЕ чіпаємо: у data.ua.js вони теж німецькі —
+// це зразкова відповідь, яку на екзамені треба написати німецькою.
+// Українські відповіді існують лише там, де їх виписано вручну (UA вище).
+(function(){
+  if(typeof DATA_UA==='undefined')return;
+  const byId={};
+  Object.values(DATA_UA).forEach(s=>(s.qs||[]).forEach(q=>{byId[q.id]=q;}));
+  Object.values(DATA).forEach(s=>(s.qs||[]).forEach(q=>{
+    const u=byId[q.id];
+    if(u&&!q.ua_q&&u.text)q.ua_q=u.text;
+  }));
 })();
 
 let mode='flash',day=0,qIdx=0,flipped=false,lang='ua',dialogCtx=null,done={};
@@ -200,7 +219,10 @@ function goQ(i){qIdx=i;flipped=false;saveProg();renderMain();}
 function nextQ(){qIdx=(qIdx+1)%getDayQs(day).length;flipped=false;saveProg();renderMain();}
 
 function renderFlash(){
-  const q=getDayQs(day)[qIdx];
+  const qs=getDayQs(day);
+  if(qIdx>=qs.length)qIdx=0;
+  const q=qs[qIdx];
+  if(!q){document.getElementById('main').innerHTML='<div class="q-info">Питань немає</div>';return;}
   const ua=lang==='ua';
   const qt=ua&&q.ua_q?q.ua_q:q.text;
   const at=ua&&q.ua_a?q.ua_a:(q.de_a||q.ans||'');
@@ -237,7 +259,10 @@ function flipCard(){flipped=!flipped;if(flipped)markDone();renderMain();}
 
 function getAns(q){return (q.de_a||q.ans||'').split('\n').join('<br>');}
 function renderVoice(){
-  const q=getDayQs(day)[qIdx];
+  const qs=getDayQs(day);
+  if(qIdx>=qs.length)qIdx=0;
+  const q=qs[qIdx];
+  if(!q){document.getElementById('main').innerHTML='<div class="q-info">Питань немає</div>';return;}
   document.getElementById('main').innerHTML=`
     <div class="q-info">Питання ${qIdx+1} / ${getDayQs(day).length}</div>
     <div class="dots">${dots()}</div>

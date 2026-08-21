@@ -1,7 +1,7 @@
 // Питання тренажера, німецька версія.
 // Спільний файл — підключається кількома сторінками через <script src>.
 // Не копіювати цей масив в HTML: єдине місце для правок — тут.
-const DATA = {
+const DATA_DE = {
 a1:{
   label:'Aufgabe 1 — Wareneingang (30 Punkte, ~45 Min)',
   sit:`<p>Die <strong>Eltron GmbH</strong> erbringt am Standort Nürnberg logistische Dienstleistungen. Sie erhalten heute, am 28.04.2026, eine Lieferung Sportbekleidung. Sie führen die Warenannahme und Warenprüfung durch. Ein Teil der angelieferten Bekleidung wird zur Qualitätskontrolle weitergeleitet. Im Anschluss bereiten Sie die Einlagerung vor. Für einen Sportartikelvertrieb werden zusätzlich Sets zusammengestellt. Sie sind im Wareneingang zuständig und bekommen den Lieferschein vom Fahrer.</p>
