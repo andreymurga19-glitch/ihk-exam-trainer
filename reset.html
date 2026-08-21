@@ -1,26 +1,113 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8">
-<meta http-equiv="refresh" content="2;url=/voice.html">
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Скидання прогресу — IHK Trainer</title>
 <style>
-body{background:#0b0d13;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center}
-.box{padding:30px}
-.emoji{font-size:60px;margin-bottom:20px}
-h2{font-size:20px;margin-bottom:10px}
-p{color:#64748b;font-size:14px}
+:root{--bg:#0b0d13;--s1:#13161f;--s2:#1a1e2b;--border:#252a3a;--acc:#4f7fff;--green:#22c55e;--red:#ef4444;--gold:#f59e0b;--text:#e2e8f0;--muted:#64748b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.box{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:26px 22px;max-width:440px;width:100%}
+.top{text-align:center;margin-bottom:18px}
+.emoji{font-size:46px;margin-bottom:10px}
+h2{font-size:19px;margin-bottom:6px}
+p{color:var(--muted);font-size:13.5px;line-height:1.6}
+.grp{margin-bottom:14px}
+.grp-t{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.list{background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:13px}
+.row{padding:4px 0;display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.k{color:var(--muted)}
+.v{font-weight:600;white-space:nowrap}
+.has{color:var(--acc)}
+.empty{color:#3f4757}
+button,a.btn{width:100%;padding:12px;font-size:14px;font-weight:600;border-radius:9px;border:1px solid var(--border);cursor:pointer;font-family:inherit;text-decoration:none;display:block;text-align:center;margin-top:9px}
+.danger{background:var(--red);color:#fff;border-color:var(--red)}
+.warn{background:none;color:var(--gold);border-color:var(--gold)}
+.cancel{background:var(--s2);color:var(--text)}
+.msg{margin-top:14px;text-align:center;font-weight:600}
+.ok{color:var(--green)}
 </style>
 </head>
 <body>
 <div class="box">
-  <div class="emoji">✅</div>
-  <h2>Прогрес скинуто!</h2>
-  <p>Починається з 17 серпня...<br>Переходжу до тренажера...</p>
+  <div class="top">
+    <div class="emoji">🗑️</div>
+    <h2>Скидання прогресу</h2>
+    <p>Дані зберігаються лише у цьому браузері. Відновити після видалення неможливо.</p>
+  </div>
+
+  <div class="grp">
+    <div class="grp-t">Прогрес навчання</div>
+    <div class="list" id="listProg"></div>
+  </div>
+
+  <div class="grp">
+    <div class="grp-t">Твій контент</div>
+    <div class="list" id="listKeep"></div>
+  </div>
+
+  <button class="danger" onclick="doReset(PROGRESS)">Скинути прогрес</button>
+  <button class="warn" onclick="doReset(PROGRESS.concat(KEEP))">Очистити все, разом зі словником</button>
+  <a class="btn cancel" href="/">← Назад, нічого не чіпати</a>
+
+  <div class="msg" id="msg"></div>
 </div>
 <script>
-localStorage.setItem('ihk_trainer_v1', JSON.stringify({
-  startDate: '2026-08-17',
-  currentDay: 0,
-  days: {}
-}));
-setTimeout(function(){ window.location.href = '/voice.html'; }, 1500);
+// Ключі, які реально використовують сторінки проєкту.
+var PROGRESS = [
+  ['ihk_voice_v1',   'Картки та голос (voice.html)'],
+  ['vt_v1',          'Варіанти по днях'],
+  ['ihk26_done',     'Пройдені питання'],
+  ['ihk_trainer_v1', 'Старий ключ (не використовується)']
+];
+var KEEP = [
+  ['ihk26_vocab',    'Словник слів']
+];
+
+function read(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+
+function describe(k, raw){
+  if(raw === null) return 'порожньо';
+  try{
+    var p = JSON.parse(raw);
+    if(k === 'ihk_voice_v1' && p && p.done) return Object.keys(p.done).length + ' питань · день ' + ((p.day|0)+1);
+    if(k === 'vt_v1'        && p && p.res)  return Object.keys(p.res).length + ' днів';
+    if(Array.isArray(p))                    return p.length + ' зап.';
+  }catch(e){}
+  return Math.round(raw.length/1024*10)/10 + ' КБ';
+}
+
+function renderList(el, keys){
+  var h = '';
+  for(var i=0;i<keys.length;i++){
+    var raw = read(keys[i][0]), has = raw !== null;
+    h += '<div class="row"><span class="k">' + keys[i][1] + '</span>' +
+         '<span class="v ' + (has?'has':'empty') + '">' + describe(keys[i][0], raw) + '</span></div>';
+  }
+  el.innerHTML = h;
+}
+
+function render(){
+  renderList(document.getElementById('listProg'), PROGRESS);
+  renderList(document.getElementById('listKeep'), KEEP);
+}
+
+function doReset(keys){
+  var n = 0;
+  for(var i=0;i<keys.length;i++){
+    try{
+      if(localStorage.getItem(keys[i][0]) !== null){ localStorage.removeItem(keys[i][0]); n++; }
+    }catch(e){}
+  }
+  render();
+  document.getElementById('msg').innerHTML =
+    n ? '<span class="ok">✅ Очищено ключів: ' + n + '. Переходжу до тренажера…</span>'
+      : '<span class="ok">Нічого очищати — уже порожньо.</span>';
+  if(n) setTimeout(function(){ window.location.href = '/voice.html'; }, 1300);
+}
+
+render();
 </script>
-</body></html>
+</body>
+</html>

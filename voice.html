@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -19,6 +19,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .day-scroll::-webkit-scrollbar{display:none}
 .day-btn{padding:9px 14px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .2s;flex-shrink:0}
 .day-btn.on{color:var(--acc);border-bottom-color:var(--acc)}
+.day-btn.full{color:var(--green)}
+.day-btn.full.on{border-bottom-color:var(--green)}
+.day-prog{display:block;font-size:9px;font-weight:500;opacity:.75;margin-top:1px}
 main{max-width:640px;margin:0 auto;padding:16px 16px 40px}
 .q-info{text-align:center;font-size:12px;color:var(--muted);margin-bottom:14px;font-family:'JetBrains Mono',monospace}
 .dots{display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
@@ -1009,7 +1012,32 @@ a6:{
   });
 })();
 
-let mode='flash',day=0,qIdx=0,flipped=false,lang='ua',dialogCtx=null;
+let mode='flash',day=0,qIdx=0,flipped=false,lang='ua',dialogCtx=null,done={};
+
+const PKEY='ihk_voice_v1';
+function loadProg(){
+  try{
+    const p=JSON.parse(localStorage.getItem(PKEY)||'null');
+    if(!p||p.v!==1)return;
+    if(p.done&&typeof p.done==='object')done=p.done;
+    if(p.mode==='flash'||p.mode==='voice')mode=p.mode;
+    if(p.lang==='de'||p.lang==='ua')lang=p.lang;
+    if(Number.isInteger(p.day))day=Math.min(Math.max(p.day,0),totalDays()-1);
+    if(Number.isInteger(p.qIdx))qIdx=Math.min(Math.max(p.qIdx,0),getDayQs(day).length-1);
+  }catch(e){}
+}
+function saveProg(){
+  try{localStorage.setItem(PKEY,JSON.stringify({v:1,day,qIdx,mode,lang,done,updated:new Date().toISOString()}));}catch(e){}
+}
+function markDone(){
+  const q=getDayQs(day)[qIdx];
+  if(q&&!done[q.id]){done[q.id]=true;renderDays();}
+  saveProg();
+}
+function dayStats(d){
+  const qs=getDayQs(d);
+  return {ok:qs.filter(q=>done[q.id]).length,tot:qs.length};
+}
 
 function getAllQs(){const a=[];['a1','a2','a3','a4'].forEach(k=>{if(DATA[k])DATA[k].qs.forEach(q=>a.push(q));});return a;}
 function getDayQs(d){return getAllQs().slice(d*5,(d+1)*5);}
@@ -1017,24 +1045,29 @@ function totalDays(){return Math.ceil(getAllQs().length/5);}
 
 function renderDays(){
   let h='';
-  for(let i=0;i<totalDays();i++)
-    h+=`<button class="day-btn ${i===day?'on':''}" onclick="goDay(${i})">Tag ${i+1}</button>`;
+  for(let i=0;i<totalDays();i++){
+    const s=dayStats(i);
+    const cls='day-btn'+(i===day?' on':'')+(s.tot&&s.ok===s.tot?' full':'');
+    h+=`<button class="${cls}" onclick="goDay(${i})">Tag ${i+1}<span class="day-prog">${s.ok}/${s.tot}</span></button>`;
+  }
   document.getElementById('dayScroll').innerHTML=h;
 }
-function goDay(d){day=d;qIdx=0;flipped=false;renderDays();renderMain();}
+function goDay(d){day=d;qIdx=0;flipped=false;saveProg();renderDays();renderMain();}
+function syncMode(){
+  document.getElementById('mFlash').className='mode-btn'+(mode==='flash'?' on':'');
+  document.getElementById('mVoice').className='mode-btn'+(mode==='voice'?' on':'');
+}
 function setMode(m){
-  mode=m;
-  document.getElementById('mFlash').className='mode-btn'+(m==='flash'?' on':'');
-  document.getElementById('mVoice').className='mode-btn'+(m==='voice'?' on':'');
-  qIdx=0;flipped=false;renderMain();
+  mode=m;syncMode();
+  qIdx=0;flipped=false;saveProg();renderMain();
 }
 function renderMain(){mode==='flash'?renderFlash():renderVoice();}
 function dots(){
   return getDayQs(day).map((_,i)=>
     `<div class="dot ${i===qIdx?'on':''}" onclick="goQ(${i})">${i+1}</div>`).join('');
 }
-function goQ(i){qIdx=i;flipped=false;renderMain();}
-function nextQ(){qIdx=(qIdx+1)%getDayQs(day).length;flipped=false;renderMain();}
+function goQ(i){qIdx=i;flipped=false;saveProg();renderMain();}
+function nextQ(){qIdx=(qIdx+1)%getDayQs(day).length;flipped=false;saveProg();renderMain();}
 
 function renderFlash(){
   const q=getDayQs(day)[qIdx];
@@ -1069,8 +1102,8 @@ function renderFlash(){
       :`<button class="btn-show" onclick="flipCard()">Показати відповідь</button>`
     }</div>`;
 }
-function setLang(l){lang=l;renderMain();}
-function flipCard(){flipped=!flipped;renderMain();}
+function setLang(l){lang=l;saveProg();renderMain();}
+function flipCard(){flipped=!flipped;if(flipped)markDone();renderMain();}
 
 function getAns(q){return (q.de_a||q.ans||'').split('\n').join('<br>');}
 function renderVoice(){
@@ -1086,7 +1119,6 @@ function renderVoice(){
       <button class="v-check" id="vBtn" onclick="vCheck()" disabled>🤖 AI перевіряє</button>
       <div class="ai-res" id="vAi"></div>
       <div class="ans-box" id="vAns">${getAns(q)}</div>
-/g,'<br>')}</div>
       <div class="dialog-area" id="vDlg">
         <div class="dlbl">💬 Запитай AI далі:</div>
         <div class="qbtns">
@@ -1101,12 +1133,18 @@ function renderVoice(){
         <div class="dresp" id="dResp"></div>
       </div>
       <div class="v-btns">
-        <button class="v-btn-ans" onclick="document.getElementById('vAns').classList.toggle('show')">📖 Відповідь</button>
+        <button class="v-btn-ans" onclick="showVAns()">📖 Відповідь</button>
         <button class="v-btn-next" onclick="nextQ()">Далі →</button>
       </div>
     </div>`;
 }
 function onVI(v){const b=document.getElementById('vBtn');if(b){b.disabled=!v.trim();b.style.opacity=v.trim()?'1':'0.4';}}
+function showVAns(){
+  const el=document.getElementById('vAns');
+  if(!el)return;
+  el.classList.toggle('show');
+  if(el.classList.contains('show'))markDone();
+}
 async function vCheck(){
   const inp=document.getElementById('vInp'),ai=document.getElementById('vAi'),dlg=document.getElementById('vDlg');
   if(!inp||!inp.value.trim())return;
@@ -1121,6 +1159,7 @@ Kerninhalt stimmt → ✅ Richtig! Punkte fehlen → ❌ Nicht vollständig. 1-2
     const d=await r.json();
     const t=d.candidates?.[0]?.content?.parts?.[0]?.text||d.text||d.result||'';
     ai.className='ai-res '+(t.includes('✅')?'ok':'no');ai.innerHTML=t;
+    markDone();
     dialogCtx={q:q.text,ans:q.de_a||q.ans||'',user:ans,ai:t};
     if(dlg)dlg.className='dialog-area show';
   }catch(e){ai.className='ai-res no';ai.textContent='Помилка AI.';}
@@ -1138,8 +1177,11 @@ async function sendDlg(){
   }catch(e){resp.textContent='Помилка.';}
 }
 
+loadProg();
+syncMode();
 renderDays();
 renderMain();
 </script>
+<script src="/nav.js"></script>
 </body>
 </html>
