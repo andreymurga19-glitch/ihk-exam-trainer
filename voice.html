@@ -257,19 +257,31 @@ function renderFlash(){
 function setLang(l){lang=l;saveProg();renderMain();}
 function flipCard(){flipped=!flipped;if(flipped)markDone();renderMain();}
 
-function getAns(q){return (q.de_a||q.ans||'').split('\n').join('<br>');}
+// Показує відповідь тією мовою, що й картки: українську, якщо вона є.
+function getAns(q){
+  const t=(lang==='ua'&&q.ua_a)?q.ua_a:(q.de_a||q.ans||'');
+  return t.split('\n').join('<br>');
+}
 function renderVoice(){
   const qs=getDayQs(day);
   if(qIdx>=qs.length)qIdx=0;
   const q=qs[qIdx];
   if(!q){document.getElementById('main').innerHTML='<div class="q-info">Питань немає</div>';return;}
+  const ua=lang==='ua';
+  const qt=ua&&q.ua_q?q.ua_q:q.text;
+  const clDE=lang==='de'?'lang-btn on':'lang-btn';
+  const clUA=lang==='ua'?'lang-btn on':'lang-btn';
   document.getElementById('main').innerHTML=`
     <div class="q-info">Питання ${qIdx+1} / ${getDayQs(day).length}</div>
+    <div class="lang-row">
+      <button class="${clDE}" onclick="setLang('de')">DE</button>
+      <button class="${clUA}" onclick="setLang('ua')">UA</button>
+    </div>
     <div class="dots">${dots()}</div>
     <div class="vcard">
       <div class="vcard-lbl">❓ Aufgabe ${q.id}</div>
       <div class="vcard-id">⭐ ${q.pts} Punkte</div>
-      <div class="vcard-q">${q.text}</div>
+      <div class="vcard-q">${qt}</div>
       <textarea id="vInp" placeholder="🎤 Говори через Samsung клавіатуру або пиши тут..." oninput="onVI(this.value)" rows="4"></textarea>
       <button class="v-check" id="vBtn" onclick="vCheck()" disabled>🤖 AI перевіряє</button>
       <div class="ai-res" id="vAi"></div>
