@@ -176,6 +176,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 [contenteditable]:empty:before{content:attr(placeholder);color:#374151;font-style:italic}
 .mc-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
 .mc-opt{text-align:left;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.wtok{cursor:pointer;border-radius:3px}
+.wtok:active,.wtok:hover{background:rgba(245,196,66,.25)}
 .mc-opt:hover{border-color:var(--acc);background:#162035}
 .mc-opt.selected{border-color:var(--acc);background:#1a2d4f;color:#93c5fd;font-weight:600}
 .zuord-wrap{margin:10px 0}
@@ -560,29 +562,73 @@ function clearQ(id){
 async function check(qid,id,pts){
   const aufgabe=DATA[curTab];
   const q=aufgabe.qs.find(x=>x.id===qid);
-  // Збираємо відповідь: Zuordnung, Multiselect, MC вибір, textarea, або contenteditable таблиця
-  let userAns = '';
   const zWrap = document.getElementById('zwrap_'+id);
   const msWrap = document.getElementById('mswrap_'+id);
   const mcWrap = document.getElementById('mcwrap_'+id);
-  if(zWrap){
-    const pairs = [];
+  const ld=document.getElementById('ld_'+id);
+  const ar=document.getElementById('ar_'+id);
+
+  // ===== 1) Zuordnung — локальна перевірка, без AI =====
+  if(zWrap && q.correctMulti){
+    const rows = [];
+    let allCorrect = true;
     zWrap.querySelectorAll('.zuord-opts').forEach(o=>{
       const term = o.dataset.term;
-      const val = o.dataset.selectedVal || '(не обрано)';
-      pairs.push(`${term} → ${val}`);
+      const val = o.dataset.selectedVal || '';
+      const correct = q.correctMulti[term];
+      const ok = val === correct;
+      if(!ok) allCorrect = false;
+      rows.push(`${ok?'✅':'❌'} ${term} → ти: ${val||'(не обрано)'}${ok?'':` · правильно: ${correct}`}`);
     });
-    userAns = pairs.join('\n');
-  } else if(msWrap){
+    ar.className = 'ai-res on '+(allCorrect?'ok':'bad');
+    ar.innerHTML = `<div class="ai-lbl">${allCorrect?'✅ Правильно':'❌ Є помилки'}</div>${rows.join('<br>')}`;
+    if(allCorrect){done.add(qid);saveDone();renderSidebar(DATA[curTab]);updateProgress();}
+    return;
+  }
+
+  // ===== 2) Одиночний вибір (mc) з відомою правильною відповіддю — локально =====
+  if(mcWrap && q.correct){
+    const selected = mcWrap.dataset.selected || '';
+    if(!selected){alert('Вибери відповідь!');return;}
+    const ok = selected === q.correct;
+    const correctOpt = (q.options||[]).find(o=>o.split('.')[0].trim()===q.correct) || q.correct;
+    ar.className = 'ai-res on '+(ok?'ok':'bad');
+    ar.innerHTML = `<div class="ai-lbl">${ok?'✅ Правильно':'❌ Неправильно'}</div>`
+      + (ok?'':`Правильна відповідь: <strong>${correctOpt}</strong><br>`)
+      + (q.exp?`<div style="margin-top:6px;color:var(--muted)">${q.exp}</div>`:'');
+    if(ok){done.add(qid);saveDone();renderSidebar(DATA[curTab]);updateProgress();}
+    return;
+  }
+
+  // ===== 3) Multiselect — локально, якщо вдається розпарсити правильні варіанти з q.ans =====
+  if(msWrap){
+    const selected = Array.from(msWrap.querySelectorAll('.mc-opt.selected')).map(b=>b.dataset.val).sort();
+    if(!selected.length){alert('Вибери хоча б один варіант!');return;}
+    const parsedCorrect = (q.ans||'').split('\n').map(l=>{
+      const m = l.trim().match(/^(\d+)\./);
+      return m ? m[1] : null;
+    }).filter(Boolean).sort();
+    if(parsedCorrect.length){
+      const ok = selected.length===parsedCorrect.length && selected.every((v,i)=>v===parsedCorrect[i]);
+      ar.className = 'ai-res on '+(ok?'ok':'bad');
+      ar.innerHTML = `<div class="ai-lbl">${ok?'✅ Правильно':'❌ Неправильно'}</div>`
+        + (ok?'':`Правильні варіанти: <strong>${parsedCorrect.join(', ')}</strong><br>`)
+        + (q.exp?`<div style="margin-top:6px;color:var(--muted)">${q.exp}</div>`:'');
+      if(ok){done.add(qid);saveDone();renderSidebar(DATA[curTab]);updateProgress();}
+      return;
+    }
+    // якщо з ans не вдалось розпарсити правильні варіанти — падаємо в AI-режим нижче
+  }
+
+  // ===== 4) Відкрита відповідь (textarea/таблиця) — тут і лише тут AI =====
+  let userAns = '';
+  if(msWrap){
     const selected = Array.from(msWrap.querySelectorAll('.mc-opt.selected')).map(b=>b.dataset.val);
     userAns = selected.length ? selected.join(', ') : '';
-  } else if(mcWrap){
-    userAns = mcWrap.dataset.selected || '';
   } else {
     const taEl = document.getElementById('ta_'+id);
     if(taEl) userAns = taEl.value.trim();
   }
-  // Якщо є contenteditable поля в картці — збираємо їх теж
   const qcard = document.getElementById('qc_'+id);
   if(qcard){
     const editCells = qcard.querySelectorAll('[contenteditable]');
@@ -599,10 +645,10 @@ async function check(qid,id,pts){
     }
   }
   if(!userAns){alert('Вибери відповідь або заповни поле!');return;}
-  const ld=document.getElementById('ld_'+id);
-  const ar=document.getElementById('ar_'+id);
   ld.classList.add('on'); ar.className='ai-res';
   const prompt=`Du bist ein strenger aber fairer IHK-Prüfer für Fachkraft für Lagerlogistik.
+
+Dies ist eine OFFENE Prüfungsfrage (freie Textantwort), KEINE Multiple-Choice-Frage.
 
 Frage ${qid} (${pts} Punkte): ${q.text.replace(/<[^>]+>/g,'')}
 Musterlösung: ${q.ans}
@@ -688,22 +734,41 @@ function makeWordsClickable(container){
   container.querySelectorAll('.qtext, .exp-box, .hint-box, .sit-box p, .sit-box td, .ai-res').forEach(function(el){
     if(el.dataset.wc) return;
     el.dataset.wc = '1';
-    el.addEventListener('click', function(e){
-      // Слово під курсором
-      let word = '';
-      const range = document.caretRangeFromPoint
-        ? document.caretRangeFromPoint(e.clientX, e.clientY)
-        : (document.caretPositionFromPoint
-            ? (function(){ const p=document.caretPositionFromPoint(e.clientX,e.clientY); if(!p) return null; const r=document.createRange(); r.setStart(p.offsetNode,p.offset); return r; })()
-            : null);
-      if(range){
-        range.expand('word');
-        word = range.toString().trim().replace(/[.,!?;:()\[\]{}'"«»\n\r]/g,'').trim();
-      }
-      if(word.length > 1 && word.length < 60){
-        showWordPopup(word, e.clientX, e.clientY);
-      }
-    });
+    tokenizeWords(el);
+  });
+}
+
+// Обгортає кожне слово в окремий <span>, щоб клік завжди попадав
+// точно в те слово, на яке натиснули — без вгадування координат.
+function tokenizeWords(root){
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const textNodes = [];
+  let n;
+  while(n = walker.nextNode()){
+    if(n.parentElement && n.parentElement.classList.contains('wtok')) continue;
+    if(n.nodeValue.trim()) textNodes.push(n);
+  }
+  const wordRe = /[A-Za-zÀ-ÖØ-öø-ÿА-Яа-яІіЇїЄєҐґ'-]{2,}/g;
+  textNodes.forEach(node=>{
+    const text = node.nodeValue;
+    if(!wordRe.test(text)) return;
+    wordRe.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let last = 0, m;
+    while(m = wordRe.exec(text)){
+      if(m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      const span = document.createElement('span');
+      span.className = 'wtok';
+      span.textContent = m[0];
+      span.addEventListener('click', function(e){
+        e.stopPropagation();
+        showWordPopup(m[0], e.clientX, e.clientY);
+      });
+      frag.appendChild(span);
+      last = m.index + m[0].length;
+    }
+    if(last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
   });
 }
 
