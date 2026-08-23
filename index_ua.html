@@ -177,6 +177,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .mc-options{display:flex;flex-direction:column;gap:8px;margin:10px 0}
 .mc-opt{text-align:left;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
 .wtok{cursor:pointer;border-radius:3px}
+.wtok-lp{border-radius:3px;-webkit-user-select:none;user-select:none}
+.wtok-lp:active{background:rgba(245,196,66,.35)}
 .wtok:active,.wtok:hover{background:rgba(245,196,66,.25)}
 .mc-opt:hover{border-color:var(--acc);background:#162035}
 .mc-opt.selected{border-color:var(--acc);background:#1a2d4f;color:#93c5fd;font-weight:600}
@@ -417,7 +419,7 @@ function renderAufgabe(auf){
     + examBtn
     +auf.qs.map(q=>renderCard(q)).join('');
   el.scrollTop=0;
-  setTimeout(function(){ makeWordsClickable(el); }, 100);
+  setTimeout(function(){ makeWordsClickable(el); makeOptionWordsTranslatable(el); }, 100);
 }
 
 
@@ -772,6 +774,79 @@ function tokenizeWords(root){
   });
 }
 
+// ===== Переклад слів усередині варіантів відповіді (.mc-opt / .exam-opt) =====
+// Короткий тап на кнопці — вибирає відповідь (як завжди).
+// Довге утримання (≈450мс) на слові — відкриває переклад цього слова,
+// не вибираючи відповідь.
+function makeOptionWordsTranslatable(scopeEl){
+  if(!scopeEl) return;
+  scopeEl.querySelectorAll('.mc-opt, .exam-opt, .zuord-btn').forEach(btn=>{
+    if(btn.dataset.lp) return;
+    btn.dataset.lp = '1';
+    tokenizeWordsLongPress(btn);
+    // Якщо щойно спрацював long-press — гасимо клік, що вибрав би відповідь
+    btn.addEventListener('click', function(e){
+      if(btn.dataset.lpFired === '1'){
+        btn.dataset.lpFired = '';
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    }, true);
+  });
+}
+
+function tokenizeWordsLongPress(root){
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const textNodes = [];
+  let n;
+  while(n = walker.nextNode()){
+    if(n.parentElement && n.parentElement.classList.contains('wtok-lp')) continue;
+    if(n.nodeValue.trim()) textNodes.push(n);
+  }
+  const wordRe = /[A-Za-zÀ-ÖØ-öø-ÿА-Яа-яІіЇїЄєҐґ'-]{2,}/g;
+  textNodes.forEach(node=>{
+    const text = node.nodeValue;
+    if(!wordRe.test(text)) return;
+    wordRe.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let last = 0, m;
+    while(m = wordRe.exec(text)){
+      if(m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      const span = document.createElement('span');
+      span.className = 'wtok-lp';
+      span.textContent = m[0];
+      attachLongPress(span, m[0]);
+      frag.appendChild(span);
+      last = m.index + m[0].length;
+    }
+    if(last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
+}
+
+function attachLongPress(span, word){
+  let timer = null;
+  const btn = span.closest('.mc-opt, .exam-opt, .zuord-btn');
+  const start = (e)=>{
+    const pt = e.touches ? e.touches[0] : e;
+    const x = pt.clientX, y = pt.clientY;
+    timer = setTimeout(()=>{
+      timer = null;
+      if(btn) btn.dataset.lpFired = '1';
+      if(navigator.vibrate) navigator.vibrate(15);
+      showWordPopup(word, x, y);
+    }, 450);
+  };
+  const cancel = ()=>{ if(timer){ clearTimeout(timer); timer=null; } };
+  span.addEventListener('touchstart', start, {passive:true});
+  span.addEventListener('touchend', cancel);
+  span.addEventListener('touchmove', cancel);
+  span.addEventListener('touchcancel', cancel);
+  span.addEventListener('mousedown', start);
+  span.addEventListener('mouseup', cancel);
+  span.addEventListener('mouseleave', cancel);
+}
+
 function showWordPopup(word, x, y){
   // Видаляємо старий попап
   const old = document.getElementById('word-popup');
@@ -1038,31 +1113,62 @@ function finishExam(timeUp){
   if(examState.timerInterval) clearInterval(examState.timerInterval);
   examState.finished = true;
 
-  // Підрахунок балів
+  // Підрахунок балів + детальний розбір по кожному питанню (для перегляду)
   let earnedPts = 0;
   let totalPts = 0;
   let correctCount = 0;
   let answeredCount = 0;
+  const review = [];
 
   examState.qs.forEach(q=>{
     totalPts += q.pts;
     const ans = examState.answers[q.id];
-    if(ans === undefined || (Array.isArray(ans) && ans.length===0) || (typeof ans==='object' && !Array.isArray(ans) && Object.keys(ans).length===0)) return;
-    answeredCount++;
+    const isEmpty = ans === undefined || (Array.isArray(ans) && ans.length===0) || (typeof ans==='object' && !Array.isArray(ans) && Object.keys(ans).length===0) || (typeof ans==='string' && !ans.trim());
+    if(!isEmpty) answeredCount++;
+
+    let earned = 0, status = 'unanswered', userAnsText = '(не відповів)', correctText = q.ans || '';
 
     if(q.correctMulti){
-      // перевіряємо чи ВСІ терміни правильні
-      const allCorrect = Object.keys(q.correctMulti).every(term => ans[term] === q.correctMulti[term]);
-      if(allCorrect){ earnedPts += q.pts; correctCount++; }
+      const terms = Object.keys(q.correctMulti);
+      const rows = terms.map(term=>{
+        const userVal = ans && ans[term];
+        const okTerm = userVal === q.correctMulti[term];
+        return `${term}: ти — ${userVal||'—'}${okTerm?'':` (правильно: ${q.correctMulti[term]})`}`;
+      });
+      userAnsText = isEmpty ? '(не відповів)' : rows.join('; ');
+      if(!isEmpty){
+        const allCorrect = terms.every(term => ans[term] === q.correctMulti[term]);
+        if(allCorrect){ earned = q.pts; correctCount++; status='correct'; } else status='wrong';
+      }
     } else if(q.type === 'multiselect'){
-      // для multiselect просто рахуємо як "відповів" - бали оцінюються приблизно (бо нема єдиного correct)
-      // ставимо часткові бали якщо щось вибрано
-      earnedPts += q.pts * 0.5; // консервативна оцінка
+      const parsedCorrect = (q.ans||'').split('\n').map(l=>{
+        const m = l.trim().match(/^(\d+)\./); return m?m[1]:null;
+      }).filter(Boolean).sort();
+      const userArr = (ans||[]).slice().sort();
+      userAnsText = isEmpty ? '(не відповів)' : userArr.map(v=>(q.options.find(o=>o.split('.')[0].trim()===v)||v)).join('; ');
+      if(!isEmpty && parsedCorrect.length){
+        const ok = userArr.length===parsedCorrect.length && userArr.every((v,i)=>v===parsedCorrect[i]);
+        if(ok){ earned = q.pts; correctCount++; status='correct'; } else status='wrong';
+      } else if(!isEmpty){
+        earned = q.pts * 0.5; status = 'partial';
+      }
     } else if(q.type === 'mc'){
-      if(ans === q.correct){ earnedPts += q.pts; correctCount++; }
+      const opt = q.options.find(o=>o.split('.')[0].trim()===ans);
+      userAnsText = isEmpty ? '(не відповів)' : (opt||ans);
+      if(!isEmpty){
+        if(ans === q.correct){ earned = q.pts; correctCount++; status='correct'; } else status='wrong';
+      }
+    } else {
+      // open питання — не перевіряється автоматично
+      userAnsText = isEmpty ? '(не відповів)' : ans;
+      status = isEmpty ? 'unanswered' : 'ungraded';
     }
-    // open питання не можна автоматично перевірити - не додаємо бали автоматично
+
+    earnedPts += earned;
+    review.push({ id:q.id, pts:q.pts, earned, status, text:q.text, userAnsText, correctText, isOpen: !q.correctMulti && q.type!=='mc' && q.type!=='multiselect' });
   });
+
+  examState.review = review;
 
   const pct = totalPts > 0 ? (earnedPts/totalPts*100) : 0;
   const passed = pct >= 50;
@@ -1090,8 +1196,38 @@ function finishExam(timeUp){
         <div class="exam-result-stat"><div class="ers-num">${minUsed} хв</div><div class="ers-lbl">Витрачено часу</div></div>
         <div class="exam-result-stat"><div class="ers-num">${pct>=50?'≥50%':'<50%'}</div><div class="ers-lbl">Прохідний бал</div></div>
       </div>
-      <p style="font-size:11px;color:var(--muted);line-height:1.6">⚠️ Відкриті питання (Rechenaufgaben/Текст) не перевіряються автоматично — використовуй звичайний режим з AI-перевіркою щоб дізнатись точний бал по них.</p>
+      <button class="btn" style="background:var(--acc);color:#fff;font-weight:700;width:100%;margin-top:14px;padding:12px" onclick="renderExamReview()">📋 Переглянути відповіді</button>
+      <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-top:10px">⚠️ Відкриті питання (Rechenaufgaben/Текст) позначені як "не перевірено" — бали по них тут не рахуються автоматично. Використовуй звичайний режим з AI-перевіркою, щоб дізнатись точний бал по них.</p>
     </div>`;
+}
+
+function renderExamReview(){
+  const examName = examState.tab === 'a5' ? 'Güterumschlag' : 'WiSo';
+  document.getElementById('examHdrTitle').textContent = `📋 Розбір відповідей: ${examName}`;
+  document.getElementById('examNav').innerHTML = `<button class="exam-btn-next" onclick="closeExamMode()">Закрити</button>`;
+
+  const statusMeta = {
+    correct:   { icon:'✅', label:'Правильно',        color:'var(--green)' },
+    wrong:     { icon:'❌', label:'Неправильно',       color:'#dc2626' },
+    partial:   { icon:'⚠️', label:'Частково (оцінка)', color:'#f5c842' },
+    unanswered:{ icon:'⭕', label:'Без відповіді',      color:'var(--muted)' },
+    ungraded:  { icon:'📝', label:'Відкрите — не перевірено', color:'#a78bfa' }
+  };
+
+  const html = examState.review.map(r=>{
+    const meta = statusMeta[r.status];
+    return `<div style="background:var(--s2);border:1px solid var(--border);border-left:4px solid ${meta.color};border-radius:8px;padding:14px 16px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-weight:700;color:#fff;font-size:13px">${r.id} ${meta.icon} ${meta.label}</span>
+        <span style="font-size:12px;color:${meta.color};font-weight:700">${r.earned.toFixed(1)} / ${r.pts} бал${r.pts>1?'ів':''}</span>
+      </div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:8px">${r.text}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:4px"><strong>Твоя відповідь:</strong> ${r.userAnsText}</div>
+      ${r.status==='wrong'||r.status==='partial'||r.status==='ungraded' ? `<div style="font-size:12px;color:#93c5fd;white-space:pre-wrap"><strong>Правильна відповідь:</strong> ${r.correctText}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  document.getElementById('examBody').innerHTML = `<div style="padding-bottom:20px">${html}</div>`;
 }
 
 function closeExamMode(){
