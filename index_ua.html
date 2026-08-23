@@ -753,12 +753,14 @@ function makeWordsClickable(container){
   container.querySelectorAll('.qtext, .exp-box, .hint-box, .sit-box p, .sit-box td, .ai-res').forEach(function(el){
     if(el.dataset.wc) return;
     el.dataset.wc = '1';
-    tokenizeWords(el);
+    try{ tokenizeWords(el); }catch(err){ console.error('tokenizeWords: помилка на елементі, пропускаю', err); }
   });
 }
 
 // Обгортає кожне слово в окремий <span>, щоб клік завжди попадав
 // точно в те слово, на яке натиснули — без вгадування координат.
+// Кожне слово обробляється в try/catch окремо: якщо одне слово "зламане"
+// (нетипові символи, обірваний тег тощо), решта слів все одно обробляться.
 function tokenizeWords(root){
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
   const textNodes = [];
@@ -769,25 +771,29 @@ function tokenizeWords(root){
   }
   const wordRe = /[A-Za-zÀ-ÖØ-öø-ÿА-Яа-яІіЇїЄєҐґ'-]{2,}/g;
   textNodes.forEach(node=>{
-    const text = node.nodeValue;
-    if(!wordRe.test(text)) return;
-    wordRe.lastIndex = 0;
-    const frag = document.createDocumentFragment();
-    let last = 0, m;
-    while(m = wordRe.exec(text)){
-      if(m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
-      const span = document.createElement('span');
-      span.className = 'wtok';
-      span.textContent = m[0];
-      span.addEventListener('click', function(e){
-        e.stopPropagation();
-        showWordPopup(m[0], e.clientX, e.clientY);
-      });
-      frag.appendChild(span);
-      last = m.index + m[0].length;
+    try{
+      const text = node.nodeValue;
+      if(!wordRe.test(text)) return;
+      wordRe.lastIndex = 0;
+      const frag = document.createDocumentFragment();
+      let last = 0, m;
+      while(m = wordRe.exec(text)){
+        if(m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        const span = document.createElement('span');
+        span.className = 'wtok';
+        span.textContent = m[0];
+        span.addEventListener('click', function(e){
+          e.stopPropagation();
+          showWordPopup(m[0], e.clientX, e.clientY);
+        });
+        frag.appendChild(span);
+        last = m.index + m[0].length;
+      }
+      if(last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    }catch(err){
+      console.error('tokenizeWords: помилка на слові, пропускаю', err);
     }
-    if(last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
-    node.parentNode.replaceChild(frag, node);
   });
 }
 
@@ -800,7 +806,7 @@ function makeOptionWordsTranslatable(scopeEl){
   scopeEl.querySelectorAll('.mc-opt, .exam-opt, .zuord-btn').forEach(btn=>{
     if(btn.dataset.lp) return;
     btn.dataset.lp = '1';
-    tokenizeWordsLongPress(btn);
+    try{ tokenizeWordsLongPress(btn); }catch(err){ console.error('tokenizeWordsLongPress: помилка, пропускаю', err); }
     // Якщо щойно спрацював long-press — гасимо клік, що вибрав би відповідь
     btn.addEventListener('click', function(e){
       if(btn.dataset.lpFired === '1'){
@@ -822,22 +828,26 @@ function tokenizeWordsLongPress(root){
   }
   const wordRe = /[A-Za-zÀ-ÖØ-öø-ÿА-Яа-яІіЇїЄєҐґ'-]{2,}/g;
   textNodes.forEach(node=>{
-    const text = node.nodeValue;
-    if(!wordRe.test(text)) return;
-    wordRe.lastIndex = 0;
-    const frag = document.createDocumentFragment();
-    let last = 0, m;
-    while(m = wordRe.exec(text)){
-      if(m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
-      const span = document.createElement('span');
-      span.className = 'wtok-lp';
-      span.textContent = m[0];
-      attachLongPress(span, m[0]);
-      frag.appendChild(span);
-      last = m.index + m[0].length;
+    try{
+      const text = node.nodeValue;
+      if(!wordRe.test(text)) return;
+      wordRe.lastIndex = 0;
+      const frag = document.createDocumentFragment();
+      let last = 0, m;
+      while(m = wordRe.exec(text)){
+        if(m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        const span = document.createElement('span');
+        span.className = 'wtok-lp';
+        span.textContent = m[0];
+        attachLongPress(span, m[0]);
+        frag.appendChild(span);
+        last = m.index + m[0].length;
+      }
+      if(last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    }catch(err){
+      console.error('tokenizeWordsLongPress: помилка на слові, пропускаю', err);
     }
-    if(last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
-    node.parentNode.replaceChild(frag, node);
   });
 }
 
