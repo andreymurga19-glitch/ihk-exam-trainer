@@ -561,6 +561,23 @@ function clearQ(id){
   if(correctBox){ correctBox.style.display='none'; }
 }
 
+// Деякі "ans" у даних мають зайве екранування переносу рядка (\\n замість \n
+// через повторні збереження файлу) — нормалізуємо це перед розбором/показом.
+function normAns(s){
+  return (s||'').replace(/\\+n/g, '\n');
+}
+
+// Для Rechenaufgaben (відкритих розрахункових питань): дістає останнє число
+// в тексті (напр. з "595,00 € × 0,80 = 476,00 €" дістане 476.00), щоб можна
+// було звірити з короткою числовою відповіддю користувача типу "476".
+function extractLastNumber(str){
+  if(!str) return null;
+  const nums = str.match(/\d+(?:[.,]\d+)?/g);
+  if(!nums || !nums.length) return null;
+  const v = parseFloat(nums[nums.length-1].replace(',', '.'));
+  return isNaN(v) ? null : v;
+}
+
 async function check(qid,id,pts){
   const aufgabe=DATA[curTab];
   const q=aufgabe.qs.find(x=>x.id===qid);
@@ -606,7 +623,7 @@ async function check(qid,id,pts){
   if(msWrap){
     const selected = Array.from(msWrap.querySelectorAll('.mc-opt.selected')).map(b=>b.dataset.val).sort();
     if(!selected.length){alert('Вибери хоча б один варіант!');return;}
-    const parsedCorrect = (q.ans||'').split('\n').map(l=>{
+    const parsedCorrect = normAns(q.ans).split('\n').map(l=>{
       const m = l.trim().match(/^(\d+)\./);
       return m ? m[1] : null;
     }).filter(Boolean).sort();
@@ -1122,7 +1139,7 @@ function finishExam(timeUp){
     const isEmpty = ans === undefined || (Array.isArray(ans) && ans.length===0) || (typeof ans==='object' && !Array.isArray(ans) && Object.keys(ans).length===0) || (typeof ans==='string' && !ans.trim());
     if(!isEmpty) answeredCount++;
 
-    let earned = 0, status = 'unanswered', userAnsText = '(не відповів)', correctText = q.ans || '';
+    let earned = 0, status = 'unanswered', userAnsText = '(не відповів)', correctText = normAns(q.ans);
 
     if(q.correctMulti){
       const terms = Object.keys(q.correctMulti);
@@ -1137,7 +1154,7 @@ function finishExam(timeUp){
         if(allCorrect){ earned = q.pts; correctCount++; status='correct'; } else status='wrong';
       }
     } else if(q.type === 'multiselect'){
-      const parsedCorrect = (q.ans||'').split('\n').map(l=>{
+      const parsedCorrect = normAns(q.ans).split('\n').map(l=>{
         const m = l.trim().match(/^(\d+)\./); return m?m[1]:null;
       }).filter(Boolean).sort();
       const userArr = (ans||[]).slice().sort();
@@ -1156,7 +1173,17 @@ function finishExam(timeUp){
       }
     } else {
       userAnsText = isEmpty ? '(не відповів)' : ans;
-      status = isEmpty ? 'unanswered' : 'ungraded';
+      if(isEmpty){
+        status = 'unanswered';
+      } else {
+        const correctNum = extractLastNumber(q.ans);
+        const userNum = extractLastNumber(ans);
+        if(correctNum !== null && userNum !== null && Math.abs(correctNum-userNum) < 0.01){
+          earned = q.pts; correctCount++; status = 'correct';
+        } else {
+          status = 'ungraded';
+        }
+      }
     }
 
     earnedPts += earned;
